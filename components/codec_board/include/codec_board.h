@@ -157,6 +157,7 @@ typedef struct {
 typedef enum {
     EXTENT_IO_TYPE_NONE,    /*!< NOne extent IO */
     EXTENT_IO_TYPE_TCA9554, /*!< TCA9554 extent IO type */
+    EXTENT_IO_TYPE_PCA9557,
 } extend_io_type_t;
 
 /**

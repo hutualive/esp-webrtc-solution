@@ -3,6 +3,7 @@
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_panel_ops.h"
 #include "tca9554.h"
+#include "pca9557.h"  // Add this with the other includes
 #include "esp_log.h"
 #include "driver/gpio.h"
 #include "driver/spi_common.h"
@@ -65,6 +66,37 @@ static void register_tca9554(void)
     extend_io_ops.set_gpio = tca9554_io_set;
 }
 
+// Add these forward declarations to the top of the file where other functions are declared
+static int pca9557_io_init(lcd_cfg_t *cfg);
+static int pca9557_io_set_dir(int16_t gpio, bool output);
+static int pca9557_io_set(int16_t gpio, bool high);
+
+// Add these implementations alongside the other I/O expander functions
+static int pca9557_io_init(lcd_cfg_t *cfg)
+{
+    return pca9557_init(cfg->io_i2c_port);
+}
+
+static int pca9557_io_set_dir(int16_t gpio, bool output)
+{
+    gpio = (1 << gpio);
+    pca9557_set_io_config(gpio, output ? PCA9557_IO_OUTPUT : PCA9557_IO_INPUT);
+    return 0;
+}
+
+static int pca9557_io_set(int16_t gpio, bool high)
+{
+    gpio = (1 << gpio);
+    return pca9557_set_output_state(gpio, high ? PCA9557_IO_HIGH : PCA9557_IO_LOW);
+}
+
+static void register_pca9557(void)
+{
+    extend_io_ops.init = pca9557_io_init;
+    extend_io_ops.set_dir = pca9557_io_set_dir;
+    extend_io_ops.set_gpio = pca9557_io_set;
+}
+
 static int init_extend_io(lcd_cfg_t *cfg)
 {
     if (cfg->io_type == EXTENT_IO_TYPE_NONE) {
@@ -73,6 +105,9 @@ static int init_extend_io(lcd_cfg_t *cfg)
     switch (cfg->io_type) {
         case EXTENT_IO_TYPE_TCA9554:
             register_tca9554();
+            break;
+        case EXTENT_IO_TYPE_PCA9557:  // Add this case
+            register_pca9557();
             break;
         default:
             return -1;

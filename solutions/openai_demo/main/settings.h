@@ -16,7 +16,7 @@ extern "C" {
 /**
  * @brief  Set used board name, see `codec_board` README.md for more details
  */
-#define TEST_BOARD_NAME "S3_Korvo_V2"
+#define TEST_BOARD_NAME "LICHUANG_DEV_BOARD"
 
 /**
  * @brief  If defined will use OPUS codec
@@ -31,12 +31,12 @@ extern "C" {
 /**
  * @brief  Set WiFi SSID
  */
-#define WIFI_SSID "XXXX"
+#define WIFI_SSID "dp"
 
 /**
  * @brief  Set WiFi password
  */
-#define WIFI_PASSWORD "XXXX"
+#define WIFI_PASSWORD "test1234"
 
 /**
  * @brief  Set default playback volume

@@ -228,6 +228,11 @@ static extend_io_type_t lcd_get_io_type(const char* s)
     if (str_same(s, "tca9554")) {
         return EXTENT_IO_TYPE_TCA9554;
     }
+
+    if (str_same(s, "pca9557")) {  // Add this check
+        return EXTENT_IO_TYPE_PCA9557;
+    }
+
     return EXTENT_IO_TYPE_NONE;
 }
 

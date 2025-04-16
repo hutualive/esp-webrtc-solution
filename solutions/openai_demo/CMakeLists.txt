@@ -13,9 +13,12 @@ list(APPEND EXTRA_COMPONENT_DIRS "../../components")
 
 list(APPEND EXTRA_COMPONENT_DIRS "../common")
 
-if(NOT DEFINED ENV{OPENAI_API_KEY})
-  message(FATAL_ERROR "Env variable OPENAI_API_KEY must be set")
-endif()
+#if(NOT DEFINED ENV{OPENAI_API_KEY})
+#  message(FATAL_ERROR "Env variable OPENAI_API_KEY must be set")
+#endif()
+
+# Use add_definitions instead or alongside add_compile_definitions for better compatibility
+#add_definitions(-DOPENAI_API_KEY=\"$ENV{OPENAI_API_KEY}\")
 
 add_compile_definitions(OPENAI_API_KEY="$ENV{OPENAI_API_KEY}")
 

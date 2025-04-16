@@ -94,11 +94,30 @@ static void get_ephemeral_token(openai_signaling_t *sig, char *token, char *voic
 
 static int openai_signaling_start(esp_peer_signaling_cfg_t *cfg, esp_peer_signaling_handle_t *h)
 {
+    ESP_LOGI(TAG, "Starting OpenAI signaling with config: %p, extra_size: %d", 
+             cfg, cfg ? cfg->extra_size : 0);
+
     openai_signaling_t *sig = (openai_signaling_t *)calloc(1, sizeof(openai_signaling_t));
     if (sig == NULL) {
         return ESP_PEER_ERR_NO_MEM;
     }
+
+    if (cfg == NULL) {
+        ESP_LOGE(TAG, "Signaling config is NULL");
+        free(sig);
+        return ESP_PEER_ERR_INVALID_ARG;
+    }
+
     openai_signaling_cfg_t *openai_cfg = (openai_signaling_cfg_t *)cfg->extra_cfg;
+    
+    // Add error checking
+    if (openai_cfg == NULL) {
+        ESP_LOGE(TAG, "OpenAI config is NULL, cfg: %p, extra_cfg: %p", 
+                 cfg, cfg->extra_cfg);
+        free(sig);
+        return ESP_PEER_ERR_INVALID_ARG;
+    }
+
     sig->cfg = *cfg;
     // alloy, ash, ballad, coral, echo sage, shimmer and verse
     get_ephemeral_token(sig, openai_cfg->token, openai_cfg->voice ? openai_cfg->voice : "alloy");

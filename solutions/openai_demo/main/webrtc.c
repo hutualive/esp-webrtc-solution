@@ -519,9 +519,13 @@ int start_webrtc(void)
     esp_peer_default_cfg_t peer_cfg = {
         .agent_recv_timeout = 500,
     };
-    openai_signaling_cfg_t openai_cfg = {
+    static openai_signaling_cfg_t openai_cfg = {
         .token = OPENAI_API_KEY,
     };
+
+    // Debug log
+    ESP_LOGI(TAG, "1st check API Key length: %d", strlen(openai_cfg.token));
+
     esp_webrtc_cfg_t cfg = {
         .peer_cfg = {
             .audio_info = {
@@ -539,10 +543,19 @@ int start_webrtc(void)
             .extra_cfg = &peer_cfg,
             .extra_size = sizeof(peer_cfg),
         },
-        .signaling_cfg.extra_cfg = &openai_cfg,
+//        .signaling_cfg.extra_cfg = &openai_cfg,
+        // IMPORTANT: Make sure to set both extra_cfg and extra_size
+        .signaling_cfg = {
+            .extra_cfg = &openai_cfg,
+            .extra_size = sizeof(openai_cfg)  // Add this line
+        },
         .peer_impl = esp_peer_get_default_impl(),
         .signaling_impl = esp_signaling_get_openai_signaling(),
     };
+
+    // Debug log to check if the API key is present
+    ESP_LOGI(TAG, "2nd check API Key length: %d", strlen(openai_cfg.token));
+
     int ret = esp_webrtc_open(&cfg, &webrtc);
     if (ret != 0) {
         ESP_LOGE(TAG, "Fail to open webrtc");

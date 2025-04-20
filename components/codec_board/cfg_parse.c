@@ -1,3 +1,4 @@
+#include "esp_log.h"
 #include "codec_board.h"
 
 #define BOARD_SECTION           "Board:"
@@ -182,47 +183,6 @@ static board_cfg_line_t *parse_section(const char *s, int size, int *consume)
     return cfg_line;
 }
 
-static int fill_i2c_cfg(board_cfg_attr_t *attr)
-{
-    if (codec_section->i2c_num >= MAX_I2C_NUM) {
-        return -1;
-    }
-    codec_i2c_pin_t *i2c_cfg = &codec_section->i2c_pin[codec_section->i2c_num++];
-    while (attr) {
-        if (str_same(attr->attr, "sda")) {
-            i2c_cfg->sda = atoi(attr->value);
-        } else if (str_same(attr->attr, "scl")) {
-            i2c_cfg->scl = atoi(attr->value);
-        }
-        attr = attr->next;
-    }
-    return 0;
-}
-
-static int fill_i2s_cfg(board_cfg_attr_t *attr)
-{
-    if (codec_section->i2s_num >= MAX_I2C_NUM) {
-        return -1;
-    }
-    codec_i2s_pin_t *i2s_cfg = &codec_section->i2s_pin[codec_section->i2s_num++];
-    i2s_cfg->din = i2s_cfg->dout = -1;
-    while (attr) {
-        if (str_same(attr->attr, "bclk")) {
-            i2s_cfg->bclk = atoi(attr->value);
-        } else if (str_same(attr->attr, "din")) {
-            i2s_cfg->din = atoi(attr->value);
-        } else if (str_same(attr->attr, "dout")) {
-            i2s_cfg->dout = atoi(attr->value);
-        } else if (str_same(attr->attr, "ws")) {
-            i2s_cfg->ws = atoi(attr->value);
-        } else if (str_same(attr->attr, "mclk")) {
-            i2s_cfg->mclk = atoi(attr->value);
-        }
-        attr = attr->next;
-    }
-    return 0;
-}
-
 static extend_io_type_t lcd_get_io_type(const char* s)
 {
     if (str_same(s, "tca9554")) {
@@ -263,11 +223,63 @@ static lcd_bus_type_t lcd_get_bus(const char* s)
 
 static int16_t get_pin(const char* s)
 {
+    // Skip whitespace
+    while (*s == ' ' || *s == '\t') s++;
+    // If "ext" present at the start, handle as before
     char* ext = strstr(s, "ext");
-    if (ext) {
-        return 0x1000 + atoi(ext + 3);
+    if (ext == s) {
+        ext += 3;
+        while (*ext == ' ' || *ext == '\t') ext++;
+        return 0x1000 + atoi(ext);
     }
-    return (int16_t)atoi(s);
+    // Parse number until non-digit
+    int val = 0;
+    while (*s >= '0' && *s <= '9') {
+        val = val * 10 + (*s - '0');
+        s++;
+    }
+    return (int16_t)val;
+}
+
+static int fill_i2c_cfg(board_cfg_attr_t *attr)
+{
+    if (codec_section->i2c_num >= MAX_I2C_NUM) {
+        return -1;
+    }
+    codec_i2c_pin_t *i2c_cfg = &codec_section->i2c_pin[codec_section->i2c_num++];
+    while (attr) {
+        if (str_same(attr->attr, "sda")) {
+            i2c_cfg->sda = atoi(attr->value);
+        } else if (str_same(attr->attr, "scl")) {
+            i2c_cfg->scl = atoi(attr->value);
+        }
+        attr = attr->next;
+    }
+    return 0;
+}
+
+static int fill_i2s_cfg(board_cfg_attr_t *attr)
+{
+    if (codec_section->i2s_num >= MAX_I2C_NUM) {
+        return -1;
+    }
+    codec_i2s_pin_t *i2s_cfg = &codec_section->i2s_pin[codec_section->i2s_num++];
+    i2s_cfg->din = i2s_cfg->dout = -1;
+    while (attr) {
+        if (str_same(attr->attr, "bclk")) {
+            i2s_cfg->bclk = atoi(attr->value);
+        } else if (str_same(attr->attr, "din")) {
+            i2s_cfg->din = atoi(attr->value);
+        } else if (str_same(attr->attr, "dout")) {
+            i2s_cfg->dout = atoi(attr->value);
+        } else if (str_same(attr->attr, "ws")) {
+            i2s_cfg->ws = atoi(attr->value);
+        } else if (str_same(attr->attr, "mclk")) {
+            i2s_cfg->mclk = atoi(attr->value);
+        }
+        attr = attr->next;
+    }
+    return 0;
 }
 
 static int fill_lcd_cfg(board_cfg_attr_t *attr)
@@ -367,6 +379,33 @@ static int fill_lcd_cfg(board_cfg_attr_t *attr)
             }
         }
         attr = attr->next;
+    }
+    // If no IO expander is used, forcibly treat all pins as standard GPIOs
+    if (lcd_cfg->io_type == EXTENT_IO_TYPE_NONE) {
+        if (lcd_cfg->ctrl_pin & 0x1000) {
+            ESP_LOGW("CFG_PARSE", "ctrl_pin has high bit set but io_type is NONE, forcing to GPIO: %d", lcd_cfg->ctrl_pin & 0xFFF);
+        }
+        if (lcd_cfg->reset_pin & 0x1000) {
+            ESP_LOGW("CFG_PARSE", "reset_pin has high bit set but io_type is NONE, forcing to GPIO: %d", lcd_cfg->reset_pin & 0xFFF);
+        }
+        if (lcd_cfg->spi_cfg.cs & 0x1000) {
+            ESP_LOGW("CFG_PARSE", "cs has high bit set but io_type is NONE, forcing to GPIO: %d", lcd_cfg->spi_cfg.cs & 0xFFF);
+        }
+        if (lcd_cfg->spi_cfg.dc & 0x1000) {
+            ESP_LOGW("CFG_PARSE", "dc has high bit set but io_type is NONE, forcing to GPIO: %d", lcd_cfg->spi_cfg.dc & 0xFFF);
+        }
+        if (lcd_cfg->spi_cfg.clk & 0x1000) {
+            ESP_LOGW("CFG_PARSE", "clk has high bit set but io_type is NONE, forcing to GPIO: %d", lcd_cfg->spi_cfg.clk & 0xFFF);
+        }
+        if (lcd_cfg->spi_cfg.mosi & 0x1000) {
+            ESP_LOGW("CFG_PARSE", "mosi has high bit set but io_type is NONE, forcing to GPIO: %d", lcd_cfg->spi_cfg.mosi & 0xFFF);
+        }
+        lcd_cfg->ctrl_pin   &= 0xFFF;
+        lcd_cfg->reset_pin  &= 0xFFF;
+        lcd_cfg->spi_cfg.cs   &= 0xFFF;
+        lcd_cfg->spi_cfg.dc   &= 0xFFF;
+        lcd_cfg->spi_cfg.clk  &= 0xFFF;
+        lcd_cfg->spi_cfg.mosi &= 0xFFF;
     }
     return 0;
 }

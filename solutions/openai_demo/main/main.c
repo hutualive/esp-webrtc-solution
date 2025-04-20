@@ -22,6 +22,7 @@
 #include "esp_cpu.h"
 #include "common.h"
 #include "esp_capture_defaults.h"
+#include "lcd_gui.h"
 
 static int start_chat(int argc, char **argv)
 {
@@ -216,13 +217,30 @@ static void thread_scheduler(const char *thread_name, media_lib_thread_cfg_t *th
 
 static int network_event_handler(bool connected)
 {
-    // Run async so that not block wifi event callback
+    static bool splash_shown = false;
     if (connected) {
-        RUN_ASYNC(start, { start_webrtc(); });
+        char ip[32] = {0};
+        esp_netif_ip_info_t ip_info;
+        esp_netif_t *netif = esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
+        if (netif && esp_netif_get_ip_info(netif, &ip_info) == ESP_OK) {
+            snprintf(ip, sizeof(ip), IPSTR, IP2STR(&ip_info.ip));
+        } else {
+            strncpy(ip, "unknown", sizeof(ip)-1);
+        }
+        lcd_gui_show_status("WiFi Connected: %s", ip);
+        if (!splash_shown) {
+            lcd_gui_splash(LCD_GUI_SPLASH_CONNECTED);
+            splash_shown = true;
+        }
     } else {
-        RUN_ASYNC(stop, { stop_webrtc(); });
+        lcd_gui_show_status("WiFi Disconnected");
     }
     return 0;
+}
+
+void on_new_chat_message(const char *msg)
+{
+    lcd_gui_show_chat(msg);
 }
 
 void app_main(void)
@@ -231,6 +249,8 @@ void app_main(void)
     media_lib_add_default_adapter();
     media_lib_thread_set_schedule_cb(thread_scheduler);
     init_board();
+    lcd_gui_init();
+    lcd_gui_splash(LCD_GUI_SPLASH_POWERON);
     media_sys_buildup();
     init_console();
     network_init(WIFI_SSID, WIFI_PASSWORD, network_event_handler);

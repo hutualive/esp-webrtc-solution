@@ -8,6 +8,8 @@
 #include "driver/gpio.h"
 #include "driver/spi_common.h"
 #include "esp_idf_version.h"
+#include <string.h> // For memset
+#include <unistd.h> // For usleep
 
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 3, 0)
 #include "esp_lcd_panel_dev.h"
@@ -40,6 +42,28 @@ typedef struct {
 
 static extend_io_ops_t        extend_io_ops;
 static esp_lcd_panel_handle_t panel_handle = NULL;
+
+// ===================== LCD COLOR FORMAT QUIRK =====================
+// NOTE: This ST7789 panel requires a non-standard color format:
+//   1. Input color must be in standard RGB565 (0bRRRRRGGGGGGBBBBB)
+//   2. The 16-bit value must be byte-swapped: (v >> 8) | (v << 8)
+//   3. Then, all bits must be inverted (bitwise NOT): ~(...)
+//   This means you cannot send standard RGB565 or BGR565 directly!
+//   Use st7789_fix_color() to convert any color before sending to the panel.
+//
+//   Example:
+//     uint16_t red_rgb565 = 0xF800; // Standard red
+//     uint16_t panel_red  = st7789_fix_color(red_rgb565); // Use this value
+//
+//   This quirk is required for some ST7789 modules due to internal wiring or logic.
+// ===================================================================
+static inline uint16_t swap_bytes(uint16_t v) {
+    return (v >> 8) | (v << 8);
+}
+
+static inline uint16_t st7789_fix_color(uint16_t v) {
+    return ~swap_bytes(v);
+}
 
 static int tca9554_io_init(lcd_cfg_t *cfg)
 {
@@ -115,27 +139,52 @@ static int init_extend_io(lcd_cfg_t *cfg)
     return extend_io_ops.init(cfg);
 }
 
-static int set_pin_dir(int16_t pin, bool output)
+static int set_pin_dir(const lcd_cfg_t *cfg, int16_t pin, bool output)
 {
-    if (pin & BOARD_EXTEND_IO_START) {
+    ESP_LOGI(TAG, "set_pin_dir: pin=%d, output=%d, io_type=%d", pin, output, cfg->io_type);
+    if (cfg->io_type != EXTENT_IO_TYPE_NONE && (pin & BOARD_EXTEND_IO_START)) {
         pin &= ~BOARD_EXTEND_IO_START;
-        extend_io_ops.set_dir(pin, output);
-    } else {
+        if (extend_io_ops.set_dir) {
+            ESP_LOGI(TAG, "Calling extend_io_ops.set_dir for pin %d", pin);
+            extend_io_ops.set_dir(pin, output);
+        } else {
+            ESP_LOGE(TAG, "extend_io_ops.set_dir is NULL! Pin: %d", pin);
+        }
+    } else if (pin >= 0) {
         gpio_config_t bk_gpio_config = {
             .mode = output ? GPIO_MODE_OUTPUT : GPIO_MODE_INPUT,
-            .pin_bit_mask = pin > 0 ? 1ULL << pin : 0ULL,
+            .pin_bit_mask = 1ULL << pin,
         };
+        ESP_LOGI(TAG, "Configuring GPIO pin %d as %s", pin, output ? "OUTPUT" : "INPUT");
         gpio_config(&bk_gpio_config);
     }
     return 0;
 }
 
-static int set_pin_state(int16_t pin, bool high)
+static int set_pin_state(const lcd_cfg_t *cfg, int16_t pin, bool high)
 {
-    if (pin & BOARD_EXTEND_IO_START) {
-        extend_io_ops.set_gpio(pin, high);
-    } else {
-        gpio_set_level(pin, true);
+    ESP_LOGI(TAG, "set_pin_state: pin=%d, high=%d, io_type=%d", pin, high, cfg->io_type);
+    if (cfg->io_type != EXTENT_IO_TYPE_NONE && (pin & BOARD_EXTEND_IO_START)) {
+        if (extend_io_ops.set_gpio) {
+            ESP_LOGI(TAG, "Calling extend_io_ops.set_gpio for pin %d", pin);
+            extend_io_ops.set_gpio(pin & ~BOARD_EXTEND_IO_START, high);
+        } else {
+            ESP_LOGE(TAG, "extend_io_ops.set_gpio is NULL! Pin: %d", pin);
+        }
+    } else if (pin >= 0) {
+        ESP_LOGI(TAG, "Setting GPIO level for pin %d to %d", pin, high);
+        gpio_set_level(pin, high);
+    }
+    return 0;
+}
+
+static int _lcd_rest(const lcd_cfg_t *cfg)
+{
+    ESP_LOGI(TAG, "_lcd_rest: reset_pin=%d", cfg->reset_pin);
+    if (cfg->reset_pin >= 0) {
+        set_pin_state(cfg, cfg->reset_pin, false);
+        media_lib_thread_sleep(100);
+        set_pin_state(cfg, cfg->reset_pin, true);
     }
     return 0;
 }
@@ -151,25 +200,14 @@ static int16_t get_hw_gpio(int16_t pin)
     return pin;
 }
 
-static int _lcd_rest(lcd_cfg_t *cfg)
-{
-    if (cfg->reset_pin >= 0) {
-        set_pin_state(cfg->reset_pin, false);
-        media_lib_thread_sleep(100);
-        set_pin_state(cfg->reset_pin, true);
-    }
-    return 0;
-}
-
 static int _init_spi_lcd(lcd_cfg_t *cfg)
 {
     int ret = 0;
-    if (cfg->spi_cfg.cs & BOARD_EXTEND_IO_START) {
-        set_pin_dir(cfg->spi_cfg.cs, true);
-        media_lib_thread_sleep(10);
-        set_pin_dir(cfg->spi_cfg.cs, false);
-        media_lib_thread_sleep(10);
-    }
+    ESP_LOGI(TAG, "Initializing SPI LCD with bus=%d, cs=%d, dc=%d, clk=%d, mosi=%d",
+             cfg->spi_cfg.spi_bus, cfg->spi_cfg.cs, cfg->spi_cfg.dc, 
+             cfg->spi_cfg.clk, cfg->spi_cfg.mosi);
+    
+    // SPI bus configuration
     spi_bus_config_t buscfg = {
         .sclk_io_num = cfg->spi_cfg.clk,
         .mosi_io_num = cfg->spi_cfg.mosi,
@@ -178,67 +216,85 @@ static int _init_spi_lcd(lcd_cfg_t *cfg)
         .quadhd_io_num = -1,
         .max_transfer_sz = cfg->width * cfg->height * 2,
     };
+    
 #if SOC_SPI_SUPPORT_OCT
     if (cfg->spi_cfg.d[6] >= 0) {
         buscfg.data1_io_num = cfg->spi_cfg.d[0];
         buscfg.data2_io_num = cfg->spi_cfg.d[1];
-        ;
         buscfg.data3_io_num = cfg->spi_cfg.d[2];
-        ;
         buscfg.data4_io_num = cfg->spi_cfg.d[3];
-        ;
         buscfg.data5_io_num = cfg->spi_cfg.d[4];
-        ;
         buscfg.data6_io_num = cfg->spi_cfg.d[5];
-        ;
         buscfg.data7_io_num = cfg->spi_cfg.d[6];
-        ;
         buscfg.flags = SPICOMMON_BUSFLAG_OCTAL;
     }
 #endif
+
     int bus_id = SPI1_HOST + (cfg->spi_cfg.spi_bus - 1);
     ret = spi_bus_initialize(bus_id, &buscfg, SPI_DMA_CH_AUTO);
-    ESP_LOGI(TAG, "CLK %d MOSI %d CS:%d DC: %d Bus:%d",
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize SPI bus: %d", ret);
+        return ret;
+    }
+    
+    ESP_LOGI(TAG, "SPI bus initialized: CLK=%d, MOSI=%d, CS=%d, DC=%d, Bus=%d",
              cfg->spi_cfg.clk, cfg->spi_cfg.mosi,
-             get_hw_gpio(cfg->spi_cfg.cs), cfg->spi_cfg.dc,
-             bus_id);
-    RETURN_ON_ERR(ret);
+             cfg->spi_cfg.cs, cfg->spi_cfg.dc, bus_id);
+    
     esp_lcd_panel_io_spi_config_t io_config = {
         .dc_gpio_num = cfg->spi_cfg.dc,
-        .cs_gpio_num = get_hw_gpio(cfg->spi_cfg.cs),
-        .pclk_hz = cfg->spi_cfg.pclk_clk ? cfg->spi_cfg.pclk_clk : 60 * 1000 * 1000,
+        .cs_gpio_num = cfg->spi_cfg.cs,
+        // ======= PATCH: Increase SPI speed for LCD =======
+        // Default: 20 MHz, try 80 MHz if hardware supports
+        .pclk_hz = cfg->spi_cfg.pclk_clk ? cfg->spi_cfg.pclk_clk : 80 * 1000 * 1000, // 80 MHz for ST7789
         .spi_mode = 0,
         .trans_queue_depth = 10,
         .lcd_cmd_bits = cfg->spi_cfg.cmd_bits ? cfg->spi_cfg.cmd_bits : 8,
         .lcd_param_bits = cfg->spi_cfg.param_bits ? cfg->spi_cfg.param_bits : 8,
         .on_color_trans_done = NULL,
-        .user_ctx = NULL,
+        .user_ctx = NULL
     };
+    
 #if SOC_SPI_SUPPORT_OCT
     if (cfg->spi_cfg.d[6] >= 0) {
         io_config.flags.octal_mode = 1;
         io_config.spi_mode = 3;
     }
 #endif
+
     esp_lcd_panel_io_handle_t io_handle;
     ret = esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)bus_id, &io_config, &io_handle);
-    RETURN_ON_ERR(ret);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to create panel IO: %d", ret);
+        spi_bus_free(bus_id);  // Clean up the SPI bus if panel IO creation fails
+        return ret;
+    }
+    
     esp_lcd_panel_dev_config_t panel_config = {
-        .reset_gpio_num = get_hw_gpio(cfg->reset_pin),
+        .reset_gpio_num = cfg->reset_pin,
 #if ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(5, 3, 0)
-        .rgb_ele_order = ESP_LCD_COLOR_SPACE_BGR,
+        .rgb_ele_order = ESP_LCD_COLOR_SPACE_RGB,
 #else
-        .rgb_endian = LCD_RGB_ENDIAN_BGR,
+        .rgb_endian = LCD_RGB_ENDIAN_RGB,
 #endif
         .bits_per_pixel = 16,
     };
+    
     switch (cfg->controller) {
         default:
+            ESP_LOGE(TAG, "Unsupported LCD controller type: %d", cfg->controller);
+            esp_lcd_panel_io_del(io_handle);  // Clean up panel IO
+            spi_bus_free(bus_id);  // Clean up SPI bus
             return -1;
         case LCD_CONTROLLER_TYPE_ST7789:
             ret = esp_lcd_new_panel_st7789(io_handle, &panel_config, &panel_handle);
-            RETURN_ON_ERR(ret);
-            ESP_LOGI(TAG, "Init driver ST7789 finished");
+            if (ret != ESP_OK) {
+                ESP_LOGE(TAG, "Failed to create ST7789 panel: %d", ret);
+                esp_lcd_panel_io_del(io_handle);  // Clean up panel IO
+                spi_bus_free(bus_id);  // Clean up SPI bus
+                return ret;
+            }
+            ESP_LOGI(TAG, "ST7789 driver initialized successfully");
             break;
     }
     return ret;
@@ -343,48 +399,86 @@ static int _init_mipi_lcd(lcd_cfg_t *cfg)
 static int _init_lcd(lcd_cfg_t *cfg)
 {
     int ret = 0;
+    panel_handle = NULL; // Ensure clean state at start
+    ESP_LOGI(TAG, "_init_lcd: io_type=%d, reset_pin=%d, ctrl_pin=%d, bus_type=%d", cfg->io_type, cfg->reset_pin, cfg->ctrl_pin, cfg->bus_type);
     if (cfg->io_type != EXTENT_IO_TYPE_NONE) {
+        ESP_LOGI(TAG, "Calling init_extend_io");
         ret = init_extend_io(cfg);
         if (ret != 0) {
+            ESP_LOGE(TAG, "init_extend_io failed");
             return ret;
         }
     }
     // Config reset and ctrl gpio dir
     if (cfg->reset_pin >= 0) {
-        set_pin_dir(cfg->reset_pin, true);
+        ESP_LOGI(TAG, "Setting direction for reset_pin %d", cfg->reset_pin);
+        set_pin_dir(cfg, cfg->reset_pin, true);
     }
     if (cfg->ctrl_pin >= 0) {
-        set_pin_dir(cfg->ctrl_pin, true);
+        ESP_LOGI(TAG, "Setting direction for ctrl_pin %d", cfg->ctrl_pin);
+        set_pin_dir(cfg, cfg->ctrl_pin, true);
     }
     if (cfg->bus_type == LCD_BUS_TYPE_SPI) {
         if (cfg->spi_cfg.cs >= 0) {
-            set_pin_dir(cfg->spi_cfg.cs, true);
+            ESP_LOGI(TAG, "Setting direction for SPI CS pin %d", cfg->spi_cfg.cs);
+            set_pin_dir(cfg, cfg->spi_cfg.cs, true);
         }
     }
+    ESP_LOGI(TAG, "About to call _lcd_rest");
     _lcd_rest(cfg);
+    ESP_LOGI(TAG, "After _lcd_rest");
     if (cfg->ctrl_pin >= 0) {
-        set_pin_dir(cfg->ctrl_pin, true);
+        ESP_LOGI(TAG, "Setting direction for ctrl_pin %d again", cfg->ctrl_pin);
+        set_pin_dir(cfg, cfg->ctrl_pin, true);
     }
     if (cfg->bus_type == LCD_BUS_TYPE_SPI) {
+        ESP_LOGI(TAG, "About to init SPI LCD");
         ret = _init_spi_lcd(cfg);
+        if (ret != 0) {
+            ESP_LOGE(TAG, "SPI LCD initialization failed");
+            return ret;
+        }
     } else if (cfg->bus_type == LCD_BUS_TYPE_MIPI) {
+        ESP_LOGI(TAG, "About to init MIPI LCD");
         ret = _init_mipi_lcd(cfg);
+        if (ret != 0) {
+            ESP_LOGE(TAG, "MIPI LCD initialization failed");
+            return ret;
+        }
     }
-    if (panel_handle) {
-        ret = esp_lcd_panel_init(panel_handle);
-        RETURN_ON_ERR(ret);
-        if (cfg->color_inv) {
-            ret = esp_lcd_panel_invert_color(panel_handle, cfg->color_inv);
-        }
-        // ret = esp_lcd_panel_set_gap(panel_handle, 0, 0);
-        if (cfg->swap_xy) {
-            ret = esp_lcd_panel_swap_xy(panel_handle, cfg->swap_xy);
-        }
-        if (cfg->mirror_x || cfg->mirror_y) {
-            ret = esp_lcd_panel_mirror(panel_handle, cfg->mirror_x, cfg->mirror_y);
-        }
-        ret = esp_lcd_panel_disp_on_off(panel_handle, true);
+    if (!panel_handle) {
+        ESP_LOGE(TAG, "panel_handle is NULL after initialization!");
+        return -1;
     }
+    ESP_LOGI(TAG, "About to call esp_lcd_panel_init");
+    ret = esp_lcd_panel_init(panel_handle);
+    RETURN_ON_ERR(ret);
+    if (cfg->color_inv) {
+        ESP_LOGI(TAG, "About to call esp_lcd_panel_invert_color");
+        ret = esp_lcd_panel_invert_color(panel_handle, cfg->color_inv);
+    }
+    // ret = esp_lcd_panel_set_gap(panel_handle, 0, 0);
+    if (cfg->swap_xy) {
+        ESP_LOGI(TAG, "About to call esp_lcd_panel_swap_xy");
+        ret = esp_lcd_panel_swap_xy(panel_handle, cfg->swap_xy);
+    }
+    if (cfg->mirror_x || cfg->mirror_y) {
+        ESP_LOGI(TAG, "About to call esp_lcd_panel_mirror");
+        ret = esp_lcd_panel_mirror(panel_handle, cfg->mirror_x, cfg->mirror_y);
+    }
+    ESP_LOGI(TAG, "About to call esp_lcd_panel_disp_on_off");
+    ret = esp_lcd_panel_disp_on_off(panel_handle, true);
+    ESP_LOGI(TAG, "LCD initialization complete, ret=%d", ret);
+
+    // --- PATCH: Enable LCD backlight after LCD init ---
+    #define LCD_BACKLIGHT_ACTIVE_HIGH 1
+    if (cfg->ctrl_pin >= 0) {
+        ESP_LOGI(TAG, "Setting LCD backlight (ctrl_pin %d) to %s", cfg->ctrl_pin, LCD_BACKLIGHT_ACTIVE_HIGH ? "HIGH" : "LOW");
+        set_pin_dir(cfg, cfg->ctrl_pin, true);
+        set_pin_state(cfg, cfg->ctrl_pin, LCD_BACKLIGHT_ACTIVE_HIGH ? true : false);
+    }
+    // --------------------------------------------------
+
     return ret;
 }
 
@@ -393,9 +487,35 @@ int board_lcd_init(void)
     lcd_cfg_t cfg = { 0 };
     int ret = get_lcd_cfg(&cfg);
     if (ret != 0) {
+        ESP_LOGW(TAG, "LCD configuration not found");
         return ret;
     }
-    return _init_lcd(&cfg);
+    
+    ESP_LOGI(TAG, "Initializing LCD with configuration: bus_type=%d, controller=%d, width=%d, height=%d",
+             cfg.bus_type, cfg.controller, cfg.width, cfg.height);
+    
+    // Validate basic configuration
+    if (cfg.bus_type == LCD_BUS_TYPE_SPI) {
+        if (cfg.spi_cfg.spi_bus <= 0) {
+            ESP_LOGE(TAG, "Invalid SPI bus number: %d", cfg.spi_cfg.spi_bus);
+            return -1;
+        }
+        
+        if (cfg.spi_cfg.clk < 0 || cfg.spi_cfg.mosi < 0 || cfg.spi_cfg.dc < 0) {
+            ESP_LOGE(TAG, "Invalid SPI pin configuration: clk=%d, mosi=%d, dc=%d",
+                     cfg.spi_cfg.clk, cfg.spi_cfg.mosi, cfg.spi_cfg.dc);
+            return -1;
+        }
+        
+        if (cfg.controller == LCD_CONTROLLER_TYPE_NONE) {
+            ESP_LOGE(TAG, "No LCD controller specified");
+            return -1;
+        }
+    }
+    
+    ret = _init_lcd(&cfg);
+    ESP_LOGI(TAG, "LCD initialization %s: %d", (ret == 0) ? "successful" : "failed", ret);
+    return ret;
 }
 
 void *board_get_lcd_handle(void)

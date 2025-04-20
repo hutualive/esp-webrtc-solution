@@ -21,5 +21,25 @@ void init_board(void)
         .reuse_dev = false
     };
     init_codec(&cfg);
-    board_lcd_init();
+
+#ifndef DISABLE_LCD
+    // Only initialize LCD if not disabled
+    ESP_LOGI(TAG, "Attempting to initialize LCD");
+
+    // Instead of directly calling board_lcd_init, check if LCD is available
+    lcd_cfg_t lcd_cfg;
+    if (get_lcd_cfg(&lcd_cfg) == 0) {
+        ESP_LOGI(TAG, "LCD configuration found, attempting to initialize");
+        int lcd_ret = board_lcd_init();
+        if (lcd_ret != 0) {
+            ESP_LOGW(TAG, "LCD initialization failed with error %d, continuing without LCD", lcd_ret);
+        }else {
+            ESP_LOGI(TAG, "LCD initialized successfully");
+	}
+    } else {
+        ESP_LOGI(TAG, "No LCD configuration found, skipping LCD initialization");
+    }
+#else
+    ESP_LOGI(TAG, "LCD initialization disabled by compile-time flag");
+#endif
 }

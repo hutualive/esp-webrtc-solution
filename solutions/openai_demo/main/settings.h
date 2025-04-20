@@ -16,7 +16,7 @@ extern "C" {
 /**
  * @brief  Set used board name, see `codec_board` README.md for more details
  */
-#define TEST_BOARD_NAME "LICHUANG_DEV_BOARD"
+#define TEST_BOARD_NAME "BREAD_BOARD"
 
 /**
  * @brief  If defined will use OPUS codec

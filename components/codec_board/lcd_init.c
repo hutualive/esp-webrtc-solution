@@ -466,8 +466,8 @@ static int _init_lcd(lcd_cfg_t *cfg)
         ESP_LOGI(TAG, "About to call esp_lcd_panel_mirror");
         ret = esp_lcd_panel_mirror(panel_handle, cfg->mirror_x, cfg->mirror_y);
     }
-    ESP_LOGI(TAG, "About to call esp_lcd_panel_disp_on_off");
-    ret = esp_lcd_panel_disp_on_off(panel_handle, true);
+    ESP_LOGI(TAG, "About to call esp_lcd_panel_disp_on_off (keep display off until splash)");
+    ret = esp_lcd_panel_disp_on_off(panel_handle, false);
     ESP_LOGI(TAG, "LCD initialization complete, ret=%d", ret);
 
     // --- PATCH: Enable LCD backlight after LCD init ---

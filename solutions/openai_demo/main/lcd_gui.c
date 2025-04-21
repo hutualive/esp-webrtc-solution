@@ -82,14 +82,18 @@ static void lcd_gui_task(void *param) {
                     break;
                 case LCD_GUI_CMD_SPLASH:
                     ESP_LOGI(TAG, "lcd_gui_task: SPLASH type=%d", msg.data.splash.which);
-                    lcd_gui_draw_clear(COLOR_WHITE); // Always clear to white
                     if (msg.data.splash.which == LCD_GUI_SPLASH_POWERON) {
+                        lcd_gui_draw_clear(COLOR_BLACK);
                         ESP_LOGI(TAG, "Drawing splash_bitmap1 (POWERON)");
                         lcd_gui_draw_bitmap_centered(splash_bitmap1, 32, 32);
+                        // Enable panel display now that splash is drawn, avoiding pre-splash flicker
+                        esp_lcd_panel_disp_on_off(lcd_handle, true);
                     } else if (msg.data.splash.which == LCD_GUI_SPLASH_CONNECTED) {
+                        lcd_gui_draw_clear(COLOR_WHITE);
                         ESP_LOGI(TAG, "Drawing splash_bitmap2 (CONNECTED)");
                         lcd_gui_draw_bitmap_centered(splash_bitmap2, 32, 32);
                     } else {
+                        lcd_gui_draw_clear(COLOR_BLACK);
                         ESP_LOGI(TAG, "Drawing splash_bitmap1 (DEFAULT)");
                         lcd_gui_draw_bitmap_centered(splash_bitmap1, 32, 32);
                     }

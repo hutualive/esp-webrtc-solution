@@ -14,6 +14,7 @@
 #include "esp_webrtc_defaults.h"
 #include "esp_peer_default.h"
 #include "common.h"
+#include "lcd_gui.h"
 #include <cJSON.h>
 
 #define TAG "OPENAI_APP"
@@ -412,19 +413,11 @@ static int webrtc_data_handler(esp_webrtc_custom_data_via_t via, uint8_t *data, 
     if (!root) {
         return -1;
     }
-    char *payload = cJSON_PrintUnformatted(root);
-    if (payload) {
-        char *text = strstr(payload, "transcript\":");
-        if (text) {
-            text += strlen("transcript\":");
-            char *start = strchr(text, '"');
-            char *end = start ? strchr(start + 1, '"') : NULL;
-            if (end) {
-                start++;
-                printf("Transcript: %.*s\n", (int)(end - start), start);
-            }
-        }
-        free(payload);
+    // Parse JSON for transcript and display chat on LCD
+    cJSON *transcript_item = cJSON_GetObjectItemCaseSensitive(root, "transcript");
+    if (cJSON_IsString(transcript_item) && transcript_item->valuestring) {
+        ESP_LOGI(TAG, "Transcribed: %s", transcript_item->valuestring);
+        lcd_gui_show_chat(transcript_item->valuestring);
     }
     cJSON_Delete(root);
     return 0;
@@ -461,7 +454,7 @@ static int send_response(char *text)
 
 static int webrtc_event_handler(esp_webrtc_event_t *event, void *ctx)
 {
-    printf("====================Event %d======================\n", event->type);
+    ESP_LOGI(TAG, "webrtc_event_handler: event type=%d", event->type);
     if (event->type == ESP_WEBRTC_EVENT_DATA_CHANNEL_CONNECTED) {
         send_response("You are helpful and have some tools installed. In the tools you have the ability to control a light bulb and change speaker volume. Say 'How can I help?");
         send_function_desc();
@@ -579,6 +572,7 @@ int start_webrtc(void)
 
 void query_webrtc(void)
 {
+    ESP_LOGI(TAG, ">> query_webrtc()");
     if (webrtc) {
         esp_webrtc_query(webrtc);
     }

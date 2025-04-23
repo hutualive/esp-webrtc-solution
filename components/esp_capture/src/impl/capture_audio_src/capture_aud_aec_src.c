@@ -35,6 +35,7 @@
 #include "media_lib_os.h"
 #include "esp_afe_sr_iface.h"
 #include "esp_afe_sr_models.h"
+#include "esp_webrtc.h"
 
 #define TAG "AUD_AEC_SRC"
 
@@ -70,7 +71,15 @@ static int cal_frame_length(esp_capture_audio_info_t *info)
 static int open_afe(audio_aec_src_t *src)
 {
     afe_config_t afe_config = AFE_CONFIG_DEFAULT();
-    afe_config.vad_init = false;
+    
+    afe_config.afe_mode                = SR_MODE_HIGH_PERF;     // “better” but less aggressive
+    afe_config.afe_ringbuf_size        =   50;                  // shorter tail
+    afe_config.voice_communication_agc_init = false;             // turn off VC‑AGC
+    afe_config.agc_mode                = AFE_MN_PEAK_NO_AGC;    // no ASR AGC
+    afe_config.afe_ns_mode             = NS_MODE_SSP;           // simpler NS
+    // leave se_init/vad_init = true or false as needed
+    
+    afe_config.vad_init = true;  // enable VAD to avoid cancelling local speech
     afe_config.wakenet_init = false;
     afe_config.afe_perferred_core = 1;
     afe_config.afe_perferred_priority = 20;
@@ -80,14 +89,12 @@ static int open_afe(audio_aec_src_t *src)
     afe_config.pcm_config.total_ch_num = 1 + 1;
     afe_config.aec_init = true;
     afe_config.se_init = false;
-#if 0
-    afe_config.voice_communication_agc_init = true;
-    afe_config.voice_communication_agc_gain = algo->agc_gain;
-#endif
     afe_config.pcm_config.sample_rate = src->info.sample_rate;
     afe_config.voice_communication_init = true;
     src->aec_if = &ESP_AFE_VC_HANDLE;
     src->aec_data = src->aec_if->create_from_config(&afe_config);
+    // enable noise suppression for clarity
+    src->aec_if->enable_se(src->aec_data);
     return 0;
 }
 
@@ -168,10 +175,8 @@ static void add_output_data(uint8_t *data, int size)
         return;
     }
     int need_size = size * 3;
+    // Skip dump if buffer full or not enough origin data
     if (aec_dump_fill + need_size > aec_dump_size || origin_fill < size * 2) {
-        media_lib_mutex_lock(dump_mutex, 1000);
-        origin_fill -= size * 2;
-        media_lib_mutex_unlock(dump_mutex);
         return;
     }
     media_lib_mutex_lock(dump_mutex, 1000);
@@ -205,6 +210,9 @@ static void add_origin_data(uint8_t *data, int size)
         ESP_LOGE(TAG, "Read too slow");
     }
 }
+
+// pull far-end reference for software AEC
+extern int ref_buffer_read(uint8_t *out, int len);
 
 #ifdef AEC_ADD_READ_THREAD
 static void audio_read_thread(void *arg)
@@ -250,10 +258,26 @@ static void audio_aec_src_buffer_in_thread(void *arg)
             data_queue_query(src->in_q, &q_num, &q_size);
             printf("Cached %d\n", q_size);
         }
-        ret = src->aec_if->feed(src->aec_data, (int16_t *)feed_data);
-        if (ret < 0) {
-            ESP_LOGE(TAG, "Fail to feed data %d", ret);
-            break;
+        // Interleave mic and far-end reference for AEC feed
+        int16_t *mic = (int16_t *)feed_data;
+        int16_t *ref = malloc(read_size);
+        if (ref) {
+            ref_buffer_read((uint8_t *)ref, read_size);
+            int samples = read_size / sizeof(int16_t);
+            int16_t *inter = malloc(samples * 2 * sizeof(int16_t));
+            if (inter) {
+                for (int i = 0; i < samples; i++) {
+                    inter[2*i] = mic[i];
+                    inter[2*i+1] = ref[i];
+                }
+                ret = src->aec_if->feed(src->aec_data, inter);
+                free(inter);
+            } else {
+                ret = src->aec_if->feed(src->aec_data, mic);
+            }
+            free(ref);
+        } else {
+            ret = src->aec_if->feed(src->aec_data, mic);
         }
         add_origin_data(feed_data, read_size);
         data_queue_read_unlock(src->in_q);
@@ -283,10 +307,26 @@ static void audio_aec_src_buffer_in_thread(void *arg)
                 ESP_LOGE(TAG, "Fail to read data %d", ret);
                 break;
             }
-            ret = src->aec_if->feed(src->aec_data, (int16_t *)feed_data);
-            if (ret < 0) {
-                ESP_LOGE(TAG, "Fail to feed data %d", ret);
-                break;
+            // Interleave mic and far-end reference for AEC feed
+            int16_t *mic = (int16_t *)feed_data;
+            int16_t *ref = malloc(read_size);
+            if (ref) {
+                ref_buffer_read((uint8_t *)ref, read_size);
+                int samples = read_size / sizeof(int16_t);
+                int16_t *inter = malloc(samples * 2 * sizeof(int16_t));
+                if (inter) {
+                    for (int i = 0; i < samples; i++) {
+                        inter[2*i] = mic[i];
+                        inter[2*i+1] = ref[i];
+                    }
+                    ret = src->aec_if->feed(src->aec_data, inter);
+                    free(inter);
+                } else {
+                    ret = src->aec_if->feed(src->aec_data, mic);
+                }
+                free(ref);
+            } else {
+                ret = src->aec_if->feed(src->aec_data, mic);
             }
             add_origin_data(feed_data, read_size);
         }

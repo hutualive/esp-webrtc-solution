@@ -4,29 +4,24 @@ Connecting....
 Detecting chip type... ESP32-S3
 Running ninja in directory /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build
 Executing "ninja flash"...
-[1/12] Performing build step for 'bootloader'
+[1/10] Performing build step for 'bootloader'
 [1/1] cd /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/bootloader/esp-idf/esptool_py && /home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/bootloader/bootloader.bin
 Bootloader binary size 0x52b0 bytes. 0x2d50 bytes (35%) free.
-[2/12] No install step for 'bootloader'
-[3/12] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/lcd_gui.c.obj
-[4/12] Completed 'bootloader'
-[5/12] Building C object esp-idf/codec_board/CMakeFiles/__idf_codec_board.dir/lcd_init.c.obj
-/home/dp/code/esp-webrtc-solution/components/codec_board/lcd_init.c:192:16: warning: 'get_hw_gpio' defined but not used [-Wunused-function]
-  192 | static int16_t get_hw_gpio(int16_t pin)
-      |                ^~~~~~~~~~~
-[6/12] Linking C static library esp-idf/codec_board/libcodec_board.a
-[7/12] Linking C static library esp-idf/main/libmain.a
-[8/12] Generating ld/sections.ld
-[9/12] Linking CXX executable openai_demo.elf
-[10/12] Generating binary image from built executable
+[2/10] No install step for 'bootloader'
+[3/10] Completed 'bootloader'
+[4/10] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/main.c.obj
+[5/10] Linking C static library esp-idf/main/libmain.a
+[6/10] Generating ld/sections.ld
+[7/10] Linking CXX executable openai_demo.elf
+[8/10] Generating binary image from built executable
 esptool.py v4.9.dev6
 Creating esp32s3 image...
 Merged 2 ELF sections
 Successfully created esp32s3 image.
 Generated /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.bin
-[11/12] cd /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/esp-idf/esptool_py && /home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/partition_table/partition-table.bin /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.bin
-openai_demo.bin binary size 0x20c510 bytes. Smallest app partition is 0x300000 bytes. 0xf3af0 bytes (32%) free.
-[11/12] cd /home/dp/code/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/dp/code/esp-idf -D "SERIAL_TOOL=/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python;;/home/dp/code/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32s3" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/dp/code/esp-webrtc-solution/solutions/openai_demo/build -P /home/dp/code/esp-idf/components/esptool_py/run_serial_tool.cmake
+[9/10] cd /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/esp-idf/esptool_py && /home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/partition_table/partition-table.bin /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.bin
+openai_demo.bin binary size 0x24ff80 bytes. Smallest app partition is 0x300000 bytes. 0xb0080 bytes (23%) free.
+[9/10] cd /home/dp/code/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/dp/code/esp-idf -D "SERIAL_TOOL=/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python;;/home/dp/code/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32s3" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/dp/code/esp-webrtc-solution/solutions/openai_demo/build -P /home/dp/code/esp-idf/components/esptool_py/run_serial_tool.cmake
 esptool.py --chip esp32s3 -p /dev/ttyUSB0 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x0 bootloader/bootloader.bin 0x10000 openai_demo.bin 0x8000 partition_table/partition-table.bin
 esptool.py v4.9.dev6
 Serial port /dev/ttyUSB0
@@ -42,108 +37,115 @@ Changing baud rate to 460800
 Changed.
 Configuring flash size...
 Flash will be erased from 0x00000000 to 0x00005fff...
-Flash will be erased from 0x00010000 to 0x0021cfff...
+Flash will be erased from 0x00010000 to 0x0025ffff...
 Flash will be erased from 0x00008000 to 0x00008fff...
 SHA digest in image updated
 Compressed 21168 bytes to 13485...
 Writing at 0x00000000... (100 %)
-Wrote 21168 bytes (13485 compressed) at 0x00000000 in 0.4 seconds (effective 385.8 kbit/s)...
+Wrote 21168 bytes (13485 compressed) at 0x00000000 in 0.4 seconds (effective 380.6 kbit/s)...
 Hash of data verified.
-Compressed 2147600 bytes to 1452139...
+Compressed 2424704 bytes to 1572841...
 Writing at 0x00010000... (1 %)
-Writing at 0x0001ca82... (2 %)
-Writing at 0x0002b630... (3 %)
-Writing at 0x00037055... (4 %)
-Writing at 0x0003c5c9... (5 %)
-Writing at 0x00040814... (6 %)
-Writing at 0x00044892... (7 %)
-Writing at 0x0004a18f... (8 %)
-Writing at 0x0004f3a1... (10 %)
-Writing at 0x00053ec9... (11 %)
-Writing at 0x00058bf0... (12 %)
-Writing at 0x00061270... (13 %)
-Writing at 0x0006747e... (14 %)
-Writing at 0x0006bd9b... (15 %)
-Writing at 0x00072609... (16 %)
-Writing at 0x000770f9... (17 %)
-Writing at 0x0007bf87... (19 %)
-Writing at 0x00081326... (20 %)
-Writing at 0x00088bc8... (21 %)
-Writing at 0x000920cd... (22 %)
-Writing at 0x00098344... (23 %)
-Writing at 0x0009e89b... (24 %)
-Writing at 0x000a4da4... (25 %)
-Writing at 0x000aaa7a... (26 %)
-Writing at 0x000b0867... (28 %)
-Writing at 0x000b6b23... (29 %)
-Writing at 0x000bd528... (30 %)
-Writing at 0x000c24a2... (31 %)
-Writing at 0x000c733d... (32 %)
-Writing at 0x000cc9e0... (33 %)
-Writing at 0x000d1d22... (34 %)
-Writing at 0x000d6f05... (35 %)
-Writing at 0x000dbd29... (37 %)
-Writing at 0x000e09f7... (38 %)
-Writing at 0x000e593a... (39 %)
-Writing at 0x000ea996... (40 %)
-Writing at 0x000ef6b3... (41 %)
-Writing at 0x000f47b5... (42 %)
-Writing at 0x000f965a... (43 %)
-Writing at 0x000fe582... (44 %)
-Writing at 0x001031d2... (46 %)
-Writing at 0x001087cc... (47 %)
-Writing at 0x0010da3c... (48 %)
-Writing at 0x00112afd... (49 %)
-Writing at 0x00117fbb... (50 %)
-Writing at 0x0011cfa6... (51 %)
-Writing at 0x00121e88... (52 %)
-Writing at 0x00126d2f... (53 %)
-Writing at 0x0012bced... (55 %)
-Writing at 0x00130e16... (56 %)
-Writing at 0x00136340... (57 %)
-Writing at 0x0013b132... (58 %)
-Writing at 0x0014088d... (59 %)
-Writing at 0x00146c8b... (60 %)
-Writing at 0x0014cc7e... (61 %)
-Writing at 0x00152820... (62 %)
-Writing at 0x00158526... (64 %)
-Writing at 0x0015e28e... (65 %)
-Writing at 0x00164070... (66 %)
-Writing at 0x0016a011... (67 %)
-Writing at 0x00170929... (68 %)
-Writing at 0x001764c3... (69 %)
-Writing at 0x0017c247... (70 %)
-Writing at 0x001824cf... (71 %)
-Writing at 0x0018822d... (73 %)
-Writing at 0x0018e162... (74 %)
-Writing at 0x001934c4... (75 %)
-Writing at 0x0019839c... (76 %)
-Writing at 0x0019d788... (77 %)
-Writing at 0x001a2b54... (78 %)
-Writing at 0x001a7dbe... (79 %)
-Writing at 0x001acf26... (80 %)
-Writing at 0x001b252f... (82 %)
-Writing at 0x001b888b... (83 %)
-Writing at 0x001be241... (84 %)
-Writing at 0x001c4103... (85 %)
-Writing at 0x001ca1b7... (86 %)
-Writing at 0x001cf8e3... (87 %)
-Writing at 0x001d5dd8... (88 %)
-Writing at 0x001dc8e1... (89 %)
-Writing at 0x001e4fd4... (91 %)
-Writing at 0x001eb354... (92 %)
-Writing at 0x001f1c13... (93 %)
-Writing at 0x001f7787... (94 %)
-Writing at 0x002007e1... (95 %)
-Writing at 0x0020639a... (96 %)
-Writing at 0x0020c8c0... (97 %)
-Writing at 0x00213472... (98 %)
-Writing at 0x002186d4... (100 %)
-Wrote 2147600 bytes (1452139 compressed) at 0x00010000 in 32.5 seconds (effective 528.8 kbit/s)...
+Writing at 0x0001c822... (2 %)
+Writing at 0x0002b07c... (3 %)
+Writing at 0x00038919... (4 %)
+Writing at 0x0003e0bc... (5 %)
+Writing at 0x00042977... (6 %)
+Writing at 0x00046c1a... (7 %)
+Writing at 0x0004adad... (8 %)
+Writing at 0x00050748... (9 %)
+Writing at 0x00055761... (10 %)
+Writing at 0x0005a287... (11 %)
+Writing at 0x0005f10c... (12 %)
+Writing at 0x00068b50... (13 %)
+Writing at 0x0006d8c9... (14 %)
+Writing at 0x00072136... (15 %)
+Writing at 0x00078ef1... (16 %)
+Writing at 0x0007db68... (17 %)
+Writing at 0x00082b82... (18 %)
+Writing at 0x0008825f... (19 %)
+Writing at 0x00090ca4... (20 %)
+Writing at 0x0009bd2c... (21 %)
+Writing at 0x000a1d45... (22 %)
+Writing at 0x000a8006... (23 %)
+Writing at 0x000ae351... (25 %)
+Writing at 0x000b49f2... (26 %)
+Writing at 0x000ba719... (27 %)
+Writing at 0x000c0607... (28 %)
+Writing at 0x000c6329... (29 %)
+Writing at 0x000cb74d... (30 %)
+Writing at 0x000d12e1... (31 %)
+Writing at 0x000dd096... (32 %)
+Writing at 0x000f50be... (33 %)
+Writing at 0x000fada1... (34 %)
+Writing at 0x0010086f... (35 %)
+Writing at 0x00106671... (36 %)
+Writing at 0x0010b3cb... (37 %)
+Writing at 0x00110663... (38 %)
+Writing at 0x00115f75... (39 %)
+Writing at 0x0011b09b... (40 %)
+Writing at 0x0011ffbe... (41 %)
+Writing at 0x00124c92... (42 %)
+Writing at 0x00129af7... (43 %)
+Writing at 0x0012e9a3... (44 %)
+Writing at 0x0013381b... (45 %)
+Writing at 0x00138804... (46 %)
+Writing at 0x0013d665... (47 %)
+Writing at 0x001427ab... (48 %)
+Writing at 0x001473fb... (50 %)
+Writing at 0x0014c579... (51 %)
+Writing at 0x00151983... (52 %)
+Writing at 0x00156f8c... (53 %)
+Writing at 0x0015bdd5... (54 %)
+Writing at 0x00160fb3... (55 %)
+Writing at 0x00165e70... (56 %)
+Writing at 0x0016adfe... (57 %)
+Writing at 0x0016fba6... (58 %)
+Writing at 0x00174d6f... (59 %)
+Writing at 0x00179edb... (60 %)
+Writing at 0x0017f2bb... (61 %)
+Writing at 0x00184410... (62 %)
+Writing at 0x0018a33d... (63 %)
+Writing at 0x0019111f... (64 %)
+Writing at 0x0019719d... (65 %)
+Writing at 0x0019ccdd... (66 %)
+Writing at 0x001a2a6f... (67 %)
+Writing at 0x001a8768... (68 %)
+Writing at 0x001ae3bc... (69 %)
+Writing at 0x001b457e... (70 %)
+Writing at 0x001bac9d... (71 %)
+Writing at 0x001c07c2... (72 %)
+Writing at 0x001c65ba... (73 %)
+Writing at 0x001cc962... (75 %)
+Writing at 0x001d270e... (76 %)
+Writing at 0x001d83a6... (77 %)
+Writing at 0x001dd537... (78 %)
+Writing at 0x001e2406... (79 %)
+Writing at 0x001e781a... (80 %)
+Writing at 0x001ecc75... (81 %)
+Writing at 0x001f1d96... (82 %)
+Writing at 0x001f6f65... (83 %)
+Writing at 0x001fce7b... (84 %)
+Writing at 0x00202a35... (85 %)
+Writing at 0x00208836... (86 %)
+Writing at 0x0020e31e... (87 %)
+Writing at 0x00214348... (88 %)
+Writing at 0x00219a69... (89 %)
+Writing at 0x0021f4c5... (90 %)
+Writing at 0x00226d32... (91 %)
+Writing at 0x0022edc5... (92 %)
+Writing at 0x00235531... (93 %)
+Writing at 0x0023af93... (94 %)
+Writing at 0x00241759... (95 %)
+Writing at 0x00247c4e... (96 %)
+Writing at 0x0024e1f5... (97 %)
+Writing at 0x00254395... (98 %)
+Writing at 0x0025a3cc... (100 %)
+Wrote 2424704 bytes (1572841 compressed) at 0x00010000 in 35.2 seconds (effective 551.4 kbit/s)...
 Hash of data verified.
 Compressed 3072 bytes to 105...
 Writing at 0x00008000... (100 %)
-Wrote 3072 bytes (105 compressed) at 0x00008000 in 0.0 seconds (effective 976.1 kbit/s)...
+Wrote 3072 bytes (105 compressed) at 0x00008000 in 0.0 seconds (effective 1007.1 kbit/s)...
 Hash of data verified.
 
 Leaving...
@@ -153,7 +155,7 @@ Running idf_monitor in directory /home/dp/code/esp-webrtc-solution/solutions/ope
 Executing "/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/tools/idf_monitor.py -p /dev/ttyUSB0 -b 115200 --toolchain-prefix xtensa-esp32s3-elf- --target esp32s3 --revision 0 /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.elf /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/bootloader/bootloader.elf -m '/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python' '/home/dp/code/esp-idf/tools/idf.py'"...
 ESP-ROM:esp32s3-20210327
 Build:Mar 27 2021
-rst:0x1 (POWERON),boot:0xa (SPI_FAST_FLASH_BOOT)
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
 SPIWP:0xee
 mode:DIO, clock div:1
 load:0x3fce2820,len:0x15d0
@@ -175,213 +177,620 @@ entry 0x403c8924
 [0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
 [0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00300000[0m
 [0;32mI (78) boot: End of partition table[0m
-[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c170020 size=7f3a4h (521124) map[0m
-[0;32mI (180) esp_image: segment 1: paddr=0008f3cc vaddr=3fca5900 size=00c4ch (  3148) load[0m
-[0;32mI (181) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=169d78h (1482104) map[0m
-[0;32mI (445) esp_image: segment 3: paddr=001f9da0 vaddr=3fca654c size=04eb4h ( 20148) load[0m
-[0;32mI (450) esp_image: segment 4: paddr=001fec5c vaddr=40378000 size=1d860h (120928) load[0m
-[0;32mI (476) esp_image: segment 5: paddr=0021c4c4 vaddr=600fe000 size=0001ch (    28) load[0m
-[0;32mI (488) boot: Loaded app from partition at offset 0x10000[0m
-[0;32mI (488) boot: Disabling RNG early entropy source...[0m
-[0;33mW (498) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
-[0;33mW (499) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
-[0;33mW (506) flash HPM: High performance mode of this flash model hasn't been supported.[0m
-[0;32mI (513) MSPI Timing: Flash timing tuning index: 2[0m
-[0;32mI (518) octal_psram: vendor id    : 0x0d (AP)[0m
-[0;32mI (521) octal_psram: dev id       : 0x02 (generation 3)[0m
-[0;32mI (526) octal_psram: density      : 0x03 (64 Mbit)[0m
-[0;32mI (531) octal_psram: good-die     : 0x01 (Pass)[0m
-[0;32mI (535) octal_psram: Latency      : 0x01 (Fixed)[0m
-[0;32mI (540) octal_psram: VCC          : 0x01 (3V)[0m
-[0;32mI (544) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
-[0;32mI (549) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
-[0;32mI (553) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
-[0;32mI (558) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
-[0;32mI (563) octal_psram: DriveStrength: 0x00 (1/1)[0m
-[0;32mI (575) MSPI Timing: PSRAM timing tuning index: 10[0m
-[0;32mI (576) esp_psram: Found 8MB PSRAM device[0m
-[0;32mI (576) esp_psram: Speed: 120MHz[0m
-[0;32mI (579) cpu_start: Multicore app[0m
-[0;32mI (816) esp_psram: SPI SRAM memory test OK[0m
-[0;32mI (825) cpu_start: Pro cpu start user code[0m
-[0;32mI (825) cpu_start: cpu freq: 240000000 Hz[0m
-[0;32mI (825) app_init: Application information:[0m
-[0;32mI (825) app_init: Project name:     openai_demo[0m
-[0;32mI (829) app_init: App version:      5a9b4a8-dirty[0m
-[0;32mI (834) app_init: Compile time:     Apr 21 2025 16:26:25[0m
-[0;32mI (839) app_init: ELF file SHA256:  07fa3bb43...[0m
-[0;32mI (843) app_init: ESP-IDF:          v5.5-dev-2488-gee77c489e7-dirty[0m
-[0;32mI (849) efuse_init: Min chip rev:     v0.0[0m
-[0;32mI (853) efuse_init: Max chip rev:     v0.99 [0m
-[0;32mI (857) efuse_init: Chip rev:         v0.2[0m
-[0;32mI (861) heap_init: Initializing. RAM available for dynamic allocation:[0m
-[0;32mI (867) heap_init: At 3FCB0B28 len 00038BE8 (226 KiB): RAM[0m
-[0;32mI (872) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
-[0;32mI (877) heap_init: At 600FE01C len 00001FCC (7 KiB): RTCRAM[0m
-[0;32mI (883) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator[0m
-[0;32mI (890) spi_flash: detected chip: generic[0m
-[0;32mI (893) spi_flash: flash io: dio[0m
-[0;33mW (896) spi_flash: Detected size(16384k) larger than the size in the binary image header(4096k). Using the size in the binary image header.[0m
-[0;32mI (908) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
-[0;32mI (914) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
-[0;32mI (921) main_task: Started on CPU0[0m
-[0;32mI (941) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
-[0;32mI (941) main_task: Calling app_main()[0m
-[0;32mI (941) Board: Init board.[0m
-i2s: {mclk: -1, din: 6, ws: 7, bclk: 15}
-i2s: {mclk: -1, dout: 16, bclk: 17, ws: 18}
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c1b0020 size=84e1ch (544284) map[0m
+[0;32mI (184) esp_image: segment 1: paddr=00094e44 vaddr=3fca5f00 size=06710h ( 26384) load[0m
+[0;32mI (190) esp_image: segment 2: paddr=0009b55c vaddr=40378000 size=04abch ( 19132) load[0m
+[0;32mI (195) esp_image: segment 3: paddr=000a0020 vaddr=42000020 size=1a6b20h (1731360) map[0m
+[0;32mI (501) esp_image: segment 4: paddr=00246b48 vaddr=4037cabc size=193e8h (103400) load[0m
+[0;32mI (524) esp_image: segment 5: paddr=0025ff38 vaddr=600fe000 size=0001ch (    28) load[0m
+[0;32mI (536) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (536) boot: Disabling RNG early entropy source...[0m
+[0;33mW (546) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;33mW (546) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
+[0;33mW (553) flash HPM: High performance mode of this flash model hasn't been supported.[0m
+[0;32mI (561) MSPI Timing: Flash timing tuning index: 2[0m
+[0;32mI (565) octal_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (569) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (574) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (579) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (583) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (587) octal_psram: VCC          : 0x01 (3V)[0m
+[0;32mI (591) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
+[0;32mI (596) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
+[0;32mI (601) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (606) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (611) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (620) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (620) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (623) esp_psram: Speed: 120MHz[0m
+[0;32mI (626) cpu_start: Multicore app[0m
+[0;32mI (863) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (872) cpu_start: Pro cpu start user code[0m
+[0;32mI (872) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (872) app_init: Application information:[0m
+[0;32mI (872) app_init: Project name:     openai_demo[0m
+[0;32mI (877) app_init: App version:      1a74549-dirty[0m
+[0;32mI (881) app_init: Compile time:     Apr 21 2025 18:05:01[0m
+[0;32mI (886) app_init: ELF file SHA256:  19b4e8433...[0m
+[0;32mI (890) app_init: ESP-IDF:          v5.5-dev-2488-gee77c489e7-dirty[0m
+[0;32mI (896) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (900) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (904) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (908) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (914) heap_init: At 3FCB5DB0 len 00033960 (206 KiB): RAM[0m
+[0;32mI (919) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (925) heap_init: At 600FE01C len 00001FCC (7 KiB): RTCRAM[0m
+[0;32mI (930) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator[0m
+[0;32mI (937) spi_flash: detected chip: generic[0m
+[0;32mI (940) spi_flash: flash io: dio[0m
+[0;33mW (943) spi_flash: Detected size(16384k) larger than the size in the binary image header(4096k). Using the size in the binary image header.[0m
+[0;32mI (956) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (962) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (968) main_task: Started on CPU0[0m
+[0;32mI (988) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (988) main_task: Calling app_main()[0m
+[0;32mI (988) Board: Init board.[0m
+i2s: {mclk: -1, din: 4, ws: 5, bclk: 6}
+i2s: {mclk: -1, dout: 7, bclk: 15, ws: 16}
 in: {codec: DUMMY, i2c_port: -1}
 Codec 0 dir 1 type:5
 out: {codec: DUMMY, i2c_port: -1, pa: -1, i2s_port: 1}
 Codec 1 dir 2 type:5
 lcd: {bus: spi, controller: st7789, spi_bus: 3, mirror_x: 0, mirror_y: 0, swap_xy: 0, color_inv: 0, width: 240, height: 240, ctrl: 3, cs: 46, dc: 9, rst: 10, mosi: 11, clk: 12, cmd_bits: 8, param_bits: 8}
-[0;32mI (981) CODEC_INIT: Set mater handle 0 0x3c1f0998[0m
-[0;32mI (981) CODEC_INIT: in:1 out:1 port: 0[0m
-[0;32mI (991) CODEC_INIT: Success to int i2c: -1[0m
-[0;32mI (991) CODEC_INIT: Init i2s 1 type: 2 mclk:-1 bclk:17 ws:18 din:-1 dout:16[0m
-[0;32mI (1001) CODEC_INIT: tx:0x3c1f0e18 rx:0x0[0m
-[0;32mI (1001) CODEC_INIT: output init std ret 0[0m
-[0;32mI (1011) CODEC_INIT: Init i2s 1 ok[0m
-[0;32mI (1011) CODEC_INIT: Success to init i2s: 0[0m
-[0;32mI (1011) CODEC_INIT: Success to int i2c: -1[0m
-[0;32mI (1021) CODEC_INIT: Init i2s 0 type: 1 mclk:-1 bclk:15 ws:7 din:6 dout:-1[0m
-[0;33mW (1021) i2s_platform: i2s controller 0 has been occupied by i2s_driver[0m
-[0;32mI (1031) CODEC_INIT: tx:0x0 rx:0x3c1f1024[0m
-[0;33mW (1031) i2s_tdm: the current mclk multiple is too small, adjust the mclk multiple to 384[0m
-[0;32mI (1041) CODEC_INIT: Input init tdm ret 0[0m
-[0;32mI (1041) CODEC_INIT: Init i2s 0 ok[0m
-[0;32mI (1051) CODEC_INIT: Success to init i2s: 0[0m
-[0;32mI (1051) CODEC_INIT: Get out handle 0x3c1f0e18 port 1[0m
-[0;32mI (1061) CODEC_INIT: Get in handle 0x3c1f1024 port 0[0m
-[0;32mI (1061) Board: Attempting to initialize LCD[0m
-[0;32mI (1071) Board: LCD configuration found, attempting to initialize[0m
-[0;32mI (1071) LCD_INIT: Initializing LCD with configuration: bus_type=1, controller=1, width=240, height=240[0m
-[0;32mI (1081) LCD_INIT: _init_lcd: io_type=0, reset_pin=10, ctrl_pin=3, bus_type=1[0m
-[0;32mI (1091) LCD_INIT: Setting direction for reset_pin 10[0m
-[0;32mI (1091) LCD_INIT: set_pin_dir: pin=10, output=1, io_type=0[0m
-[0;32mI (1101) LCD_INIT: Configuring GPIO pin 10 as OUTPUT[0m
-[0;32mI (1101) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1111) LCD_INIT: Setting direction for ctrl_pin 3[0m
-[0;32mI (1111) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
-[0;32mI (1121) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
-[0;32mI (1121) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1131) LCD_INIT: Setting direction for SPI CS pin 46[0m
-[0;32mI (1141) LCD_INIT: set_pin_dir: pin=46, output=1, io_type=0[0m
-[0;32mI (1141) LCD_INIT: Configuring GPIO pin 46 as OUTPUT[0m
-[0;32mI (1151) gpio: GPIO[46]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1161) LCD_INIT: About to call _lcd_rest[0m
-[0;32mI (1161) LCD_INIT: _lcd_rest: reset_pin=10[0m
-[0;32mI (1161) LCD_INIT: set_pin_state: pin=10, high=0, io_type=0[0m
-[0;32mI (1171) LCD_INIT: Setting GPIO level for pin 10 to 0[0m
-[0;32mI (1271) LCD_INIT: set_pin_state: pin=10, high=1, io_type=0[0m
-[0;32mI (1271) LCD_INIT: Setting GPIO level for pin 10 to 1[0m
-[0;32mI (1271) LCD_INIT: After _lcd_rest[0m
-[0;32mI (1271) LCD_INIT: Setting direction for ctrl_pin 3 again[0m
-[0;32mI (1271) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
-[0;32mI (1281) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
-[0;32mI (1281) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1291) LCD_INIT: About to init SPI LCD[0m
-[0;32mI (1291) LCD_INIT: Initializing SPI LCD with bus=3, cs=46, dc=9, clk=12, mosi=11[0m
-[0;32mI (1301) LCD_INIT: SPI bus initialized: CLK=12, MOSI=11, CS=46, DC=9, Bus=2[0m
-[0;32mI (1311) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1321) LCD_INIT: ST7789 driver initialized successfully[0m
-[0;32mI (1321) LCD_INIT: About to call esp_lcd_panel_init[0m
-[0;32mI (1431) LCD_INIT: About to call esp_lcd_panel_disp_on_off (keep display off until splash)[0m
-[0;32mI (1431) LCD_INIT: LCD initialization complete, ret=0[0m
-[0;32mI (1431) LCD_INIT: Setting LCD backlight (ctrl_pin 3) to HIGH[0m
-[0;32mI (1431) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
-[0;32mI (1441) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
-[0;32mI (1441) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1451) LCD_INIT: set_pin_state: pin=3, high=1, io_type=0[0m
-[0;32mI (1461) LCD_INIT: Setting GPIO level for pin 3 to 1[0m
-[0;32mI (1461) LCD_INIT: LCD initialization successful: 0[0m
-[0;32mI (1461) Board: LCD initialized successfully[0m
-[0;32mI (1471) LCD_GUI: lcd_gui_task started[0m
-[0;32mI (1471) LCD_GUI: Received LCD command: 1[0m
-[0;32mI (1481) LCD_GUI: lcd_gui_task: SPLASH type=1[0m
-[0;32mI (1491) LCD_GUI: Drawing splash_bitmap1 (POWERON)[0m
-[5n[0;32mI (1491) LCD_GUI: Splash displayed, delaying for visibility[0m
+[0;32mI (1028) CODEC_INIT: Set mater handle 0 0x3c240998[0m
+[0;32mI (1028) CODEC_INIT: in:1 out:1 port: 0[0m
+[0;32mI (1038) CODEC_INIT: Success to int i2c: -1[0m
+[0;32mI (1038) CODEC_INIT: Init i2s 1 type: 2 mclk:-1 bclk:15 ws:16 din:-1 dout:7[0m
+[0;32mI (1048) CODEC_INIT: tx:0x3c240e18 rx:0x0[0m
+[0;32mI (1048) CODEC_INIT: output init std ret 0[0m
+[0;32mI (1058) CODEC_INIT: Init i2s 1 ok[0m
+[0;32mI (1058) CODEC_INIT: Success to init i2s: 0[0m
+[0;32mI (1058) CODEC_INIT: Success to int i2c: -1[0m
+[0;32mI (1068) CODEC_INIT: Init i2s 0 type: 1 mclk:-1 bclk:6 ws:5 din:4 dout:-1[0m
+[0;33mW (1068) i2s_platform: i2s controller 0 has been occupied by i2s_driver[0m
+[0;32mI (1078) CODEC_INIT: tx:0x0 rx:0x3c241024[0m
+[0;33mW (1078) i2s_tdm: the current mclk multiple is too small, adjust the mclk multiple to 384[0m
+[0;32mI (1088) CODEC_INIT: Input init tdm ret 0[0m
+[0;32mI (1088) CODEC_INIT: Init i2s 0 ok[0m
+[0;32mI (1098) CODEC_INIT: Success to init i2s: 0[0m
+[0;32mI (1098) CODEC_INIT: Get out handle 0x3c240e18 port 1[0m
+[0;32mI (1108) CODEC_INIT: Get in handle 0x3c241024 port 0[0m
+[0;32mI (1108) Board: Attempting to initialize LCD[0m
+[0;32mI (1118) Board: LCD configuration found, attempting to initialize[0m
+[0;32mI (1118) LCD_INIT: Initializing LCD with configuration: bus_type=1, controller=1, width=240, height=240[0m
+[0;32mI (1128) LCD_INIT: _init_lcd: io_type=0, reset_pin=10, ctrl_pin=3, bus_type=1[0m
+[0;32mI (1138) LCD_INIT: Setting direction for reset_pin 10[0m
+[0;32mI (1138) LCD_INIT: set_pin_dir: pin=10, output=1, io_type=0[0m
+[0;32mI (1148) LCD_INIT: Configuring GPIO pin 10 as OUTPUT[0m
+[0;32mI (1148) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1158) LCD_INIT: Setting direction for ctrl_pin 3[0m
+[0;32mI (1158) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
+[0;32mI (1168) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
+[0;32mI (1168) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1178) LCD_INIT: Setting direction for SPI CS pin 46[0m
+[0;32mI (1188) LCD_INIT: set_pin_dir: pin=46, output=1, io_type=0[0m
+[0;32mI (1188) LCD_INIT: Configuring GPIO pin 46 as OUTPUT[0m
+[0;32mI (1198) gpio: GPIO[46]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1208) LCD_INIT: About to call _lcd_rest[0m
+[0;32mI (1208) LCD_INIT: _lcd_rest: reset_pin=10[0m
+[0;32mI (1208) LCD_INIT: set_pin_state: pin=10, high=0, io_type=0[0m
+[0;32mI (1218) LCD_INIT: Setting GPIO level for pin 10 to 0[0m
+[0;32mI (1318) LCD_INIT: set_pin_state: pin=10, high=1, io_type=0[0m
+[0;32mI (1318) LCD_INIT: Setting GPIO level for pin 10 to 1[0m
+[0;32mI (1318) LCD_INIT: After _lcd_rest[0m
+[0;32mI (1318) LCD_INIT: Setting direction for ctrl_pin 3 again[0m
+[0;32mI (1318) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
+[0;32mI (1328) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
+[0;32mI (1328) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1338) LCD_INIT: About to init SPI LCD[0m
+[0;32mI (1338) LCD_INIT: Initializing SPI LCD with bus=3, cs=46, dc=9, clk=12, mosi=11[0m
+[0;32mI (1348) LCD_INIT: SPI bus initialized: CLK=12, MOSI=11, CS=46, DC=9, Bus=2[0m
+[0;32mI (1358) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1368) LCD_INIT: ST7789 driver initialized successfully[0m
+[0;32mI (1368) LCD_INIT: About to call esp_lcd_panel_init[0m
+[0;32mI (1478) LCD_INIT: About to call esp_lcd_panel_disp_on_off (keep display off until splash)[0m
+[0;32mI (1478) LCD_INIT: LCD initialization complete, ret=0[0m
+[0;32mI (1478) LCD_INIT: Setting LCD backlight (ctrl_pin 3) to HIGH[0m
+[0;32mI (1478) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
+[0;32mI (1488) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
+[0;32mI (1488) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1498) LCD_INIT: set_pin_state: pin=3, high=1, io_type=0[0m
+[0;32mI (1508) LCD_INIT: Setting GPIO level for pin 3 to 1[0m
+[0;32mI (1508) LCD_INIT: LCD initialization successful: 0[0m
+[0;32mI (1508) Board: LCD initialized successfully[0m
+[0;32mI (1518) LCD_GUI: lcd_gui_task started[0m
+[0;32mI (1518) LCD_GUI: Received LCD command: 1[0m
+[0;32mI (1528) LCD_GUI: lcd_gui_task: SPLASH type=1[0m
+[5n[0;32mI (1548) LCD_GUI: Drawing splash_bitmap1 (POWERON)[0m
+[0;32mI (1548) LCD_GUI: Splash displayed, delaying for visibility[0m
 
 Type 'help' to get the list of commands.
 Use UP/DOWN arrows to navigate through command history.
 Press TAB when typing command name to auto-complete.
-[6n I (1561) pp: pp rom version: e7ae62f
-[0;32mI (1561) net80211: net80211 rom version: e7ae62f[0m
-[0;32mI (1571) wifi:wifi driver task: 3fcce0a0, prio:23, stack:6656, core=0[0m
-[0;32mI (1571) wifi:wifi firmware version: 7086521f2a[0m
-[0;32mI (1571) wifi:wifi certification version: v7.0[0m
-[0;32mI (1571) wifi:config NVS flash: enabled[0m
-[999C I (1581) wifi:config nano formatting: disabled
-[0;32mI (1591) wifi:Init data frame dynamic rx buffer num: 32[0m
-[6n I (1591) wifi:Init static rx mgmt buffer num: 5
-[0;32mI (1601) wifi:Init management short buffer num: 32[0m
-[0;32mI (1601) wifi:Init dynamic tx buffer num: 32[0m
-[0;32mI (1601) wifi:Init static tx FG buffer num: 2[0m
-esp> I (1611) wifi:Init static rx buffer size: 1600
-[0;32mI (1621) wifi:Init static rx buffer num: 10[0m
-[0;32mI (1621) wifi:Init dynamic rx buffer num: 32[0m
-[0;32mI (1621) wifi_init: rx ba win: 6[0m
-[0;32mI (1631) wifi_init: accept mbox: 6[0m
-[0;32mI (1631) wifi_init: tcpip mbox: 32[0m
-[0;32mI (1631) wifi_init: udp mbox: 6[0m
-[0;32mI (1631) wifi_init: tcp mbox: 6[0m
-[0;32mI (1641) wifi_init: tcp tx win: 5760[0m
-[0;32mI (1641) wifi_init: tcp rx win: 5760[0m
-[0;32mI (1641) wifi_init: tcp mss: 1440[0m
-[0;32mI (1641) wifi_init: WiFi IRAM OP enabled[0m
-[0;32mI (1651) wifi_init: WiFi RX IRAM OP enabled[0m
-[0;32mI (1651) NETWORK: Force to use wifi config from nvs[0m
-[0;32mI (1671) wifi:Set ps type: 0, coexist: 0[0m
+[6n I (1618) pp: pp rom version: e7ae62f
+[0;32mI (1618) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1628) wifi:wifi driver task: 3fcd3dd8, prio:23, stack:6656, core=0[0m
+[999C [6n I (1638) wifi:wifi firmware version: 7086521f2a
+[0;32mI (1638) wifi:wifi certification version: v7.0[0m
+[0;32mI (1638) wifi:config NVS flash: enabled[0m
+[0;32mI (1638) wifi:config nano formatting: disabled[0m
+[166DI (1648) wifi:Init data frame dynamic rx buffer num: 32
+esp> I (1648) wifi:Init static rx mgmt buffer num: 5
+[0;32mI (1658) wifi:Init management short buffer num: 32[0m
+[0;32mI (1658) wifi:Init dynamic tx buffer num: 32[0m
+[0;32mI (1658) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1668) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1668) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1668) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1678) wifi_init: rx ba win: 6[0m
+[0;32mI (1678) wifi_init: accept mbox: 6[0m
+[0;32mI (1678) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1688) wifi_init: udp mbox: 6[0m
+[0;32mI (1698) wifi_init: tcp mbox: 6[0m
+[0;32mI (1698) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1698) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1708) wifi_init: tcp mss: 1440[0m
+[0;32mI (1708) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1708) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1718) NETWORK: Force to use wifi config from nvs[0m
+[0;32mI (1718) wifi:Set ps type: 0, coexist: 0[0m
 
-[0;32mI (1671) phy_init: phy_version 701,f4f1da3a,Mar  3 2025,15:50:10[0m
-[0;32mI (1711) wifi:mode : sta (30:ed:a0:2b:82:54)[0m
-[0;32mI (1711) wifi:enable tsf[0m
-[0;32mI (1711) NETWORK: wifi_init_sta finished.[0m
-[0;32mI (1721) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (1721) wifi:state: init -> auth (0xb0)[0m
-[0;32mI (1841) wifi:state: auth -> assoc (0x0)[0m
-[0;32mI (1901) wifi:state: assoc -> run (0x10)[0m
-[0;32mI (1921) wifi:connected with dp, aid = 1, channel 1, BW20, bssid = 02:00:46:fa:da:ed[0m
-[0;32mI (1921) wifi:security: WPA2-PSK, phy: bgn, rssi: -39[0m
-[0;32mI (1931) wifi:pm start, type: 0[0m
-
-[0;32mI (1931) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
-[0;32mI (1941) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
-[0;32mI (2021) wifi:dp: 2, bi: 102400, li: 4, scale listen interval from 307200 us to 409600 us[0m
-[0;32mI (2021) wifi:AP's beacon interval = 102400 us, DTIM period = 2[0m
-[0;32mI (2701) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (2701) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
-[0;32mI (3061) esp_netif_handlers: sta ip: 10.42.0.99, mask: 255.255.255.0, gw: 10.42.0.1[0m
-[0;32mI (3061) NETWORK: got ip:10.42.0.99[0m
-[0;32mI (3061) LCD_GUI: Received LCD command: 2[0m
-[0;32mI (3071) LCD_GUI: lcd_gui_task: STATUS[0m
-[0;32mI (3081) LCD_GUI: lcd_gui_task: STATUS done[0m
-[0;32mI (3081) LCD_GUI: LCD STATUS: WiFi Connected: 10.42.0.99[0m
-[0;32mI (3081) LCD_GUI: lcd_gui_queue spaces available: 7[0m
-[0;32mI (3091) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (3091) LCD_GUI: Received LCD command: 1[0m
-[0;32mI (3091) LCD_GUI: lcd_gui_task: SPLASH type=2[0m
-[0;32mI (3121) LCD_GUI: Drawing splash_bitmap2 (CONNECTED)[0m
-[0;32mI (3121) LCD_GUI: Splash displayed, delaying for visibility[0m
-[0;32mI (4321) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (4321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (6321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (6321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (8321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (8321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (10321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (10321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (12321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (12321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (14321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (14321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (16321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (16321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (18321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (18321) LCD_GUI: lcd_gui_task heartbeat[0m
-[0;32mI (18321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (20331) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (20331) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (22331) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (22331) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-Done
+[0;32mI (1728) phy_init: phy_version 701,f4f1da3a,Mar  3 2025,15:50:10[0m
+[0;32mI (1758) wifi:mode : sta (30:ed:a0:2b:82:54)[0m
+[0;32mI (1758) wifi:enable tsf[0m
+[0;32mI (1758) NETWORK: wifi_init_sta finished.[0m
+[0;32mI (2748) LCD_GUI: lcd_gui_queue spaces available: 8[0m
+[0;32mI (2748) LCD_GUI: lcd_gui_task stack high water mark: 9988[0m
+[0;32mI (3758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (4168) NETWORK: retry to connect to the AP[0m
+[0;32mI (4748) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (4748) LCD_GUI: lcd_gui_task stack high water mark: 9988[0m
+[0;32mI (5758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (6568) NETWORK: retry to connect to the AP[0m
+[0;32mI (6748) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (6748) LCD_GUI: lcd_gui_task stack high water mark: 9988[0m
+[0;32mI (7758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (8748) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (8748) LCD_GUI: lcd_gui_task stack high water mark: 9988[0m
+[0;32mI (8968) NETWORK: retry to connect to the AP[0m
+[0;32mI (9758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (10748) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (10748) LCD_GUI: lcd_gui_task stack high water mark: 9988[0m
+[0;32mI (11378) NETWORK: retry to connect to the AP[0m
+[0;32mI (11758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (12748) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (12748) LCD_GUI: lcd_gui_task stack high water mark: 9988[0m
+[0;32mI (13758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (13778) NETWORK: retry to connect to the AP[0m
+[0;32mI (14748) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (14748) LCD_GUI: lcd_gui_task stack high water mark: 9988[0m
+[0;32mI (15758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (16188) NETWORK: retry to connect to the AP[0m
+[0;32mI (16748) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (16748) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (17758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (18588) NETWORK: retry to connect to the AP[0m
+[0;32mI (18748) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (18748) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (19758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (20748) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (20748) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (20748) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (20998) NETWORK: retry to connect to the AP[0m
+[0;32mI (21758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (22758) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (22758) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (23398) NETWORK: retry to connect to the AP[0m
+[0;32mI (23758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (24758) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (24758) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (25758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (25798) NETWORK: retry to connect to the AP[0m
+[0;32mI (26758) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (26758) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (27758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (28208) NETWORK: retry to connect to the AP[0m
+[0;32mI (28758) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (28758) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (29758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (30608) NETWORK: retry to connect to the AP[0m
+[0;32mI (30758) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (30758) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (31758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (32758) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (32758) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (33018) NETWORK: retry to connect to the AP[0m
+[0;32mI (33758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (34758) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (34758) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (35418) NETWORK: retry to connect to the AP[0m
+[0;32mI (35758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (36758) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (36758) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (37758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (37818) NETWORK: retry to connect to the AP[0m
+[0;32mI (38758) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (38758) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (39758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (40228) NETWORK: retry to connect to the AP[0m
+[0;32mI (40758) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (40758) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (40758) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (41758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (42628) NETWORK: retry to connect to the AP[0m
+[0;32mI (42768) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (42768) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (43758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (44768) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (44768) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (45038) NETWORK: retry to connect to the AP[0m
+[0;32mI (45758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (46768) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (46768) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (47438) NETWORK: retry to connect to the AP[0m
+[0;32mI (47758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (48768) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (48768) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (49758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (49848) NETWORK: retry to connect to the AP[0m
+[0;32mI (50768) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (50768) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (51758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (52248) NETWORK: retry to connect to the AP[0m
+[0;32mI (52768) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (52768) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (53758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (54648) NETWORK: retry to connect to the AP[0m
+[0;32mI (54768) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (54768) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (55758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (56768) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (56768) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (57058) NETWORK: retry to connect to the AP[0m
+[0;32mI (57758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (58768) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (58768) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (59458) NETWORK: retry to connect to the AP[0m
+[0;32mI (59758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (60768) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (60768) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (60768) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (61758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (61868) NETWORK: retry to connect to the AP[0m
+[0;32mI (62778) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (62778) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (63758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (64268) NETWORK: retry to connect to the AP[0m
+[0;32mI (64778) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (64778) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (65758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (66678) NETWORK: retry to connect to the AP[0m
+[0;32mI (66778) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (66778) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (67758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (68778) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (68778) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (69078) NETWORK: retry to connect to the AP[0m
+[0;32mI (69758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (70778) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (70778) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (71478) NETWORK: retry to connect to the AP[0m
+[0;32mI (71758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (72778) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (72778) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (73758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (73888) NETWORK: retry to connect to the AP[0m
+[0;32mI (74778) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (74778) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (75758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (76288) NETWORK: retry to connect to the AP[0m
+[0;32mI (76778) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (76778) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (77758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (78698) NETWORK: retry to connect to the AP[0m
+[0;32mI (78778) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (78778) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (79758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (80778) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (80778) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (80778) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (81098) NETWORK: retry to connect to the AP[0m
+[0;32mI (81758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (82788) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (82788) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (83498) NETWORK: retry to connect to the AP[0m
+[0;32mI (83758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (84788) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (84788) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (85758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (85908) NETWORK: retry to connect to the AP[0m
+[0;32mI (86788) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (86788) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (87758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (88308) NETWORK: retry to connect to the AP[0m
+[0;32mI (88788) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (88788) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (89758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (90718) NETWORK: retry to connect to the AP[0m
+[0;32mI (90788) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (90788) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (91758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (92788) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (92788) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (93118) NETWORK: retry to connect to the AP[0m
+[0;32mI (93758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (94788) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (94788) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (95528) NETWORK: retry to connect to the AP[0m
+[0;32mI (95758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (96788) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (96788) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (97758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (97928) NETWORK: retry to connect to the AP[0m
+[0;32mI (98788) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (98788) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (99758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (100328) NETWORK: retry to connect to the AP[0m
+[0;32mI (100788) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (100788) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (100788) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (101758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (102738) NETWORK: retry to connect to the AP[0m
+[0;32mI (102798) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (102798) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (103758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (104798) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (104798) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (105138) NETWORK: retry to connect to the AP[0m
+[0;32mI (105758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (106798) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (106798) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (107548) NETWORK: retry to connect to the AP[0m
+[0;32mI (107758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (108798) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (108798) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (109758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (109948) NETWORK: retry to connect to the AP[0m
+[0;32mI (110798) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (110798) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (111758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (112358) NETWORK: retry to connect to the AP[0m
+[0;32mI (112798) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (112798) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (113758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (114758) NETWORK: retry to connect to the AP[0m
+[0;32mI (114798) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (114798) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (115758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (116798) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (116798) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (117158) NETWORK: retry to connect to the AP[0m
+[0;32mI (117758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (118798) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (118798) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (119568) NETWORK: retry to connect to the AP[0m
+[0;32mI (119758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (120798) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (120798) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (120798) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (121758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (121968) NETWORK: retry to connect to the AP[0m
+[0;32mI (122808) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (122808) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (123758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (124378) NETWORK: retry to connect to the AP[0m
+[0;32mI (124808) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (124808) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (125758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (126778) NETWORK: retry to connect to the AP[0m
+[0;32mI (126808) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (126808) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (127758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (128808) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (128808) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (129188) NETWORK: retry to connect to the AP[0m
+[0;32mI (129758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (130808) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (130808) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (131588) NETWORK: retry to connect to the AP[0m
+[0;32mI (131758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (132808) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (132808) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (133758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (133988) NETWORK: retry to connect to the AP[0m
+[0;32mI (134808) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (134808) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (135758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (136398) NETWORK: retry to connect to the AP[0m
+[0;32mI (136808) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (136808) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (137758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (138798) NETWORK: retry to connect to the AP[0m
+[0;32mI (138808) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (138808) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (139758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (140808) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (140808) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (140808) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (141208) NETWORK: retry to connect to the AP[0m
+[0;32mI (141758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (142818) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (142818) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (143608) NETWORK: retry to connect to the AP[0m
+[0;32mI (143758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (144818) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (144818) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (145758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (146008) NETWORK: retry to connect to the AP[0m
+[0;32mI (146818) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (146818) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (147758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (148418) NETWORK: retry to connect to the AP[0m
+[0;32mI (148818) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (148818) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (149758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (150818) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (150818) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (150818) NETWORK: retry to connect to the AP[0m
+[0;32mI (151758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (152818) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (152818) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (153228) NETWORK: retry to connect to the AP[0m
+[0;32mI (153758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (154818) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (154818) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (155628) NETWORK: retry to connect to the AP[0m
+[0;32mI (155758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (156818) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (156818) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (157758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (158038) NETWORK: retry to connect to the AP[0m
+[0;32mI (158818) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (158818) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (159758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (160438) NETWORK: retry to connect to the AP[0m
+[0;32mI (160818) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (160818) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (160818) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (161758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (162828) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (162828) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (162838) NETWORK: retry to connect to the AP[0m
+[0;32mI (163758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (164828) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (164828) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (165248) NETWORK: retry to connect to the AP[0m
+[0;32mI (165758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (166828) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (166828) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (167648) NETWORK: retry to connect to the AP[0m
+[0;32mI (167758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (168828) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (168828) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (169758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (170058) NETWORK: retry to connect to the AP[0m
+[0;32mI (170828) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (170828) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (171758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (172458) NETWORK: retry to connect to the AP[0m
+[0;32mI (172828) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (172828) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (173758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (174828) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (174828) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (174868) NETWORK: retry to connect to the AP[0m
+[0;32mI (175758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (176828) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (176828) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (177268) NETWORK: retry to connect to the AP[0m
+[0;32mI (177758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (178828) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (178828) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (179668) NETWORK: retry to connect to the AP[0m
+[0;32mI (179758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (180828) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (180828) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (180828) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (181758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (182078) NETWORK: retry to connect to the AP[0m
+[0;32mI (182838) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (182838) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (183758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (184478) NETWORK: retry to connect to the AP[0m
+[0;32mI (184838) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (184838) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (185758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (186838) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (186838) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (186888) NETWORK: retry to connect to the AP[0m
+[0;32mI (187758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (188838) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (188838) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (189288) NETWORK: retry to connect to the AP[0m
+[0;32mI (189758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (190838) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (190838) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (191688) NETWORK: retry to connect to the AP[0m
+[0;32mI (191758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (192838) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (192838) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (193758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (194098) NETWORK: retry to connect to the AP[0m
+[0;32mI (194838) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (194838) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (195758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (196498) NETWORK: retry to connect to the AP[0m
+[0;32mI (196838) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (196838) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (197758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (198838) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (198838) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (198908) NETWORK: retry to connect to the AP[0m
+[0;32mI (199758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (200838) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (200838) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (200838) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (201308) NETWORK: retry to connect to the AP[0m
+[0;32mI (201758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (202848) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (202848) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (203718) NETWORK: retry to connect to the AP[0m
+[0;32mI (203758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (204848) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (204848) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (205758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (206118) NETWORK: retry to connect to the AP[0m
+[0;32mI (206848) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (206848) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (207758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (208518) NETWORK: retry to connect to the AP[0m
+[0;32mI (208848) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (208848) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (209758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (210848) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (210848) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (210928) NETWORK: retry to connect to the AP[0m
+[0;32mI (211758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (212848) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (212848) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (213328) NETWORK: retry to connect to the AP[0m
+[0;32mI (213758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (214848) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (214848) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (215738) NETWORK: retry to connect to the AP[0m
+[0;32mI (215758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (216848) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (216848) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (217758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (218138) NETWORK: retry to connect to the AP[0m
+[0;32mI (218848) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (218848) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (219758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (220548) NETWORK: retry to connect to the AP[0m
+[0;32mI (220848) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (220848) LCD_GUI: lcd_gui_task heartbeat[0m
+[0;32mI (220848) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (221758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (222858) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (222858) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (222948) NETWORK: retry to connect to the AP[0m
+[0;32mI (223758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (224858) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (224858) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (225348) NETWORK: retry to connect to the AP[0m
+[0;32mI (225758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (226858) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (226858) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (227758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (227758) NETWORK: retry to connect to the AP[0m
+[0;32mI (228858) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (228858) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (229758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (230158) NETWORK: retry to connect to the AP[0m
+[0;32mI (230858) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (230858) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (231758) OPENAI_APP: >> query_webrtc()[0m
+[0;32mI (232568) NETWORK: retry to connect to the AP[0m
+[0;32mI (232858) LCD_GUI: lcd_gui_task timeout – still alive[0m
+[0;32mI (232858) LCD_GUI: lcd_gui_task stack high water mark: 9908[0m
+[0;32mI (233758) OPENAI_APP: >> query_webrtc()[0m

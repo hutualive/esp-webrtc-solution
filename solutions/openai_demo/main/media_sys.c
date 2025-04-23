@@ -23,14 +23,16 @@
 #include "esp_capture_defaults.h"
 #include "esp_log.h"
 
+//#define DEBUG_DISABLE_AEC  // re-enabled AEC by commenting out disable macro
+
+#define TAG "MEDIA_SYS"
+
 #define RET_ON_NULL(ptr, v) do {                                \
     if (ptr == NULL) {                                          \
         ESP_LOGE(TAG, "Memory allocate fail on %d", __LINE__);  \
         return v;                                               \
     }                                                           \
 } while (0)
-
-#define TAG "MEDIA_SYS"
 
 typedef struct {
     esp_capture_path_handle_t   capture_handle;
@@ -52,31 +54,32 @@ static int build_capture_system(void)
     capture_sys.aud_enc = esp_capture_new_audio_encoder();
     RET_ON_NULL(capture_sys.aud_enc, -1);
 
-/*
-    // For S3 when use ES7210 it use TDM mode second channel is reference data
-    esp_capture_audio_aec_src_cfg_t codec_cfg = {
+#ifdef DEBUG_DISABLE_AEC
+    esp_capture_audio_codec_src_cfg_t codec_src_cfg = {
+        .record_handle = get_record_handle(),
+    };
+    capture_sys.aud_src = esp_capture_new_audio_codec_src(&codec_src_cfg);
+#else
+    // Enable acoustic echo cancellation: require TDM input with mic + reference channels
+    esp_capture_audio_aec_src_cfg_t aec_cfg = {
         .record_handle = get_record_handle(),
 #if CONFIG_IDF_TARGET_ESP32S3
-        .channel = 4,
-        .channel_mask = 1 | 2,
+        .channel = 2,               // index of reference channel
+        .channel_mask = (1 << 1) | (1 << 2), // mic channel bit + ref channel bit
 #endif
     };
-    //capture_sys.aud_src = esp_capture_new_audio_codec_src(&codec_cfg);
-    capture_sys.aud_src = esp_capture_new_audio_aec_src(&codec_cfg);
-*/
-
-    //adapt for bread board: INMP441/MAX98357
-    esp_capture_audio_codec_src_cfg_t codec_cfg = {
-        .record_handle = get_record_handle(),
-    };
-    capture_sys.aud_src = esp_capture_new_audio_codec_src(&codec_cfg);
-    
+    capture_sys.aud_src = esp_capture_new_audio_aec_src(&aec_cfg);
+#endif
     RET_ON_NULL(capture_sys.aud_src, -1);
+
     esp_capture_simple_path_cfg_t simple_cfg = {
         .aenc = capture_sys.aud_enc,
     };
     capture_sys.path_if = esp_capture_build_simple_path(&simple_cfg);
     RET_ON_NULL(capture_sys.path_if, -1);
+    // Disabled AEC dump by default (can enable via console)
+    // esp_capture_enable_aec_src_dump(true);
+
     // Create capture system
     esp_capture_cfg_t cfg = {
         .sync_mode = ESP_CAPTURE_SYNC_MODE_AUDIO,
@@ -112,7 +115,7 @@ static int build_player_system()
     // When support AEC, reference data is from speaker right channel for ES8311 so must output 2 channel
     av_render_audio_frame_info_t aud_info = {
         .sample_rate = 16000,
-        .channel = 2,
+        .channel = 2, // AEC requires stereo reference channel
         .bits_per_sample = 16,
     };
     av_render_set_fixed_frame_info(player_sys.player, &aud_info);
@@ -145,7 +148,7 @@ int test_capture_to_player(void)
         .audio_info = {
             .codec = ESP_CAPTURE_CODEC_TYPE_OPUS,
             .sample_rate = 16000,
-            .channel = 1,
+            .channel = 1, // use mono for AEC output
             .bits_per_sample = 16,
         },
     };
@@ -157,9 +160,10 @@ int test_capture_to_player(void)
     av_render_audio_info_t render_aud_info = {
         .codec = AV_RENDER_AUDIO_CODEC_OPUS,
         .sample_rate = 16000,
-        .channel = 1,
+        .channel = 2, // use stereo for playback
     };
     av_render_add_audio_stream(player_sys.player, &render_aud_info);
+    //av_render_start(player_sys.player); // start rendering to speaker
 
     uint32_t start_time = (uint32_t)(esp_timer_get_time() / 1000);
     esp_capture_start(capture_sys.capture_handle);
@@ -172,7 +176,7 @@ int test_capture_to_player(void)
             av_render_audio_data_t audio_data = {
                 .data = frame.data,
                 .size = frame.size,
-                .pts = frame.pts,
+                .pts  = frame.pts,
             };
             av_render_add_audio_data(player_sys.player, &audio_data);
             esp_capture_release_path_frame(capture_path, &frame);

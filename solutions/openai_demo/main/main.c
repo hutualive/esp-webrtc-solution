@@ -23,6 +23,10 @@
 #include "common.h"
 #include "esp_capture_defaults.h"
 #include "lcd_gui.h"
+#include <stdio.h>
+#include <stdint.h>
+#include "esp_codec_dev.h"
+#include "codec_init.h"
 
 static int start_chat(int argc, char **argv)
 {
@@ -98,6 +102,54 @@ static int text_cli(int argc, char **argv)
     return 0;
 }
 
+static void raw2play_task(void *arg)
+{
+    printf("[raw2play] task started\n");
+    esp_codec_dev_handle_t rec = get_record_handle();
+    esp_codec_dev_handle_t play = get_playback_handle();
+    if (!rec || !play) {
+        printf("[raw2play] invalid handles rec=%p play=%p\n", rec, play);
+        vTaskDelete(NULL);
+        return;
+    }
+    esp_codec_dev_sample_info_t fs = { .bits_per_sample = 16, .sample_rate = 16000, .channel = 1 };
+    int ret = esp_codec_dev_open(rec, &fs);
+    printf("[raw2play] rec open ret=%d\n", ret);
+    esp_codec_dev_set_in_gain(rec, 40.0f);
+    ret = esp_codec_dev_open(play, &fs);
+    printf("[raw2play] play open ret=%d\n", ret);
+    esp_codec_dev_set_out_vol(play, 80.0f);
+    uint8_t buf[512];
+    int total = 0;
+    while (1) {
+        int len = esp_codec_dev_read(rec, buf, sizeof(buf));
+        printf("[raw2play] read len=%d\n", len);
+        if (len <= 0) {
+            printf("[raw2play] read returned %d, exiting loop\n", len);
+            break;
+        }
+        int written = esp_codec_dev_write(play, buf, len);
+        printf("[raw2play] write=%d\n", written);
+        total += written;
+        media_lib_thread_sleep(10);
+    }
+    esp_codec_dev_close(rec);
+    esp_codec_dev_close(play);
+    printf("[raw2play] task ended, total=%d\n", total);
+    vTaskDelete(NULL);
+}
+
+static int raw2play_cli(int argc, char **argv)
+{
+    printf("raw2play loopback spawned\n");
+    media_lib_thread_handle_t handle;
+    int rc = media_lib_thread_create_from_scheduler(&handle, "raw2play", raw2play_task, NULL);
+    if (rc != 0) {
+        ESP_LOGE("raw2play", "thread create failed %d", rc);
+    }
+    return 0;
+}
+
 static int init_console()
 {
     esp_console_repl_t *repl = NULL;
@@ -162,6 +214,11 @@ static int init_console()
             .command = "rec2play",
             .help = "Play recorded voice\r\n",
             .func = rec2play_cli,
+        },
+        {
+            .command = "raw2play",
+            .help = "Raw mic->speaker loopback\r\n",
+            .func = raw2play_cli,
         },
     };
     for (int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++) {

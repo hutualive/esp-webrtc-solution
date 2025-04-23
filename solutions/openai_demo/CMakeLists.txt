@@ -3,23 +3,21 @@
 cmake_minimum_required(VERSION 3.5)
 
 # include($ENV{ADF_PATH}/CMakeLists.txt)
+
+list(APPEND EXTRA_COMPONENT_DIRS "../../components")
+list(APPEND EXTRA_COMPONENT_DIRS "../common")
+list(APPEND EXTRA_COMPONENT_DIRS "managed_components")
+
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 
 if("${IDF_TARGET}" STREQUAL "esp32p4")
     set(EXTRA_COMPONENT_DIRS "$ENV{IDF_PATH}/examples/ethernet/basic/components/ethernet_init")
 endif()
 
-list(APPEND EXTRA_COMPONENT_DIRS "../../components")
+if(NOT DEFINED ENV{OPENAI_API_KEY})
+  message(FATAL_ERROR "Env variable OPENAI_API_KEY must be set")
+endif()
 
-list(APPEND EXTRA_COMPONENT_DIRS "../common")
-
-#if(NOT DEFINED ENV{OPENAI_API_KEY})
-#  message(FATAL_ERROR "Env variable OPENAI_API_KEY must be set")
-#endif()
-
-# Use add_definitions instead or alongside add_compile_definitions for better compatibility
-#add_definitions(-DOPENAI_API_KEY=\"$ENV{OPENAI_API_KEY}\")
-
-add_compile_definitions(OPENAI_API_KEY="$ENV{OPENAI_API_KEY}")
+add_compile_definitions(OPENAI_API_KEY=\"$ENV{OPENAI_API_KEY}\")
 
 project(openai_demo)

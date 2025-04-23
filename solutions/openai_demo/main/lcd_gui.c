@@ -92,32 +92,34 @@ static void lcd_gui_task(void *param) {
                         lcd_gui_draw_clear(COLOR_WHITE);
                         ESP_LOGI(TAG, "Drawing splash_bitmap2 (CONNECTED)");
                         lcd_gui_draw_bitmap_centered(splash_bitmap2, 32, 32);
+                        esp_lcd_panel_disp_on_off(lcd_handle, true);
                     } else {
                         lcd_gui_draw_clear(COLOR_BLACK);
                         ESP_LOGI(TAG, "Drawing splash_bitmap1 (DEFAULT)");
                         lcd_gui_draw_bitmap_centered(splash_bitmap1, 32, 32);
+                        esp_lcd_panel_disp_on_off(lcd_handle, true);
                     }
                     ESP_LOGI(TAG, "Splash displayed, delaying for visibility");
                     vTaskDelay(pdMS_TO_TICKS(1200)); // Show splash for 1.2s
                     break;
                 case LCD_GUI_CMD_STATUS:
                     ESP_LOGI(TAG, "lcd_gui_task: STATUS");
-                    lcd_gui_draw_clear(COLOR_WHITE); // Use white background for status
-                    ESP_LOGI(TAG, "lcd_gui_task: STATUS done");
+                    lcd_gui_draw_clear(COLOR_GREEN);
                     ESP_LOGI(TAG, "LCD STATUS: %s", msg.data.status.msg);
+                    vTaskDelay(pdMS_TO_TICKS(1200));
                     break;
                 case LCD_GUI_CMD_CHAT:
                     ESP_LOGI(TAG, "lcd_gui_task: CHAT");
-                    lcd_gui_draw_clear(COLOR_WHITE);
-                    ESP_LOGI(TAG, "lcd_gui_task: CHAT done");
+                    lcd_gui_draw_clear(COLOR_CYAN);
                     ESP_LOGI(TAG, "LCD CHAT: %s", msg.data.chat.msg);
+                    vTaskDelay(pdMS_TO_TICKS(1200));
                     break;
             }
             ESP_LOGD(TAG, "After switch, before queue status");
             UBaseType_t q_space = uxQueueSpacesAvailable(lcd_gui_queue);
             ESP_LOGI(TAG, "lcd_gui_queue spaces available: %lu", (unsigned long)q_space);
         } else {
-            ESP_LOGW(TAG, "xQueueReceive timeout (no LCD command in 2s)");
+            ESP_LOGI(TAG, "lcd_gui_task timeout – still alive");
         }
         if (++heartbeat % 10 == 0) {
             ESP_LOGI(TAG, "lcd_gui_task heartbeat");
@@ -179,10 +181,16 @@ void lcd_gui_show_chat(const char *msg_in) {
 static void lcd_gui_draw_clear(uint16_t color) {
     if (!lcd_handle) return;
     ESP_LOGD(TAG, "lcd_gui_draw_clear: start");
-    const int ROWS_PER_BLOCK = 20; // Tune for your hardware/SPI driver
+    const int ROWS_PER_BLOCK = 5; // Reduced block size to prevent SPI queue overflow
     uint16_t c = st7789_fix_color(color);
     size_t block_buf_size = lcd_width * ROWS_PER_BLOCK * sizeof(uint16_t);
-    uint16_t *buf = malloc(block_buf_size);
+    static uint16_t *buf = NULL;
+    static size_t buf_capacity = 0;
+    if (buf_capacity < block_buf_size) {
+        free(buf);
+        buf = malloc(block_buf_size);
+        buf_capacity = block_buf_size;
+    }
     if (!buf) {
         ESP_LOGE(TAG, "Failed to allocate LCD clear buffer");
         return;
@@ -196,11 +204,15 @@ static void lcd_gui_draw_clear(uint16_t color) {
         esp_err_t err = esp_lcd_panel_draw_bitmap(lcd_handle, 0, y, lcd_width, y + rows, buf);
         if (err != ESP_OK) {
             ESP_LOGE(TAG, "panel_draw_bitmap failed at y=%d: %s", y, esp_err_to_name(err));
-            break;
+            // Allow SPI queue to drain, then retry next block
+            vTaskDelay(pdMS_TO_TICKS(5));
+            continue;
         }
+        // Yield to let SPI transactions complete
+        vTaskDelay(pdMS_TO_TICKS(1));
     }
     ESP_LOGD(TAG, "lcd_gui_draw_clear: done");
-    free(buf);
+    // Buf retained for reuse; no free here to avoid releasing while SPI busy
 }
 
 void lcd_gui_draw_bitmap_centered(const uint16_t *bitmap, int bmp_w, int bmp_h) {

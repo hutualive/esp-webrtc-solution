@@ -34,6 +34,8 @@
 #include "esp_webrtc.h"
 #include "esp_codec_dev.h"
 #include "esp_webrtc_defaults.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/semphr.h"
 
 #define AUDIO_FRAME_INTERVAL (20)
 #define STR_SAME(a, b)       (strncmp(a, b, sizeof(b) - 1) == 0)
@@ -100,6 +102,46 @@ typedef struct {
 static const char *TAG = "webrtc";
 
 bool webrtc_tracing = false;
+
+#define REF_BUF_CAP 16384
+static uint8_t ref_buf[REF_BUF_CAP];
+static int ref_head = 0, ref_tail = 0;
+static SemaphoreHandle_t ref_mutex = NULL;
+
+void ref_buffer_init(void) {
+    ref_head = ref_tail = 0;
+    ref_mutex = xSemaphoreCreateMutex();
+    if (ref_mutex == NULL) {
+        ESP_LOGE(TAG, "ref_mutex creation failed");
+    }
+}
+
+void ref_buffer_push(const uint8_t *data, int len) {
+    if (ref_mutex == NULL) return;
+    if (xSemaphoreTake(ref_mutex, portMAX_DELAY) == pdTRUE) {
+        for (int i = 0; i < len; i++) {
+            ref_buf[ref_head] = data[i];
+            ref_head = (ref_head + 1) % REF_BUF_CAP;
+            if (ref_head == ref_tail) ref_tail = (ref_tail + 1) % REF_BUF_CAP;
+        }
+        xSemaphoreGive(ref_mutex);
+    }
+}
+
+int ref_buffer_read(uint8_t *out, int len) {
+    if (ref_mutex == NULL) return 0;
+    int got = 0;
+    if (xSemaphoreTake(ref_mutex, portMAX_DELAY) == pdTRUE) {
+        int avail = (ref_head - ref_tail + REF_BUF_CAP) % REF_BUF_CAP;
+        for (; got < len && avail > 0; got++, avail--) {
+            out[got] = ref_buf[ref_tail];
+            ref_tail = (ref_tail + 1) % REF_BUF_CAP;
+        }
+        xSemaphoreGive(ref_mutex);
+    }
+    if (got < len) memset(out + got, 0, len - got);
+    return len;
+}
 
 static void _media_send(void *ctx)
 {
@@ -337,6 +379,7 @@ static int pc_on_audio_data(esp_peer_audio_frame_t *info, void *ctx)
         .size = info->size,
     };
     av_render_add_audio_data(rtc->play_handle, &audio_data);
+    ref_buffer_push(audio_data.data, audio_data.size);
     return 0;
 }
 
@@ -775,6 +818,7 @@ int esp_webrtc_start(esp_webrtc_handle_t handle)
         ESP_LOGE(TAG, "Fail to start signaling");
         return ret;
     }
+    ref_buffer_init();
     return ret;
 }
 

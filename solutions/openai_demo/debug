@@ -4,33 +4,29 @@ Connecting....
 Detecting chip type... ESP32-S3
 Running ninja in directory /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build
 Executing "ninja flash"...
-[1/12] Performing build step for 'bootloader'
+[1/11] Generating ../../board_cfg.txt.S
+[2/11] Building ASM object esp-idf/codec_board/CMakeFiles/__idf_codec_board.dir/__/__/board_cfg.txt.S.obj
+[3/11] Linking C static library esp-idf/codec_board/libcodec_board.a
+[4/11] Performing build step for 'bootloader'
 [1/1] cd /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/bootloader/esp-idf/esptool_py && /home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/bootloader/bootloader.bin
 Bootloader binary size 0x52b0 bytes. 0x2d50 bytes (35%) free.
-[2/12] No install step for 'bootloader'
-[3/12] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/lcd_gui.c.obj
-[4/12] Completed 'bootloader'
-[5/12] Building C object esp-idf/codec_board/CMakeFiles/__idf_codec_board.dir/lcd_init.c.obj
-/home/dp/code/esp-webrtc-solution/components/codec_board/lcd_init.c:192:16: warning: 'get_hw_gpio' defined but not used [-Wunused-function]
-  192 | static int16_t get_hw_gpio(int16_t pin)
-      |                ^~~~~~~~~~~
-[6/12] Linking C static library esp-idf/codec_board/libcodec_board.a
-[7/12] Linking C static library esp-idf/main/libmain.a
-[8/12] Generating ld/sections.ld
-[9/12] Linking CXX executable openai_demo.elf
-[10/12] Generating binary image from built executable
+[5/11] No install step for 'bootloader'
+[6/11] Completed 'bootloader'
+[7/11] Generating ld/sections.ld
+[8/11] Linking CXX executable openai_demo.elf
+[9/11] Generating binary image from built executable
 esptool.py v4.9.dev6
 Creating esp32s3 image...
 Merged 2 ELF sections
 Successfully created esp32s3 image.
 Generated /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.bin
-[11/12] cd /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/esp-idf/esptool_py && /home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/partition_table/partition-table.bin /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.bin
-openai_demo.bin binary size 0x20c510 bytes. Smallest app partition is 0x300000 bytes. 0xf3af0 bytes (32%) free.
-[11/12] cd /home/dp/code/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/dp/code/esp-idf -D "SERIAL_TOOL=/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python;;/home/dp/code/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32s3" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/dp/code/esp-webrtc-solution/solutions/openai_demo/build -P /home/dp/code/esp-idf/components/esptool_py/run_serial_tool.cmake
+[10/11] cd /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/esp-idf/esptool_py && /home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/partition_table/partition-table.bin /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.bin
+openai_demo.bin binary size 0x20c5b0 bytes. Smallest app partition is 0x300000 bytes. 0xf3a50 bytes (32%) free.
+[10/11] cd /home/dp/code/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/dp/code/esp-idf -D "SERIAL_TOOL=/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python;;/home/dp/code/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32s3" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/dp/code/esp-webrtc-solution/solutions/openai_demo/build -P /home/dp/code/esp-idf/components/esptool_py/run_serial_tool.cmake
 esptool.py --chip esp32s3 -p /dev/ttyUSB0 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x0 bootloader/bootloader.bin 0x10000 openai_demo.bin 0x8000 partition_table/partition-table.bin
 esptool.py v4.9.dev6
 Serial port /dev/ttyUSB0
-Connecting....
+Connecting...
 Chip is ESP32-S3 (QFN56) (revision v0.2)
 Features: WiFi, BLE, Embedded PSRAM 8MB (AP_3v3)
 Crystal is 40MHz
@@ -45,105 +41,105 @@ Flash will be erased from 0x00000000 to 0x00005fff...
 Flash will be erased from 0x00010000 to 0x0021cfff...
 Flash will be erased from 0x00008000 to 0x00008fff...
 SHA digest in image updated
-Compressed 21168 bytes to 13485...
+Compressed 21168 bytes to 13487...
 Writing at 0x00000000... (100 %)
-Wrote 21168 bytes (13485 compressed) at 0x00000000 in 0.4 seconds (effective 385.8 kbit/s)...
+Wrote 21168 bytes (13487 compressed) at 0x00000000 in 0.4 seconds (effective 380.6 kbit/s)...
 Hash of data verified.
-Compressed 2147600 bytes to 1452139...
+Compressed 2147760 bytes to 1452311...
 Writing at 0x00010000... (1 %)
-Writing at 0x0001ca82... (2 %)
-Writing at 0x0002b630... (3 %)
-Writing at 0x00037055... (4 %)
-Writing at 0x0003c5c9... (5 %)
-Writing at 0x00040814... (6 %)
-Writing at 0x00044892... (7 %)
-Writing at 0x0004a18f... (8 %)
-Writing at 0x0004f3a1... (10 %)
-Writing at 0x00053ec9... (11 %)
-Writing at 0x00058bf0... (12 %)
-Writing at 0x00061270... (13 %)
-Writing at 0x0006747e... (14 %)
-Writing at 0x0006bd9b... (15 %)
-Writing at 0x00072609... (16 %)
-Writing at 0x000770f9... (17 %)
-Writing at 0x0007bf87... (19 %)
-Writing at 0x00081326... (20 %)
-Writing at 0x00088bc8... (21 %)
-Writing at 0x000920cd... (22 %)
-Writing at 0x00098344... (23 %)
-Writing at 0x0009e89b... (24 %)
-Writing at 0x000a4da4... (25 %)
-Writing at 0x000aaa7a... (26 %)
-Writing at 0x000b0867... (28 %)
-Writing at 0x000b6b23... (29 %)
-Writing at 0x000bd528... (30 %)
-Writing at 0x000c24a2... (31 %)
-Writing at 0x000c733d... (32 %)
-Writing at 0x000cc9e0... (33 %)
-Writing at 0x000d1d22... (34 %)
-Writing at 0x000d6f05... (35 %)
-Writing at 0x000dbd29... (37 %)
-Writing at 0x000e09f7... (38 %)
-Writing at 0x000e593a... (39 %)
-Writing at 0x000ea996... (40 %)
-Writing at 0x000ef6b3... (41 %)
-Writing at 0x000f47b5... (42 %)
-Writing at 0x000f965a... (43 %)
-Writing at 0x000fe582... (44 %)
-Writing at 0x001031d2... (46 %)
-Writing at 0x001087cc... (47 %)
-Writing at 0x0010da3c... (48 %)
-Writing at 0x00112afd... (49 %)
-Writing at 0x00117fbb... (50 %)
-Writing at 0x0011cfa6... (51 %)
-Writing at 0x00121e88... (52 %)
-Writing at 0x00126d2f... (53 %)
-Writing at 0x0012bced... (55 %)
-Writing at 0x00130e16... (56 %)
-Writing at 0x00136340... (57 %)
-Writing at 0x0013b132... (58 %)
-Writing at 0x0014088d... (59 %)
-Writing at 0x00146c8b... (60 %)
-Writing at 0x0014cc7e... (61 %)
-Writing at 0x00152820... (62 %)
-Writing at 0x00158526... (64 %)
-Writing at 0x0015e28e... (65 %)
-Writing at 0x00164070... (66 %)
-Writing at 0x0016a011... (67 %)
-Writing at 0x00170929... (68 %)
-Writing at 0x001764c3... (69 %)
-Writing at 0x0017c247... (70 %)
-Writing at 0x001824cf... (71 %)
-Writing at 0x0018822d... (73 %)
-Writing at 0x0018e162... (74 %)
-Writing at 0x001934c4... (75 %)
-Writing at 0x0019839c... (76 %)
-Writing at 0x0019d788... (77 %)
-Writing at 0x001a2b54... (78 %)
-Writing at 0x001a7dbe... (79 %)
-Writing at 0x001acf26... (80 %)
-Writing at 0x001b252f... (82 %)
-Writing at 0x001b888b... (83 %)
-Writing at 0x001be241... (84 %)
-Writing at 0x001c4103... (85 %)
-Writing at 0x001ca1b7... (86 %)
-Writing at 0x001cf8e3... (87 %)
-Writing at 0x001d5dd8... (88 %)
-Writing at 0x001dc8e1... (89 %)
-Writing at 0x001e4fd4... (91 %)
-Writing at 0x001eb354... (92 %)
-Writing at 0x001f1c13... (93 %)
-Writing at 0x001f7787... (94 %)
-Writing at 0x002007e1... (95 %)
-Writing at 0x0020639a... (96 %)
-Writing at 0x0020c8c0... (97 %)
-Writing at 0x00213472... (98 %)
-Writing at 0x002186d4... (100 %)
-Wrote 2147600 bytes (1452139 compressed) at 0x00010000 in 32.5 seconds (effective 528.8 kbit/s)...
+Writing at 0x0001c86f... (2 %)
+Writing at 0x0002b3e2... (3 %)
+Writing at 0x00036f6f... (4 %)
+Writing at 0x0003c5a3... (5 %)
+Writing at 0x000407aa... (6 %)
+Writing at 0x0004484c... (7 %)
+Writing at 0x0004a16f... (8 %)
+Writing at 0x0004f37d... (10 %)
+Writing at 0x00053e91... (11 %)
+Writing at 0x00058ba1... (12 %)
+Writing at 0x0005efca... (13 %)
+Writing at 0x00067460... (14 %)
+Writing at 0x0006bd8f... (15 %)
+Writing at 0x000725d2... (16 %)
+Writing at 0x000770ec... (17 %)
+Writing at 0x0007bf0e... (19 %)
+Writing at 0x0008131c... (20 %)
+Writing at 0x00088a11... (21 %)
+Writing at 0x00091fba... (22 %)
+Writing at 0x00098221... (23 %)
+Writing at 0x0009e7b6... (24 %)
+Writing at 0x000a4c74... (25 %)
+Writing at 0x000aa98b... (26 %)
+Writing at 0x000b0776... (28 %)
+Writing at 0x000b6a0a... (29 %)
+Writing at 0x000bd42c... (30 %)
+Writing at 0x000c23e1... (31 %)
+Writing at 0x000c724c... (32 %)
+Writing at 0x000cc90c... (33 %)
+Writing at 0x000d1c00... (34 %)
+Writing at 0x000d6dff... (35 %)
+Writing at 0x000dbc53... (37 %)
+Writing at 0x000e0931... (38 %)
+Writing at 0x000e5868... (39 %)
+Writing at 0x000ea8c9... (40 %)
+Writing at 0x000ef5da... (41 %)
+Writing at 0x000f46eb... (42 %)
+Writing at 0x000f9576... (43 %)
+Writing at 0x000fe4b0... (44 %)
+Writing at 0x001030e5... (46 %)
+Writing at 0x001086ed... (47 %)
+Writing at 0x0010d963... (48 %)
+Writing at 0x001129e4... (49 %)
+Writing at 0x00117ee4... (50 %)
+Writing at 0x0011cec6... (51 %)
+Writing at 0x00121dbd... (52 %)
+Writing at 0x00126c2a... (53 %)
+Writing at 0x0012bbfc... (55 %)
+Writing at 0x00130d40... (56 %)
+Writing at 0x00136278... (57 %)
+Writing at 0x0013b045... (58 %)
+Writing at 0x0014077d... (59 %)
+Writing at 0x00146b6a... (60 %)
+Writing at 0x0014cb7b... (61 %)
+Writing at 0x00152729... (62 %)
+Writing at 0x00158424... (64 %)
+Writing at 0x0015e19e... (65 %)
+Writing at 0x00163f7e... (66 %)
+Writing at 0x00169efc... (67 %)
+Writing at 0x00170819... (68 %)
+Writing at 0x0017639b... (69 %)
+Writing at 0x0017c150... (70 %)
+Writing at 0x001823e6... (71 %)
+Writing at 0x001880b7... (73 %)
+Writing at 0x0018e078... (74 %)
+Writing at 0x001933ed... (75 %)
+Writing at 0x001982bc... (76 %)
+Writing at 0x0019d6b7... (77 %)
+Writing at 0x001a2a88... (78 %)
+Writing at 0x001a7cf8... (79 %)
+Writing at 0x001ace64... (80 %)
+Writing at 0x001b242c... (82 %)
+Writing at 0x001b87ac... (83 %)
+Writing at 0x001be15d... (84 %)
+Writing at 0x001c3fe5... (85 %)
+Writing at 0x001ca0be... (86 %)
+Writing at 0x001cf81b... (87 %)
+Writing at 0x001d5d02... (88 %)
+Writing at 0x001dc81d... (89 %)
+Writing at 0x001e4ecd... (91 %)
+Writing at 0x001eb1ef... (92 %)
+Writing at 0x001f1ac4... (93 %)
+Writing at 0x001f766a... (94 %)
+Writing at 0x00200797... (95 %)
+Writing at 0x0020631e... (96 %)
+Writing at 0x0020c875... (97 %)
+Writing at 0x002133b0... (98 %)
+Writing at 0x00218699... (100 %)
+Wrote 2147760 bytes (1452311 compressed) at 0x00010000 in 32.5 seconds (effective 529.3 kbit/s)...
 Hash of data verified.
 Compressed 3072 bytes to 105...
 Writing at 0x00008000... (100 %)
-Wrote 3072 bytes (105 compressed) at 0x00008000 in 0.0 seconds (effective 976.1 kbit/s)...
+Wrote 3072 bytes (105 compressed) at 0x00008000 in 0.0 seconds (effective 1020.5 kbit/s)...
 Hash of data verified.
 
 Leaving...
@@ -153,7 +149,7 @@ Running idf_monitor in directory /home/dp/code/esp-webrtc-solution/solutions/ope
 Executing "/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/tools/idf_monitor.py -p /dev/ttyUSB0 -b 115200 --toolchain-prefix xtensa-esp32s3-elf- --target esp32s3 --revision 0 /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.elf /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/bootloader/bootloader.elf -m '/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python' '/home/dp/code/esp-idf/tools/idf.py'"...
 ESP-ROM:esp32s3-20210327
 Build:Mar 27 2021
-rst:0x1 (POWERON),boot:0xa (SPI_FAST_FLASH_BOOT)
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
 SPIWP:0xee
 mode:DIO, clock div:1
 load:0x3fce2820,len:0x15d0
@@ -161,7 +157,7 @@ load:0x403c8700,len:0xd24
 load:0x403cb700,len:0x2f60
 entry 0x403c8924
 [0;32mI (24) boot: ESP-IDF v5.5-dev-2488-gee77c489e7-dirty 2nd stage bootloader[0m
-[0;32mI (25) boot: compile time Apr 20 2025 22:08:36[0m
+[0;32mI (25) boot: compile time Apr 23 2025 19:39:09[0m
 [0;32mI (25) boot: Multicore bootloader[0m
 [0;32mI (27) boot: chip revision: v0.2[0m
 [0;32mI (30) boot: efuse block revision: v1.3[0m
@@ -175,12 +171,12 @@ entry 0x403c8924
 [0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
 [0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00300000[0m
 [0;32mI (78) boot: End of partition table[0m
-[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c170020 size=7f3a4h (521124) map[0m
-[0;32mI (180) esp_image: segment 1: paddr=0008f3cc vaddr=3fca5900 size=00c4ch (  3148) load[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c170020 size=7f444h (521284) map[0m
+[0;32mI (180) esp_image: segment 1: paddr=0008f46c vaddr=3fca5900 size=00bach (  2988) load[0m
 [0;32mI (181) esp_image: segment 2: paddr=00090020 vaddr=42000020 size=169d78h (1482104) map[0m
-[0;32mI (445) esp_image: segment 3: paddr=001f9da0 vaddr=3fca654c size=04eb4h ( 20148) load[0m
-[0;32mI (450) esp_image: segment 4: paddr=001fec5c vaddr=40378000 size=1d860h (120928) load[0m
-[0;32mI (476) esp_image: segment 5: paddr=0021c4c4 vaddr=600fe000 size=0001ch (    28) load[0m
+[0;32mI (445) esp_image: segment 3: paddr=001f9da0 vaddr=3fca64ac size=04f54h ( 20308) load[0m
+[0;32mI (450) esp_image: segment 4: paddr=001fecfc vaddr=40378000 size=1d860h (120928) load[0m
+[0;32mI (476) esp_image: segment 5: paddr=0021c564 vaddr=600fe000 size=0001ch (    28) load[0m
 [0;32mI (488) boot: Loaded app from partition at offset 0x10000[0m
 [0;32mI (488) boot: Disabling RNG early entropy source...[0m
 [0;33mW (498) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
@@ -188,18 +184,18 @@ entry 0x403c8924
 [0;33mW (506) flash HPM: High performance mode of this flash model hasn't been supported.[0m
 [0;32mI (513) MSPI Timing: Flash timing tuning index: 2[0m
 [0;32mI (518) octal_psram: vendor id    : 0x0d (AP)[0m
-[0;32mI (521) octal_psram: dev id       : 0x02 (generation 3)[0m
-[0;32mI (526) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (522) octal_psram: dev id       : 0x02 (generation 3)[0m
+[0;32mI (527) octal_psram: density      : 0x03 (64 Mbit)[0m
 [0;32mI (531) octal_psram: good-die     : 0x01 (Pass)[0m
 [0;32mI (535) octal_psram: Latency      : 0x01 (Fixed)[0m
 [0;32mI (540) octal_psram: VCC          : 0x01 (3V)[0m
 [0;32mI (544) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
 [0;32mI (549) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
-[0;32mI (553) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (554) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
 [0;32mI (558) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
 [0;32mI (563) octal_psram: DriveStrength: 0x00 (1/1)[0m
-[0;32mI (575) MSPI Timing: PSRAM timing tuning index: 10[0m
-[0;32mI (576) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (572) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (573) esp_psram: Found 8MB PSRAM device[0m
 [0;32mI (576) esp_psram: Speed: 120MHz[0m
 [0;32mI (579) cpu_start: Multicore app[0m
 [0;32mI (816) esp_psram: SPI SRAM memory test OK[0m
@@ -207,181 +203,150 @@ entry 0x403c8924
 [0;32mI (825) cpu_start: cpu freq: 240000000 Hz[0m
 [0;32mI (825) app_init: Application information:[0m
 [0;32mI (825) app_init: Project name:     openai_demo[0m
-[0;32mI (829) app_init: App version:      5a9b4a8-dirty[0m
-[0;32mI (834) app_init: Compile time:     Apr 21 2025 16:26:25[0m
-[0;32mI (839) app_init: ELF file SHA256:  07fa3bb43...[0m
-[0;32mI (843) app_init: ESP-IDF:          v5.5-dev-2488-gee77c489e7-dirty[0m
-[0;32mI (849) efuse_init: Min chip rev:     v0.0[0m
-[0;32mI (853) efuse_init: Max chip rev:     v0.99 [0m
-[0;32mI (857) efuse_init: Chip rev:         v0.2[0m
-[0;32mI (861) heap_init: Initializing. RAM available for dynamic allocation:[0m
-[0;32mI (867) heap_init: At 3FCB0B28 len 00038BE8 (226 KiB): RAM[0m
-[0;32mI (872) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
-[0;32mI (877) heap_init: At 600FE01C len 00001FCC (7 KiB): RTCRAM[0m
-[0;32mI (883) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator[0m
-[0;32mI (890) spi_flash: detected chip: generic[0m
-[0;32mI (893) spi_flash: flash io: dio[0m
-[0;33mW (896) spi_flash: Detected size(16384k) larger than the size in the binary image header(4096k). Using the size in the binary image header.[0m
-[0;32mI (908) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (829) app_init: App version:      1a74549[0m
+[0;32mI (833) app_init: Compile time:     Apr 23 2025 19:39:04[0m
+[0;32mI (838) app_init: ELF file SHA256:  558ef04fe...[0m
+[0;32mI (842) app_init: ESP-IDF:          v5.5-dev-2488-gee77c489e7-dirty[0m
+[0;32mI (848) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (852) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (856) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (860) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (866) heap_init: At 3FCB0B28 len 00038BE8 (226 KiB): RAM[0m
+[0;32mI (871) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (876) heap_init: At 600FE01C len 00001FCC (7 KiB): RTCRAM[0m
+[0;32mI (882) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator[0m
+[0;32mI (889) spi_flash: detected chip: generic[0m
+[0;32mI (892) spi_flash: flash io: dio[0m
+[0;33mW (895) spi_flash: Detected size(16384k) larger than the size in the binary image header(4096k). Using the size in the binary image header.[0m
+[0;32mI (907) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
 [0;32mI (914) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
-[0;32mI (921) main_task: Started on CPU0[0m
-[0;32mI (941) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
-[0;32mI (941) main_task: Calling app_main()[0m
-[0;32mI (941) Board: Init board.[0m
-i2s: {mclk: -1, din: 6, ws: 7, bclk: 15}
-i2s: {mclk: -1, dout: 16, bclk: 17, ws: 18}
+[0;32mI (920) main_task: Started on CPU0[0m
+[0;32mI (940) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (940) main_task: Calling app_main()[0m
+[0;32mI (940) Board: Init board.[0m
+i2s: {mclk: -1, din: 4, ws: 5, bclk: 6}
+i2s: {mclk: -1, dout: 7, bclk: 15, ws: 16}
 in: {codec: DUMMY, i2c_port: -1}
 Codec 0 dir 1 type:5
 out: {codec: DUMMY, i2c_port: -1, pa: -1, i2s_port: 1}
 Codec 1 dir 2 type:5
 lcd: {bus: spi, controller: st7789, spi_bus: 3, mirror_x: 0, mirror_y: 0, swap_xy: 0, color_inv: 0, width: 240, height: 240, ctrl: 3, cs: 46, dc: 9, rst: 10, mosi: 11, clk: 12, cmd_bits: 8, param_bits: 8}
-[0;32mI (981) CODEC_INIT: Set mater handle 0 0x3c1f0998[0m
-[0;32mI (981) CODEC_INIT: in:1 out:1 port: 0[0m
-[0;32mI (991) CODEC_INIT: Success to int i2c: -1[0m
-[0;32mI (991) CODEC_INIT: Init i2s 1 type: 2 mclk:-1 bclk:17 ws:18 din:-1 dout:16[0m
-[0;32mI (1001) CODEC_INIT: tx:0x3c1f0e18 rx:0x0[0m
-[0;32mI (1001) CODEC_INIT: output init std ret 0[0m
-[0;32mI (1011) CODEC_INIT: Init i2s 1 ok[0m
-[0;32mI (1011) CODEC_INIT: Success to init i2s: 0[0m
-[0;32mI (1011) CODEC_INIT: Success to int i2c: -1[0m
-[0;32mI (1021) CODEC_INIT: Init i2s 0 type: 1 mclk:-1 bclk:15 ws:7 din:6 dout:-1[0m
-[0;33mW (1021) i2s_platform: i2s controller 0 has been occupied by i2s_driver[0m
-[0;32mI (1031) CODEC_INIT: tx:0x0 rx:0x3c1f1024[0m
-[0;33mW (1031) i2s_tdm: the current mclk multiple is too small, adjust the mclk multiple to 384[0m
-[0;32mI (1041) CODEC_INIT: Input init tdm ret 0[0m
-[0;32mI (1041) CODEC_INIT: Init i2s 0 ok[0m
-[0;32mI (1051) CODEC_INIT: Success to init i2s: 0[0m
-[0;32mI (1051) CODEC_INIT: Get out handle 0x3c1f0e18 port 1[0m
-[0;32mI (1061) CODEC_INIT: Get in handle 0x3c1f1024 port 0[0m
-[0;32mI (1061) Board: Attempting to initialize LCD[0m
-[0;32mI (1071) Board: LCD configuration found, attempting to initialize[0m
-[0;32mI (1071) LCD_INIT: Initializing LCD with configuration: bus_type=1, controller=1, width=240, height=240[0m
-[0;32mI (1081) LCD_INIT: _init_lcd: io_type=0, reset_pin=10, ctrl_pin=3, bus_type=1[0m
-[0;32mI (1091) LCD_INIT: Setting direction for reset_pin 10[0m
-[0;32mI (1091) LCD_INIT: set_pin_dir: pin=10, output=1, io_type=0[0m
-[0;32mI (1101) LCD_INIT: Configuring GPIO pin 10 as OUTPUT[0m
-[0;32mI (1101) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1111) LCD_INIT: Setting direction for ctrl_pin 3[0m
-[0;32mI (1111) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
-[0;32mI (1121) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
-[0;32mI (1121) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1131) LCD_INIT: Setting direction for SPI CS pin 46[0m
-[0;32mI (1141) LCD_INIT: set_pin_dir: pin=46, output=1, io_type=0[0m
-[0;32mI (1141) LCD_INIT: Configuring GPIO pin 46 as OUTPUT[0m
-[0;32mI (1151) gpio: GPIO[46]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1161) LCD_INIT: About to call _lcd_rest[0m
-[0;32mI (1161) LCD_INIT: _lcd_rest: reset_pin=10[0m
-[0;32mI (1161) LCD_INIT: set_pin_state: pin=10, high=0, io_type=0[0m
-[0;32mI (1171) LCD_INIT: Setting GPIO level for pin 10 to 0[0m
-[0;32mI (1271) LCD_INIT: set_pin_state: pin=10, high=1, io_type=0[0m
-[0;32mI (1271) LCD_INIT: Setting GPIO level for pin 10 to 1[0m
-[0;32mI (1271) LCD_INIT: After _lcd_rest[0m
-[0;32mI (1271) LCD_INIT: Setting direction for ctrl_pin 3 again[0m
-[0;32mI (1271) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
-[0;32mI (1281) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
-[0;32mI (1281) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1291) LCD_INIT: About to init SPI LCD[0m
-[0;32mI (1291) LCD_INIT: Initializing SPI LCD with bus=3, cs=46, dc=9, clk=12, mosi=11[0m
-[0;32mI (1301) LCD_INIT: SPI bus initialized: CLK=12, MOSI=11, CS=46, DC=9, Bus=2[0m
-[0;32mI (1311) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1321) LCD_INIT: ST7789 driver initialized successfully[0m
-[0;32mI (1321) LCD_INIT: About to call esp_lcd_panel_init[0m
-[0;32mI (1431) LCD_INIT: About to call esp_lcd_panel_disp_on_off (keep display off until splash)[0m
-[0;32mI (1431) LCD_INIT: LCD initialization complete, ret=0[0m
-[0;32mI (1431) LCD_INIT: Setting LCD backlight (ctrl_pin 3) to HIGH[0m
-[0;32mI (1431) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
-[0;32mI (1441) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
-[0;32mI (1441) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1451) LCD_INIT: set_pin_state: pin=3, high=1, io_type=0[0m
-[0;32mI (1461) LCD_INIT: Setting GPIO level for pin 3 to 1[0m
-[0;32mI (1461) LCD_INIT: LCD initialization successful: 0[0m
-[0;32mI (1461) Board: LCD initialized successfully[0m
-[0;32mI (1471) LCD_GUI: lcd_gui_task started[0m
-[0;32mI (1471) LCD_GUI: Received LCD command: 1[0m
-[0;32mI (1481) LCD_GUI: lcd_gui_task: SPLASH type=1[0m
-[0;32mI (1491) LCD_GUI: Drawing splash_bitmap1 (POWERON)[0m
-[5n[0;32mI (1491) LCD_GUI: Splash displayed, delaying for visibility[0m
+[0;32mI (980) CODEC_INIT: Set mater handle 0 0x3c1f0998[0m
+[0;32mI (980) CODEC_INIT: in:1 out:1 port: 0[0m
+[0;32mI (990) CODEC_INIT: Success to int i2c: -1[0m
+[0;32mI (990) CODEC_INIT: Init i2s 1 type: 2 mclk:-1 bclk:15 ws:16 din:-1 dout:7[0m
+[0;32mI (1000) CODEC_INIT: tx:0x3c1f0e18 rx:0x0[0m
+[0;32mI (1000) CODEC_INIT: output init std ret 0[0m
+[0;32mI (1010) CODEC_INIT: Init i2s 1 ok[0m
+[0;32mI (1010) CODEC_INIT: Success to init i2s: 0[0m
+[0;32mI (1010) CODEC_INIT: Success to int i2c: -1[0m
+[0;32mI (1020) CODEC_INIT: Init i2s 0 type: 1 mclk:-1 bclk:6 ws:5 din:4 dout:-1[0m
+[0;33mW (1020) i2s_platform: i2s controller 0 has been occupied by i2s_driver[0m
+[0;32mI (1030) CODEC_INIT: tx:0x0 rx:0x3c1f1024[0m
+[0;33mW (1030) i2s_tdm: the current mclk multiple is too small, adjust the mclk multiple to 384[0m
+[0;32mI (1040) CODEC_INIT: Input init tdm ret 0[0m
+[0;32mI (1040) CODEC_INIT: Init i2s 0 ok[0m
+[0;32mI (1050) CODEC_INIT: Success to init i2s: 0[0m
+[0;32mI (1050) CODEC_INIT: Get out handle 0x3c1f0e18 port 1[0m
+[0;32mI (1060) CODEC_INIT: Get in handle 0x3c1f1024 port 0[0m
+[0;32mI (1060) Board: Attempting to initialize LCD[0m
+[0;32mI (1060) Board: LCD configuration found, attempting to initialize[0m
+[0;32mI (1070) LCD_INIT: Initializing LCD with configuration: bus_type=1, controller=1, width=240, height=240[0m
+[0;32mI (1080) LCD_INIT: _init_lcd: io_type=0, reset_pin=10, ctrl_pin=3, bus_type=1[0m
+[0;32mI (1090) LCD_INIT: Setting direction for reset_pin 10[0m
+[0;32mI (1090) LCD_INIT: set_pin_dir: pin=10, output=1, io_type=0[0m
+[0;32mI (1100) LCD_INIT: Configuring GPIO pin 10 as OUTPUT[0m
+[0;32mI (1100) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1110) LCD_INIT: Setting direction for ctrl_pin 3[0m
+[0;32mI (1110) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
+[0;32mI (1120) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
+[0;32mI (1120) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1130) LCD_INIT: Setting direction for SPI CS pin 46[0m
+[0;32mI (1140) LCD_INIT: set_pin_dir: pin=46, output=1, io_type=0[0m
+[0;32mI (1140) LCD_INIT: Configuring GPIO pin 46 as OUTPUT[0m
+[0;32mI (1150) gpio: GPIO[46]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1160) LCD_INIT: About to call _lcd_rest[0m
+[0;32mI (1160) LCD_INIT: _lcd_rest: reset_pin=10[0m
+[0;32mI (1160) LCD_INIT: set_pin_state: pin=10, high=0, io_type=0[0m
+[0;32mI (1170) LCD_INIT: Setting GPIO level for pin 10 to 0[0m
+[0;32mI (1270) LCD_INIT: set_pin_state: pin=10, high=1, io_type=0[0m
+[0;32mI (1270) LCD_INIT: Setting GPIO level for pin 10 to 1[0m
+[0;32mI (1270) LCD_INIT: After _lcd_rest[0m
+[0;32mI (1270) LCD_INIT: Setting direction for ctrl_pin 3 again[0m
+[0;32mI (1270) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
+[0;32mI (1280) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
+[0;32mI (1280) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1290) LCD_INIT: About to init SPI LCD[0m
+[0;32mI (1290) LCD_INIT: Initializing SPI LCD with bus=3, cs=46, dc=9, clk=12, mosi=11[0m
+[0;32mI (1300) LCD_INIT: SPI bus initialized: CLK=12, MOSI=11, CS=46, DC=9, Bus=2[0m
+[0;32mI (1310) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1320) LCD_INIT: ST7789 driver initialized successfully[0m
+[0;32mI (1320) LCD_INIT: About to call esp_lcd_panel_init[0m
+[0;32mI (1430) LCD_INIT: About to call esp_lcd_panel_disp_on_off (keep display off until splash)[0m
+[0;32mI (1430) LCD_INIT: LCD initialization complete, ret=0[0m
+[0;32mI (1430) LCD_INIT: Setting LCD backlight (ctrl_pin 3) to HIGH[0m
+[0;32mI (1430) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
+[0;32mI (1440) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
+[0;32mI (1440) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (1450) LCD_INIT: set_pin_state: pin=3, high=1, io_type=0[0m
+[0;32mI (1460) LCD_INIT: Setting GPIO level for pin 3 to 1[0m
+[0;32mI (1460) LCD_INIT: LCD initialization successful: 0[0m
+[0;32mI (1460) Board: LCD initialized successfully[0m
+[0;32mI (1470) LCD_GUI: lcd_gui_task started[0m
+[0;32mI (1470) LCD_GUI: Received LCD command: 1[0m
+[0;32mI (1480) LCD_GUI: lcd_gui_task: SPLASH type=1[0m
+[0;32mI (1490) LCD_GUI: Drawing splash_bitmap1 (POWERON)[0m
+[5n[0;32mI (1490) LCD_GUI: Splash displayed, delaying for visibility[0m
 
 Type 'help' to get the list of commands.
 Use UP/DOWN arrows to navigate through command history.
 Press TAB when typing command name to auto-complete.
-[6n I (1561) pp: pp rom version: e7ae62f
-[0;32mI (1561) net80211: net80211 rom version: e7ae62f[0m
-[0;32mI (1571) wifi:wifi driver task: 3fcce0a0, prio:23, stack:6656, core=0[0m
-[0;32mI (1571) wifi:wifi firmware version: 7086521f2a[0m
-[0;32mI (1571) wifi:wifi certification version: v7.0[0m
-[0;32mI (1571) wifi:config NVS flash: enabled[0m
-[999C I (1581) wifi:config nano formatting: disabled
-[0;32mI (1591) wifi:Init data frame dynamic rx buffer num: 32[0m
-[6n I (1591) wifi:Init static rx mgmt buffer num: 5
-[0;32mI (1601) wifi:Init management short buffer num: 32[0m
-[0;32mI (1601) wifi:Init dynamic tx buffer num: 32[0m
-[0;32mI (1601) wifi:Init static tx FG buffer num: 2[0m
-esp> I (1611) wifi:Init static rx buffer size: 1600
-[0;32mI (1621) wifi:Init static rx buffer num: 10[0m
-[0;32mI (1621) wifi:Init dynamic rx buffer num: 32[0m
-[0;32mI (1621) wifi_init: rx ba win: 6[0m
-[0;32mI (1631) wifi_init: accept mbox: 6[0m
-[0;32mI (1631) wifi_init: tcpip mbox: 32[0m
-[0;32mI (1631) wifi_init: udp mbox: 6[0m
-[0;32mI (1631) wifi_init: tcp mbox: 6[0m
-[0;32mI (1641) wifi_init: tcp tx win: 5760[0m
-[0;32mI (1641) wifi_init: tcp rx win: 5760[0m
-[0;32mI (1641) wifi_init: tcp mss: 1440[0m
-[0;32mI (1641) wifi_init: WiFi IRAM OP enabled[0m
-[0;32mI (1651) wifi_init: WiFi RX IRAM OP enabled[0m
-[0;32mI (1651) NETWORK: Force to use wifi config from nvs[0m
-[0;32mI (1671) wifi:Set ps type: 0, coexist: 0[0m
+[6n I (1580) pp: pp rom version: e7ae62f
+[0;32mI (1580) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1590) wifi:wifi driver task: 3fcce1a4, prio:23, stack:6656, core=0[0m
+[0;32mI (1600) wifi:wifi firmware version: 7086521f2a[0m
+[0;32mI (1600) wifi:wifi certification version: v7.0[0m
+[0;32mI (1600) wifi:config NVS flash: enabled[0m
+[0;32mI (1600) wifi:config nano formatting: disabled[0m
+[999C I (1610) wifi:Init data frame dynamic rx buffer num: 32
+[6n I (1610) wifi:Init static rx mgmt buffer num: 5
+[0;32mI (1620) wifi:Init management short buffer num: 32[0m
+[0;32mI (1620) wifi:Init dynamic tx buffer num: 32[0m
+[0;32mI (1620) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1630) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1630) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1630) wifi:Init dynamic rx buffer num: 32[0m
+esp> I (1640) wifi_init: rx ba win: 6
+[0;32mI (1650) wifi_init: accept mbox: 6[0m
+[0;32mI (1650) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1650) wifi_init: udp mbox: 6[0m
+[0;32mI (1650) wifi_init: tcp mbox: 6[0m
+[0;32mI (1660) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1660) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1660) wifi_init: tcp mss: 1440[0m
+[0;32mI (1660) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1670) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1680) wifi:Set ps type: 0, coexist: 0[0m
 
-[0;32mI (1671) phy_init: phy_version 701,f4f1da3a,Mar  3 2025,15:50:10[0m
-[0;32mI (1711) wifi:mode : sta (30:ed:a0:2b:82:54)[0m
-[0;32mI (1711) wifi:enable tsf[0m
-[0;32mI (1711) NETWORK: wifi_init_sta finished.[0m
-[0;32mI (1721) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (1721) wifi:state: init -> auth (0xb0)[0m
-[0;32mI (1841) wifi:state: auth -> assoc (0x0)[0m
-[0;32mI (1901) wifi:state: assoc -> run (0x10)[0m
-[0;32mI (1921) wifi:connected with dp, aid = 1, channel 1, BW20, bssid = 02:00:46:fa:da:ed[0m
-[0;32mI (1921) wifi:security: WPA2-PSK, phy: bgn, rssi: -39[0m
-[0;32mI (1931) wifi:pm start, type: 0[0m
-
-[0;32mI (1931) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
-[0;32mI (1941) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
-[0;32mI (2021) wifi:dp: 2, bi: 102400, li: 4, scale listen interval from 307200 us to 409600 us[0m
-[0;32mI (2021) wifi:AP's beacon interval = 102400 us, DTIM period = 2[0m
-[0;32mI (2701) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (2701) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
-[0;32mI (3061) esp_netif_handlers: sta ip: 10.42.0.99, mask: 255.255.255.0, gw: 10.42.0.1[0m
-[0;32mI (3061) NETWORK: got ip:10.42.0.99[0m
-[0;32mI (3061) LCD_GUI: Received LCD command: 2[0m
-[0;32mI (3071) LCD_GUI: lcd_gui_task: STATUS[0m
-[0;32mI (3081) LCD_GUI: lcd_gui_task: STATUS done[0m
-[0;32mI (3081) LCD_GUI: LCD STATUS: WiFi Connected: 10.42.0.99[0m
-[0;32mI (3081) LCD_GUI: lcd_gui_queue spaces available: 7[0m
-[0;32mI (3091) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (3091) LCD_GUI: Received LCD command: 1[0m
-[0;32mI (3091) LCD_GUI: lcd_gui_task: SPLASH type=2[0m
-[0;32mI (3121) LCD_GUI: Drawing splash_bitmap2 (CONNECTED)[0m
-[0;32mI (3121) LCD_GUI: Splash displayed, delaying for visibility[0m
-[0;32mI (4321) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (4321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (6321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (6321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (8321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (8321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (10321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (10321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (12321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (12321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (14321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (14321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (16321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (16321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (18321) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (18321) LCD_GUI: lcd_gui_task heartbeat[0m
-[0;32mI (18321) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (20331) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (20331) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (22331) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (22331) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
+[0;32mI (1680) phy_init: phy_version 701,f4f1da3a,Mar  3 2025,15:50:10[0m
+[0;32mI (1710) wifi:mode : sta (30:ed:a0:2b:82:54)[0m
+[0;32mI (1710) wifi:enable tsf[0m
+[0;32mI (1720) NETWORK: wifi_init_sta finished.[0m
+[0;32mI (2700) LCD_GUI: lcd_gui_queue spaces available: 8[0m
+[0;32mI (2700) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
+[0;32mI (4120) NETWORK: retry to connect to the AP[0m
+[0;33mW (4700) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
+[0;32mI (4700) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
+[0;32mI (6520) NETWORK: retry to connect to the AP[0m
+[0;33mW (6700) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
+[0;32mI (6700) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
+[0;33mW (8700) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
+[0;32mI (8700) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
+[0;32mI (8930) NETWORK: retry to connect to the AP[0m
+[0;33mW (10700) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
+[0;32mI (10700) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
+[0;32mI (11330) NETWORK: retry to connect to the AP[0m
+[0;33mW (12700) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
+[0;32mI (12700) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
+[0;32mI (13740) NETWORK: retry to connect to the AP[0m
 Done

@@ -464,12 +464,20 @@ int init_codec(codec_init_cfg_t *cfg)
         };
         codec_res.record_dev = esp_codec_dev_new(&dev_cfg);
     }
-    int ret = esp_codec_dev_set_out_vol(codec_res.play_dev, 60.0);
-    ret = esp_codec_dev_set_in_gain(codec_res.record_dev, 30.0);
-    if (ret == 0) {
-        codec_res.inited = true;
+    // Set output volume, ignore not-supported errors
+    esp_err_t err_out = esp_codec_dev_set_out_vol(codec_res.play_dev, 60.0);
+    if (err_out != ESP_OK && err_out != ESP_ERR_NOT_SUPPORTED) {
+        ESP_LOGE(TAG, "Failed to set output volume: %d", err_out);
+        return err_out;
     }
-    return ret;
+    // Set input gain, ignore not-supported errors
+    esp_err_t err_in = esp_codec_dev_set_in_gain(codec_res.record_dev, 30.0);
+    if (err_in != ESP_OK && err_in != ESP_ERR_NOT_SUPPORTED) {
+        ESP_LOGE(TAG, "Failed to set input gain: %d", err_in);
+        return err_in;
+    }
+    codec_res.inited = true;
+    return ESP_OK;
 }
 
 esp_codec_dev_handle_t get_playback_handle(void)

@@ -28,6 +28,7 @@ GPATH
 **/managed_components
 **/dependencies.lock
 **/dist
+**/debug
 
 # gcov coverage reports
 *.gcda

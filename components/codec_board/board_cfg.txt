@@ -7,11 +7,8 @@
 # Panel configuration: .rgb_ele_order = RGB, hardware inversion disabled (color_inv:0)
 
 Board: BREAD_BOARD
-i2s: {mclk: -1, din: 4, ws: 5, bclk: 6} #INMP441
-i2s: {mclk: -1, dout: 7, bclk: 15, ws: 16} #MAX98357
-#in_out: {codec: DUMMY, i2c_port: -1, pa: -1, i2s_port: 1} #INMP441/MAX98357
-in: {codec: DUMMY, i2c_port: -1} #INMP441
-out: {codec: DUMMY, i2c_port: -1, pa: -1, i2s_port: 1} #MAX98357
+i2s: {mclk: -1, bclk: 6, ws: 5, din: 4, dout: 7}
+in_out: {codec: DUMMY, i2c_port: -1, pa: -1, i2s_port: 0}
 lcd: {
     bus: spi, controller: st7789, spi_bus: 3,
     mirror_x: 0, mirror_y: 0, swap_xy: 0, color_inv: 0,

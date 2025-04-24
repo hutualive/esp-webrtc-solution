@@ -12,15 +12,17 @@ void init_board(void)
 {
     ESP_LOGI(TAG, "Init board.");
     set_codec_board_type(TEST_BOARD_NAME);
-    // Notes when use playback and record at same time, must set reuse_dev = false
-    codec_init_cfg_t cfg = {
-#if CONFIG_IDF_TARGET_ESP32S3
+    // Initialize codec (I2S TDM full-duplex) via codec_init
+    codec_init_cfg_t init_cfg = {
         .in_mode = CODEC_I2S_MODE_TDM,
+        .out_mode = CODEC_I2S_MODE_TDM,
         .in_use_tdm = true,
-#endif
-        .reuse_dev = false
+        .reuse_dev = true,
     };
-    init_codec(&cfg);
+    int ret = init_codec(&init_cfg);
+    if (ret != 0) {
+        ESP_LOGE(TAG, "Codec init failed: %d", ret);
+    }
 
 #ifndef DISABLE_LCD
     // Only initialize LCD if not disabled

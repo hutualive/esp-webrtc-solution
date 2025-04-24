@@ -52,25 +52,13 @@ static int build_capture_system(void)
     capture_sys.aud_enc = esp_capture_new_audio_encoder();
     RET_ON_NULL(capture_sys.aud_enc, -1);
 
-/*
-    // For S3 when use ES7210 it use TDM mode second channel is reference data
-    esp_capture_audio_aec_src_cfg_t codec_cfg = {
+    // Use AEC source: channel 0=mic, 1=ref
+    esp_capture_audio_aec_src_cfg_t aec_cfg = {
         .record_handle = get_record_handle(),
-#if CONFIG_IDF_TARGET_ESP32S3
-        .channel = 4,
-        .channel_mask = 1 | 2,
-#endif
+        .channel = 2,
+        .channel_mask = (1<<0)|(1<<1),
     };
-    //capture_sys.aud_src = esp_capture_new_audio_codec_src(&codec_cfg);
-    capture_sys.aud_src = esp_capture_new_audio_aec_src(&codec_cfg);
-*/
-
-    //adapt for bread board: INMP441/MAX98357
-    esp_capture_audio_codec_src_cfg_t codec_cfg = {
-        .record_handle = get_record_handle(),
-    };
-    capture_sys.aud_src = esp_capture_new_audio_codec_src(&codec_cfg);
-    
+    capture_sys.aud_src = esp_capture_new_audio_aec_src(&aec_cfg);
     RET_ON_NULL(capture_sys.aud_src, -1);
     esp_capture_simple_path_cfg_t simple_cfg = {
         .aenc = capture_sys.aud_enc,
@@ -109,10 +97,9 @@ static int build_player_system()
         ESP_LOGE(TAG, "Fail to create player");
         return -1;
     }
-    // When support AEC, reference data is from speaker right channel for ES8311 so must output 2 channel
     av_render_audio_frame_info_t aud_info = {
         .sample_rate = 16000,
-        .channel = 2,
+        .channel = 1, // mono output for MAX98357
         .bits_per_sample = 16,
     };
     av_render_set_fixed_frame_info(player_sys.player, &aud_info);

@@ -145,17 +145,21 @@ int test_capture_to_player(void)
         .codec = AV_RENDER_AUDIO_CODEC_OPUS,
         .sample_rate = 16000,
         .channel = 1,
+        .bits_per_sample = 16,
     };
     av_render_add_audio_stream(player_sys.player, &render_aud_info);
 
     uint32_t start_time = (uint32_t)(esp_timer_get_time() / 1000);
     esp_capture_start(capture_sys.capture_handle);
+    int cnt = 0;  // frame-forward counter
     while ((uint32_t)(esp_timer_get_time() / 1000) < start_time + 20000) {
         media_lib_thread_sleep(30);
         esp_capture_stream_frame_t frame = {
             .stream_type = ESP_CAPTURE_STREAM_TYPE_AUDIO,
         };
         while (esp_capture_acquire_path_frame(capture_path, &frame, true) == ESP_CAPTURE_ERR_OK) {
+            cnt++;
+            ESP_LOGI(TAG, "fwd frame #%d size=%d", cnt, frame.size);
             av_render_audio_data_t audio_data = {
                 .data = frame.data,
                 .size = frame.size,
@@ -165,7 +169,57 @@ int test_capture_to_player(void)
             esp_capture_release_path_frame(capture_path, &frame);
         }
     }
+    ESP_LOGI(TAG, "total frames forwarded: %d", cnt);
     esp_capture_stop(capture_sys.capture_handle);
     av_render_reset(player_sys.player);
+    return 0;
+}
+
+int test_capture_to_player_raw(void)
+{
+    // Bypass AEC: use raw codec source
+    esp_capture_audio_codec_src_cfg_t raw_cfg = { .record_handle = get_record_handle(), };
+    esp_capture_audio_src_if_t *raw_src = esp_capture_new_audio_codec_src(&raw_cfg);
+    if (!raw_src) { ESP_LOGE(TAG, "raw audio src init failed"); return -1; }
+    // Build simple path
+    esp_capture_aenc_if_t *enc = esp_capture_new_audio_encoder();
+    if (!enc) { ESP_LOGE(TAG, "audio encoder alloc failed"); return -1; }
+    esp_capture_path_if_t *path_if = esp_capture_build_simple_path(&(esp_capture_simple_path_cfg_t){ .aenc = enc });
+    if (!path_if) { ESP_LOGE(TAG, "path build failed"); return -1; }
+    // Open capture handle
+    esp_capture_cfg_t cfg = {
+        .sync_mode = ESP_CAPTURE_SYNC_MODE_AUDIO,
+        .audio_src = raw_src,
+        .capture_path = path_if,
+    };
+    esp_capture_path_handle_t raw_handle;
+    esp_capture_open(&cfg, &raw_handle);
+    // Setup sink path
+    esp_capture_path_handle_t sink_path;
+    esp_capture_sink_cfg_t sink_cfg_raw = {
+        .audio_info = { .codec = ESP_CAPTURE_CODEC_TYPE_PCM, .sample_rate = 16000, .channel = 1, .bits_per_sample = 16, },
+    };
+    esp_capture_setup_path(raw_handle, ESP_CAPTURE_PATH_PRIMARY, &sink_cfg_raw, &sink_path);
+    esp_capture_enable_path(sink_path, ESP_CAPTURE_RUN_TYPE_ALWAYS);
+    // Add player stream
+    av_render_add_audio_stream(player_sys.player, &(av_render_audio_info_t){ .codec = AV_RENDER_AUDIO_CODEC_PCM, .sample_rate = 16000, .channel = 1, .bits_per_sample = 16 });
+    // Run capture->player
+    uint32_t start = esp_timer_get_time() / 1000;
+    int cnt_raw = 0;
+    esp_capture_start(raw_handle);
+    while (esp_timer_get_time() / 1000 < start + 20000) {
+        media_lib_thread_sleep(30);
+        esp_capture_stream_frame_t frame = { .stream_type = ESP_CAPTURE_STREAM_TYPE_AUDIO };
+        while (esp_capture_acquire_path_frame(sink_path, &frame, true) == ESP_CAPTURE_ERR_OK) {
+            cnt_raw++;
+            ESP_LOGI(TAG, "raw fwd #%d size=%d", cnt_raw, frame.size);
+            av_render_audio_data_t d = { .data = frame.data, .size = frame.size, .pts = frame.pts };
+            av_render_add_audio_data(player_sys.player, &d);
+            esp_capture_release_path_frame(sink_path, &frame);
+        }
+    }
+    esp_capture_stop(raw_handle);
+    av_render_reset(player_sys.player);
+    ESP_LOGI(TAG, "total raw frames forwarded: %d", cnt_raw);
     return 0;
 }

@@ -47,6 +47,14 @@ int media_sys_get_provider(esp_webrtc_media_provider_t *provider);
 int test_capture_to_player(void);
 
 /**
+ * @brief  Play recorded voice from raw mic (no AEC)
+ *
+ * @return
+ *      - 0       On success
+ */
+int test_capture_to_player_raw(void);
+
+/**
  * @brief  Play music
  *
  * @param[in]  data      Music data to be played

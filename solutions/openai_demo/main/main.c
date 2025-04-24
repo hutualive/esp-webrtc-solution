@@ -98,6 +98,43 @@ static int text_cli(int argc, char **argv)
     return 0;
 }
 
+#include <stdint.h>
+#include <math.h>
+#include <stdlib.h>
+#include "esp_timer.h"
+#include "esp_cpu.h"
+
+static int tone_cli(int argc, char **argv)
+{
+    float f = argc > 1 ? atof(argv[1]) : 1000.0f;
+    int ms = argc > 2 ? atoi(argv[2]) : 2000;
+    ESP_LOGI("TONE", "tone_cli: f=%.1f Hz, d=%d ms", f, ms);
+    const int N = 160;
+    int16_t buf[N];
+    for (int i = 0; i < N; i++) {
+        buf[i] = (int16_t)(sinf(2 * M_PI * f * i / 16000) * 3000);
+    }
+    esp_webrtc_media_provider_t provider;
+    media_sys_get_provider(&provider);
+    av_render_handle_t player = provider.player;
+    av_render_audio_info_t tone_info = { .codec = AV_RENDER_AUDIO_CODEC_PCM, .sample_rate = 16000, .channel = 1, .bits_per_sample = 16 };
+    av_render_add_audio_stream(player, &tone_info);
+    uint32_t start = esp_timer_get_time() / 1000;
+    while ((esp_timer_get_time() / 1000) < start + ms) {
+        av_render_audio_data_t d = { .data = (uint8_t*)buf, .size = sizeof(buf), .pts = 0 };
+        av_render_add_audio_data(player, &d);
+        media_lib_thread_sleep(10);
+    }
+    av_render_reset(player);
+    return 0;
+}
+
+static int rec2play_raw_cli(int argc, char **argv)
+{
+    test_capture_to_player_raw();
+    return 0;
+}
+
 static int init_console()
 {
     esp_console_repl_t *repl = NULL;
@@ -162,6 +199,16 @@ static int init_console()
             .command = "rec2play",
             .help = "Play recorded voice\r\n",
             .func = rec2play_cli,
+        },
+        {
+            .command = "tone",
+            .help = "Play test tone: tone <freq> <ms>\n",
+            .func = tone_cli,
+        },
+        {
+            .command = "rec2play_raw",
+            .help = "Play recorded voice (raw mic, no AEC)\n",
+            .func = rec2play_raw_cli,
         },
     };
     for (int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++) {
@@ -246,6 +293,7 @@ void on_new_chat_message(const char *msg)
 void app_main(void)
 {
     esp_log_level_set("*", ESP_LOG_INFO);
+    esp_log_level_set("LCD_GUI", ESP_LOG_ERROR);
     media_lib_add_default_adapter();
     media_lib_thread_set_schedule_cb(thread_scheduler);
     init_board();

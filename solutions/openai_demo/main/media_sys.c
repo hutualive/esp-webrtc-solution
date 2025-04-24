@@ -181,10 +181,8 @@ int test_capture_to_player_raw(void)
     esp_capture_audio_codec_src_cfg_t raw_cfg = { .record_handle = get_record_handle(), };
     esp_capture_audio_src_if_t *raw_src = esp_capture_new_audio_codec_src(&raw_cfg);
     if (!raw_src) { ESP_LOGE(TAG, "raw audio src init failed"); return -1; }
-    // Build simple path
-    esp_capture_aenc_if_t *enc = esp_capture_new_audio_encoder();
-    if (!enc) { ESP_LOGE(TAG, "audio encoder alloc failed"); return -1; }
-    esp_capture_path_if_t *path_if = esp_capture_build_simple_path(&(esp_capture_simple_path_cfg_t){ .aenc = enc });
+    // Build simple path (bypass audio encoder)
+    esp_capture_path_if_t *path_if = esp_capture_build_simple_path(&(esp_capture_simple_path_cfg_t){ .aenc = NULL });
     if (!path_if) { ESP_LOGE(TAG, "path build failed"); return -1; }
     // Open capture handle
     esp_capture_cfg_t cfg = {
@@ -201,8 +199,6 @@ int test_capture_to_player_raw(void)
     };
     esp_capture_setup_path(raw_handle, ESP_CAPTURE_PATH_PRIMARY, &sink_cfg_raw, &sink_path);
     esp_capture_enable_path(sink_path, ESP_CAPTURE_RUN_TYPE_ALWAYS);
-    // Add player stream
-    av_render_add_audio_stream(player_sys.player, &(av_render_audio_info_t){ .codec = AV_RENDER_AUDIO_CODEC_PCM, .sample_rate = 16000, .channel = 1, .bits_per_sample = 16 });
     // Run capture->player
     uint32_t start = esp_timer_get_time() / 1000;
     int cnt_raw = 0;
@@ -213,13 +209,17 @@ int test_capture_to_player_raw(void)
         while (esp_capture_acquire_path_frame(sink_path, &frame, true) == ESP_CAPTURE_ERR_OK) {
             cnt_raw++;
             ESP_LOGI(TAG, "raw fwd #%d size=%d", cnt_raw, frame.size);
+            // Amplify audio volume by 2x
+            int16_t *pcm = (int16_t *)frame.data;
+            int sample_cnt = frame.size / sizeof(int16_t);
+            for (int i = 0; i < sample_cnt; i++) {
+                pcm[i] = pcm[i] * 2;
+            }
             av_render_audio_data_t d = { .data = frame.data, .size = frame.size, .pts = frame.pts };
             av_render_add_audio_data(player_sys.player, &d);
             esp_capture_release_path_frame(sink_path, &frame);
         }
     }
     esp_capture_stop(raw_handle);
-    av_render_reset(player_sys.player);
-    ESP_LOGI(TAG, "total raw frames forwarded: %d", cnt_raw);
     return 0;
 }

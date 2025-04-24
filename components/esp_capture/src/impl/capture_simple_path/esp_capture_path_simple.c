@@ -98,8 +98,9 @@ static bool need_bypass_venc(simple_capture_t *capture, esp_capture_video_info_t
 static bool check_audio_codec_support(simple_capture_t *capture, esp_capture_aenc_if_t *aenc, esp_capture_audio_info_t *audio_info)
 {
     if (aenc == NULL) {
-        ESP_LOGE(TAG, "Not support audio encoder");
-        return false;
+        ESP_LOGI(TAG, "Bypass audio encoder (no encoder configured)");
+        capture->primary.aenc_bypass = true;
+        return true;
     }
     if (need_bypass_aenc(capture, audio_info)) {
         capture->primary.aenc_bypass = true;

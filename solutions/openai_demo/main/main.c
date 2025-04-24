@@ -23,6 +23,9 @@
 #include "common.h"
 #include "esp_capture_defaults.h"
 #include "lcd_gui.h"
+#include "codec_init.h"
+
+#define TAG "MAIN"
 
 static int start_chat(int argc, char **argv)
 {
@@ -125,13 +128,51 @@ static int tone_cli(int argc, char **argv)
         av_render_add_audio_data(player, &d);
         media_lib_thread_sleep(10);
     }
-    av_render_reset(player);
+    // av_render_reset(player); // removed to keep audio render alive
     return 0;
 }
 
 static int rec2play_raw_cli(int argc, char **argv)
 {
-    test_capture_to_player_raw();
+    // Direct raw loopback: capture from mic, amplify, and play
+    esp_capture_audio_codec_src_cfg_t raw_cfg = { .record_handle = get_record_handle() };
+    esp_capture_audio_src_if_t *raw_src = esp_capture_new_audio_codec_src(&raw_cfg);
+    if (!raw_src) { ESP_LOGE(TAG, "raw audio src init failed"); return 1; }
+    // negotiate PCM capture capabilities
+    esp_capture_audio_info_t in_cfg = { .codec = ESP_CAPTURE_CODEC_TYPE_PCM,
+                                       .sample_rate = 16000, .channel = 1, .bits_per_sample = 16 };
+    esp_capture_audio_info_t out_cfg;
+    int ret = raw_src->negotiate_caps(raw_src, &in_cfg, &out_cfg);
+    if (ret != ESP_CAPTURE_ERR_OK) { ESP_LOGE(TAG, "negotiate_caps failed %d", ret); return 1; }
+    raw_src->open(raw_src);
+    raw_src->start(raw_src);
+    esp_webrtc_media_provider_t provider;
+    media_sys_get_provider(&provider);
+    av_render_handle_t player = provider.player;
+    // skip reset here to avoid I2S disable errors
+    av_render_audio_info_t raw_info = { .codec = AV_RENDER_AUDIO_CODEC_PCM,
+                                        .sample_rate = 16000,
+                                        .channel = 1,
+                                        .bits_per_sample = 16 };
+    av_render_add_audio_stream(player, &raw_info);
+    static int16_t pcm_buf[160];
+    esp_capture_stream_frame_t frame = { .stream_type = ESP_CAPTURE_STREAM_TYPE_AUDIO,
+                                        .data = (uint8_t*)pcm_buf,
+                                        .size = sizeof(pcm_buf) };
+    uint32_t start_ms = esp_timer_get_time() / 1000;
+    while (esp_timer_get_time() / 1000 < start_ms + 20000) {
+        int ret = raw_src->read_frame(raw_src, &frame);
+        if (ret != ESP_CAPTURE_ERR_OK) { ESP_LOGE(TAG, "fail to read audio frame %d", ret); break; }
+        int16_t *pcm = (int16_t *)frame.data;
+        int sample_cnt = frame.size / sizeof(int16_t);
+        for (int i = 0; i < sample_cnt; i++) pcm[i] *= 4;
+        av_render_audio_data_t d = { .data = frame.data, .size = frame.size, .pts = frame.pts };
+        av_render_add_audio_data(player, &d);
+        media_lib_thread_sleep(10);
+    }
+    raw_src->stop(raw_src);
+    raw_src->close(raw_src);
+    av_render_reset(player);
     return 0;
 }
 

@@ -1,7 +1,157 @@
-Executing action: monitor
+Executing action: flash
 Serial port /dev/ttyUSB0
 Connecting....
 Detecting chip type... ESP32-S3
+Running ninja in directory /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build
+Executing "ninja flash"...
+[1/10] Performing build step for 'bootloader'
+[1/1] cd /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/bootloader/esp-idf/esptool_py && /home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/bootloader/bootloader.bin
+Bootloader binary size 0x52b0 bytes. 0x2d50 bytes (35%) free.
+[2/10] No install step for 'bootloader'
+[3/10] Building C object esp-idf/capture_audio_src/CMakeFiles/__idf_capture_audio_src.dir/capture_aud_aec_src.c.obj
+[4/10] Completed 'bootloader'
+[5/10] Linking C static library esp-idf/capture_audio_src/libcapture_audio_src.a
+[6/10] Generating ld/sections.ld
+[7/10] Linking CXX executable openai_demo.elf
+[8/10] Generating binary image from built executable
+esptool.py v4.9.dev6
+Creating esp32s3 image...
+Merged 2 ELF sections
+Successfully created esp32s3 image.
+Generated /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.bin
+[9/10] cd /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/esp-idf/esptool_py && /home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/partition_table/partition-table.bin /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.bin
+openai_demo.bin binary size 0x250020 bytes. Smallest app partition is 0x300000 bytes. 0xaffe0 bytes (23%) free.
+[9/10] cd /home/dp/code/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/dp/code/esp-idf -D "SERIAL_TOOL=/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python;;/home/dp/code/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32s3" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/dp/code/esp-webrtc-solution/solutions/openai_demo/build -P /home/dp/code/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32s3 -p /dev/ttyUSB0 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 4MB 0x0 bootloader/bootloader.bin 0x10000 openai_demo.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.9.dev6
+Serial port /dev/ttyUSB0
+Connecting....
+Chip is ESP32-S3 (QFN56) (revision v0.2)
+Features: WiFi, BLE, Embedded PSRAM 8MB (AP_3v3)
+Crystal is 40MHz
+MAC: 94:a9:90:04:c9:e8
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00000000 to 0x00005fff...
+Flash will be erased from 0x00010000 to 0x00260fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+SHA digest in image updated
+Compressed 21168 bytes to 13487...
+Writing at 0x00000000... (100 %)
+Wrote 21168 bytes (13487 compressed) at 0x00000000 in 0.6 seconds (effective 278.1 kbit/s)...
+Hash of data verified.
+Compressed 2424864 bytes to 1574382...
+Writing at 0x00010000... (1 %)
+Writing at 0x0001c799... (2 %)
+Writing at 0x0002b2cf... (3 %)
+Writing at 0x000386de... (4 %)
+Writing at 0x0003e6e7... (5 %)
+Writing at 0x00042b39... (6 %)
+Writing at 0x00046dd9... (7 %)
+Writing at 0x0004b416... (8 %)
+Writing at 0x0005094c... (9 %)
+Writing at 0x000558fa... (10 %)
+Writing at 0x0005a3e6... (11 %)
+Writing at 0x0005f472... (12 %)
+Writing at 0x00068d2a... (13 %)
+Writing at 0x0006db31... (14 %)
+Writing at 0x000723f4... (15 %)
+Writing at 0x00078cc1... (16 %)
+Writing at 0x0007d92d... (17 %)
+Writing at 0x000828bf... (18 %)
+Writing at 0x00087f90... (19 %)
+Writing at 0x00090604... (20 %)
+Writing at 0x0009ba1d... (21 %)
+Writing at 0x000a1991... (22 %)
+Writing at 0x000a7c30... (23 %)
+Writing at 0x000ae00b... (24 %)
+Writing at 0x000b45cc... (25 %)
+Writing at 0x000ba25d... (26 %)
+Writing at 0x000bf7e7... (27 %)
+Writing at 0x000c5929... (28 %)
+Writing at 0x000cabb8... (29 %)
+Writing at 0x000d071a... (30 %)
+Writing at 0x000ecdfb... (31 %)
+Writing at 0x000f46fd... (32 %)
+Writing at 0x000fa5f8... (34 %)
+Writing at 0x00100bfa... (35 %)
+Writing at 0x00106f1d... (36 %)
+Writing at 0x0010bd11... (37 %)
+Writing at 0x00110f2a... (38 %)
+Writing at 0x001165ce... (39 %)
+Writing at 0x0011b832... (40 %)
+Writing at 0x0012090a... (41 %)
+Writing at 0x0012546a... (42 %)
+Writing at 0x0012a329... (43 %)
+Writing at 0x0012f24c... (44 %)
+Writing at 0x001340e7... (45 %)
+Writing at 0x001390cb... (46 %)
+Writing at 0x0013dfc0... (47 %)
+Writing at 0x00143183... (48 %)
+Writing at 0x00147d5e... (49 %)
+Writing at 0x0014ccc7... (50 %)
+Writing at 0x001523d5... (51 %)
+Writing at 0x00157636... (52 %)
+Writing at 0x0015c5f4... (53 %)
+Writing at 0x00161796... (54 %)
+Writing at 0x001666a4... (55 %)
+Writing at 0x0016b5bf... (56 %)
+Writing at 0x00170428... (57 %)
+Writing at 0x001755d2... (58 %)
+Writing at 0x0017a711... (59 %)
+Writing at 0x0017fa5a... (60 %)
+Writing at 0x00184b16... (61 %)
+Writing at 0x0018a330... (62 %)
+Writing at 0x001907cb... (63 %)
+Writing at 0x00196b28... (64 %)
+Writing at 0x0019c6f1... (65 %)
+Writing at 0x001a23a8... (67 %)
+Writing at 0x001a8104... (68 %)
+Writing at 0x001adde1... (69 %)
+Writing at 0x001b3ff6... (70 %)
+Writing at 0x001ba6e6... (71 %)
+Writing at 0x001c01eb... (72 %)
+Writing at 0x001c5fa4... (73 %)
+Writing at 0x001cc38b... (74 %)
+Writing at 0x001d20a4... (75 %)
+Writing at 0x001d7e2e... (76 %)
+Writing at 0x001dcffb... (77 %)
+Writing at 0x001e1f1b... (78 %)
+Writing at 0x001e7305... (79 %)
+Writing at 0x001ec725... (80 %)
+Writing at 0x001f18af... (81 %)
+Writing at 0x001f6a11... (82 %)
+Writing at 0x001fc605... (83 %)
+Writing at 0x00202498... (84 %)
+Writing at 0x0020824a... (85 %)
+Writing at 0x0020db42... (86 %)
+Writing at 0x00213b98... (87 %)
+Writing at 0x0021928b... (88 %)
+Writing at 0x0021ed36... (89 %)
+Writing at 0x0022667d... (90 %)
+Writing at 0x0022e519... (91 %)
+Writing at 0x00234c84... (92 %)
+Writing at 0x0023a72c... (93 %)
+Writing at 0x00240df6... (94 %)
+Writing at 0x00247417... (95 %)
+Writing at 0x0024d8c8... (96 %)
+Writing at 0x0025399e... (97 %)
+Writing at 0x00259c39... (98 %)
+Writing at 0x0025f7f9... (100 %)
+Wrote 2424864 bytes (1574382 compressed) at 0x00010000 in 36.1 seconds (effective 537.7 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 105...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (105 compressed) at 0x00008000 in 0.0 seconds (effective 496.3 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
+Executing action: monitor
 Running idf_monitor in directory /home/dp/code/esp-webrtc-solution/solutions/openai_demo
 Executing "/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python /home/dp/code/esp-idf/tools/idf_monitor.py -p /dev/ttyUSB0 -b 115200 --toolchain-prefix xtensa-esp32s3-elf- --target esp32s3 --revision 0 /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/openai_demo.elf /home/dp/code/esp-webrtc-solution/solutions/openai_demo/build/bootloader/bootloader.elf -m '/home/dp/.espressif/python_env/idf5.5_py3.12_env/bin/python' '/home/dp/code/esp-idf/tools/idf.py'"...
 ESP-ROM:esp32s3-20210327
@@ -28,51 +178,51 @@ entry 0x403c8924
 [0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
 [0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00300000[0m
 [0;32mI (78) boot: End of partition table[0m
-[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c1b0020 size=84c1ch (543772) map[0m
-[0;32mI (184) esp_image: segment 1: paddr=00094c44 vaddr=3fca5f00 size=06710h ( 26384) load[0m
-[0;32mI (190) esp_image: segment 2: paddr=0009b35c vaddr=40378000 size=04cbch ( 19644) load[0m
-[0;32mI (195) esp_image: segment 3: paddr=000a0020 vaddr=42000020 size=1a639ch (1729436) map[0m
-[0;32mI (501) esp_image: segment 4: paddr=002463c4 vaddr=4037ccbc size=191e8h (102888) load[0m
-[0;32mI (523) esp_image: segment 5: paddr=0025f5b4 vaddr=600fe000 size=0001ch (    28) load[0m
-[0;32mI (535) boot: Loaded app from partition at offset 0x10000[0m
-[0;32mI (535) boot: Disabling RNG early entropy source...[0m
-[0;33mW (545) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c1b0020 size=84e5ch (544348) map[0m
+[0;32mI (184) esp_image: segment 1: paddr=00094e84 vaddr=3fca5f00 size=06710h ( 26384) load[0m
+[0;32mI (190) esp_image: segment 2: paddr=0009b59c vaddr=40378000 size=04a7ch ( 19068) load[0m
+[0;32mI (195) esp_image: segment 3: paddr=000a0020 vaddr=42000020 size=1a6b7ch (1731452) map[0m
+[0;32mI (501) esp_image: segment 4: paddr=00246ba4 vaddr=4037ca7c size=19428h (103464) load[0m
+[0;32mI (524) esp_image: segment 5: paddr=0025ffd4 vaddr=600fe000 size=0001ch (    28) load[0m
+[0;32mI (536) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (536) boot: Disabling RNG early entropy source...[0m
+[0;33mW (546) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
 [0;33mW (546) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
 [0;33mW (553) flash HPM: High performance mode of this flash model hasn't been supported.[0m
-[0;32mI (560) MSPI Timing: Flash timing tuning index: 2[0m
+[0;32mI (561) MSPI Timing: Flash timing tuning index: 2[0m
 [0;32mI (565) octal_psram: vendor id    : 0x0d (AP)[0m
 [0;32mI (569) octal_psram: dev id       : 0x02 (generation 3)[0m
-[0;32mI (573) octal_psram: density      : 0x03 (64 Mbit)[0m
-[0;32mI (578) octal_psram: good-die     : 0x01 (Pass)[0m
-[0;32mI (582) octal_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (574) octal_psram: density      : 0x03 (64 Mbit)[0m
+[0;32mI (579) octal_psram: good-die     : 0x01 (Pass)[0m
+[0;32mI (583) octal_psram: Latency      : 0x01 (Fixed)[0m
 [0;32mI (587) octal_psram: VCC          : 0x01 (3V)[0m
 [0;32mI (591) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
 [0;32mI (596) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
-[0;32mI (600) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
-[0;32mI (605) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
-[0;32mI (610) octal_psram: DriveStrength: 0x00 (1/1)[0m
-[0;32mI (622) MSPI Timing: PSRAM timing tuning index: 2[0m
-[0;32mI (622) esp_psram: Found 8MB PSRAM device[0m
+[0;32mI (601) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
+[0;32mI (606) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
+[0;32mI (611) octal_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (621) MSPI Timing: PSRAM timing tuning index: 2[0m
+[0;32mI (621) esp_psram: Found 8MB PSRAM device[0m
 [0;32mI (623) esp_psram: Speed: 120MHz[0m
 [0;32mI (626) cpu_start: Multicore app[0m
-[0;32mI (863) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (864) esp_psram: SPI SRAM memory test OK[0m
 [0;32mI (872) cpu_start: Pro cpu start user code[0m
 [0;32mI (872) cpu_start: cpu freq: 240000000 Hz[0m
 [0;32mI (872) app_init: Application information:[0m
 [0;32mI (872) app_init: Project name:     openai_demo[0m
-[0;32mI (876) app_init: App version:      57cb8f6-dirty[0m
-[0;32mI (881) app_init: Compile time:     Apr 23 2025 22:49:06[0m
-[0;32mI (886) app_init: ELF file SHA256:  16ad1f4e5...[0m
+[0;32mI (877) app_init: App version:      ab2faaf-dirty[0m
+[0;32mI (881) app_init: Compile time:     Apr 24 2025 17:43:14[0m
+[0;32mI (886) app_init: ELF file SHA256:  a56107075...[0m
 [0;32mI (890) app_init: ESP-IDF:          v5.5-dev-2488-gee77c489e7-dirty[0m
 [0;32mI (896) efuse_init: Min chip rev:     v0.0[0m
 [0;32mI (900) efuse_init: Max chip rev:     v0.99 [0m
 [0;32mI (904) efuse_init: Chip rev:         v0.2[0m
 [0;32mI (908) heap_init: Initializing. RAM available for dynamic allocation:[0m
-[0;32mI (914) heap_init: At 3FCB1D98 len 00037978 (222 KiB): RAM[0m
-[0;32mI (919) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
-[0;32mI (924) heap_init: At 600FE01C len 00001FCC (7 KiB): RTCRAM[0m
+[0;32mI (914) heap_init: At 3FCB2018 len 000376F8 (221 KiB): RAM[0m
+[0;32mI (920) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (925) heap_init: At 600FE01C len 00001FCC (7 KiB): RTCRAM[0m
 [0;32mI (930) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator[0m
-[0;32mI (937) spi_flash: detected chip: generic[0m
+[0;32mI (937) spi_flash: detected chip: gd[0m
 [0;32mI (940) spi_flash: flash io: dio[0m
 [0;33mW (943) spi_flash: Detected size(16384k) larger than the size in the binary image header(4096k). Using the size in the binary image header.[0m
 [0;32mI (955) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
@@ -142,528 +292,122 @@ lcd: {bus: spi, controller: st7789, spi_bus: 3, mirror_x: 0, mirror_y: 0, swap_x
 [0;32mI (1488) LCD_INIT: Setting GPIO level for pin 3 to 1[0m
 [0;32mI (1488) LCD_INIT: LCD initialization successful: 0[0m
 [0;32mI (1488) Board: LCD initialized successfully[0m
-[0;32mI (1498) LCD_GUI: lcd_gui_task started[0m
-[0;32mI (1498) LCD_GUI: Received LCD command: 1[0m
-[0;32mI (1508) LCD_GUI: lcd_gui_task: SPLASH type=1[0m
-[0;32mI (1518) LCD_GUI: Drawing splash_bitmap1 (POWERON)[0m
-[5n[0;32mI (1518) LCD_GUI: Splash displayed, delaying for visibility[0m
-
+[5n
 Type 'help' to get the list of commands.
 Use UP/DOWN arrows to navigate through command history.
 Press TAB when typing command name to auto-complete.
-[6n I (1588) pp: pp rom version: e7ae62f
-[0;32mI (1598) net80211: net80211 rom version: e7ae62f[0m
-[0;32mI (1608) wifi:wifi driver task: 3fcd1eec, prio:23, stack:6656, core=0[0m
-[999C [6n I (1608) wifi:wifi firmware version: 7086521f2a
-[0;32mI (1608) wifi:wifi certification version: v7.0[0m
-[0;32mI (1608) wifi:config NVS flash: enabled[0m
-[0;32mI (1608) wifi:config nano formatting: disabled[0m
-[0;32mI (1628) wifi:Init data frame dynamic rx buffer num: 32[0m
-[0;32mI (1628) wifi:Init static rx mgmt buffer num: 5[0m
-[172DI (1638) wifi:Init management short buffer num: 32
-esp> I (1638) wifi:Init dynamic tx buffer num: 32
-[0;32mI (1648) wifi:Init static tx FG buffer num: 2[0m
-[0;32mI (1648) wifi:Init static rx buffer size: 1600[0m
-[0;32mI (1648) wifi:Init static rx buffer num: 10[0m
-[0;32mI (1658) wifi:Init dynamic rx buffer num: 32[0m
-[0;32mI (1658) wifi_init: rx ba win: 6[0m
-[0;32mI (1658) wifi_init: accept mbox: 6[0m
-[0;32mI (1658) wifi_init: tcpip mbox: 32[0m
-[0;32mI (1668) wifi_init: udp mbox: 6[0m
-[0;32mI (1668) wifi_init: tcp mbox: 6[0m
-[0;32mI (1668) wifi_init: tcp tx win: 5760[0m
-[0;32mI (1668) wifi_init: tcp rx win: 5760[0m
-[0;32mI (1678) wifi_init: tcp mss: 1440[0m
-[0;32mI (1678) wifi_init: WiFi IRAM OP enabled[0m
-[0;32mI (1678) wifi_init: WiFi RX IRAM OP enabled[0m
-[0;32mI (1688) NETWORK: Force to use wifi config from nvs[0m
-[0;32mI (1708) wifi:Set ps type: 0, coexist: 0[0m
+[6n I (1578) pp: pp rom version: e7ae62f
+[0;32mI (1578) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1588) wifi:wifi driver task: 3fcd229c, prio:23, stack:6656, core=0[0m
+[0;32mI (1598) wifi:wifi firmware version: 7086521f2a[0m
+[999C I (1598) wifi:wifi certification version: v7.0
+[0;32mI (1598) wifi:config NVS flash: enabled[0m
+[6n I (1608) wifi:config nano formatting: disabled
+[0;32mI (1608) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1608) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1608) wifi:Init management short buffer num: 32[0m
+esp> I (1618) wifi:Init dynamic tx buffer num: 32
+[0;32mI (1628) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1628) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1628) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1638) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1638) wifi_init: rx ba win: 6[0m
+[0;32mI (1638) wifi_init: accept mbox: 6[0m
+[0;32mI (1648) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1648) wifi_init: udp mbox: 6[0m
+[0;32mI (1648) wifi_init: tcp mbox: 6[0m
+[0;32mI (1648) wifi_init: tcp tx win: 5760[0m
+[0;32mI (1658) wifi_init: tcp rx win: 5760[0m
+[0;32mI (1658) wifi_init: tcp mss: 1440[0m
+[0;32mI (1658) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1658) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1678) NETWORK: Force to use wifi config from nvs[0m
+[0;32mI (1688) wifi:Set ps type: 0, coexist: 0[0m
 
-[0;32mI (1708) phy_init: phy_version 701,f4f1da3a,Mar  3 2025,15:50:10[0m
-[0;32mI (1738) phy_init: Saving new calibration data due to checksum failure or outdated calibration data, mode(0)[0m
-[0;32mI (1748) wifi:mode : sta (94:a9:90:1b:ac:04)[0m
-[0;32mI (1748) wifi:enable tsf[0m
-[0;32mI (1758) NETWORK: wifi_init_sta finished.[0m
-[0;32mI (1758) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (1758) wifi:state: init -> auth (0xb0)[0m
-[0;32mI (1878) wifi:state: auth -> assoc (0x0)[0m
-[0;32mI (1918) wifi:state: assoc -> run (0x10)[0m
-[0;32mI (1938) wifi:connected with dp, aid = 1, channel 1, BW20, bssid = 02:00:46:fa:da:ed[0m
-[0;32mI (1938) wifi:security: WPA2-PSK, phy: bgn, rssi: -39[0m
-[0;32mI (1948) wifi:pm start, type: 0[0m
+[0;32mI (1688) phy_init: phy_version 701,f4f1da3a,Mar  3 2025,15:50:10[0m
+[0;32mI (1718) wifi:mode : sta (94:a9:90:04:c9:e8)[0m
+[0;32mI (1718) wifi:enable tsf[0m
+[0;32mI (1728) NETWORK: wifi_init_sta finished.[0m
+[0;32mI (1728) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
+[0;32mI (1728) wifi:state: init -> auth (0xb0)[0m
+[0;32mI (1838) wifi:state: auth -> assoc (0x0)[0m
+[0;32mI (1888) wifi:state: assoc -> run (0x10)[0m
+[0;32mI (1908) wifi:connected with dp, aid = 1, channel 1, BW20, bssid = 02:00:46:fa:da:ed[0m
+[0;32mI (1908) wifi:security: WPA2-PSK, phy: bgn, rssi: -30[0m
+[0;32mI (1918) wifi:pm start, type: 0[0m
 
-[0;32mI (1948) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
-[0;32mI (1958) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
-[0;32mI (1968) wifi:dp: 2, bi: 102400, li: 4, scale listen interval from 307200 us to 409600 us[0m
-[0;32mI (1968) wifi:AP's beacon interval = 102400 us, DTIM period = 2[0m
-[0;32mI (2728) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (2728) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
-[0;32mI (3478) esp_netif_handlers: sta ip: 10.42.0.79, mask: 255.255.255.0, gw: 10.42.0.1[0m
-[0;32mI (3478) NETWORK: got ip:10.42.0.79[0m
-[0;32mI (3478) LCD_GUI: Received LCD command: 2[0m
-[0;32mI (3488) LCD_GUI: lcd_gui_task: STATUS[0m
-[0;32mI (3498) LCD_GUI: lcd_gui_task: STATUS done[0m
-[0;32mI (3498) LCD_GUI: LCD STATUS: WiFi Connected: 10.42.0.79[0m
-[0;32mI (3498) LCD_GUI: lcd_gui_queue spaces available: 7[0m
-[0;32mI (3508) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (3508) LCD_GUI: Received LCD command: 1[0m
-[0;32mI (3508) LCD_GUI: lcd_gui_task: SPLASH type=2[0m
-[0;32mI (3538) LCD_GUI: Drawing splash_bitmap2 (CONNECTED)[0m
-[0;32mI (3538) LCD_GUI: Splash displayed, delaying for visibility[0m
-[0;32mI (4738) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (4738) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (6738) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (6738) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (7188) wifi:state: run -> init (0x3c0)[0m
-[0;32mI (7198) wifi:pm stop, total sleep time: 0 us / 5248323 us[0m
-
-[0;32mI (7198) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (7198) LCD_GUI: Received LCD command: 2[0m
-[0;32mI (7198) NETWORK: retry to connect to the AP[0m
-[0;32mI (7208) LCD_GUI: lcd_gui_task: STATUS[0m
-[0;32mI (7218) LCD_GUI: lcd_gui_task: STATUS done[0m
-[0;32mI (7218) LCD_GUI: LCD STATUS: WiFi Disconnected[0m
-[0;32mI (7218) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (7228) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (9238) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (9238) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (9598) NETWORK: retry to connect to the AP[0m
-[0;33mW (11238) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (11238) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (12008) NETWORK: retry to connect to the AP[0m
-[0;32mI (12008) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (12018) wifi:state: init -> auth (0xb0)[0m
-[0;32mI (12028) wifi:state: auth -> assoc (0x0)[0m
-[0;32mI (12078) wifi:state: assoc -> run (0x10)[0m
-[0;32mI (12138) wifi:connected with dp, aid = 1, channel 1, BW20, bssid = 02:00:46:fa:da:ed[0m
-[0;32mI (12138) wifi:security: WPA2-PSK, phy: bgn, rssi: -39[0m
-[0;32mI (12138) wifi:pm start, type: 0[0m
-
-[0;32mI (12158) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
-[0;32mI (12158) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
-[0;32mI (12208) wifi:dp: 2, bi: 102400, li: 4, scale listen interval from 307200 us to 409600 us[0m
-[0;32mI (12208) wifi:AP's beacon interval = 102400 us, DTIM period = 2[0m
-[0;32mI (13188) esp_netif_handlers: sta ip: 10.42.0.79, mask: 255.255.255.0, gw: 10.42.0.1[0m
-[0;32mI (13188) NETWORK: got ip:10.42.0.79[0m
-[0;32mI (13188) LCD_GUI: Received LCD command: 2[0m
-[0;32mI (13198) LCD_GUI: lcd_gui_task: STATUS[0m
-[0;32mI (13208) LCD_GUI: lcd_gui_task: STATUS done[0m
-[0;32mI (13208) LCD_GUI: LCD STATUS: WiFi Connected: 10.42.0.79[0m
-[0;32mI (13208) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (13218) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (15218) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (15218) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (17218) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (17218) LCD_GUI: lcd_gui_task heartbeat[0m
-[0;32mI (17218) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (17898) wifi:state: run -> init (0x3c0)[0m
-[0;32mI (17908) wifi:pm stop, total sleep time: 0 us / 5750587 us[0m
-
-[0;32mI (17908) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (17908) LCD_GUI: Received LCD command: 2[0m
-[0;32mI (17908) NETWORK: retry to connect to the AP[0m
-[0;32mI (17918) LCD_GUI: lcd_gui_task: STATUS[0m
-[0;32mI (17928) LCD_GUI: lcd_gui_task: STATUS done[0m
-[0;32mI (17928) LCD_GUI: LCD STATUS: WiFi Disconnected[0m
-[0;32mI (17928) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (17948) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (17948) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (17948) wifi:state: init -> auth (0xb0)[0m
-[0;32mI (18968) wifi:state: auth -> init (0x200)[0m
-[0;32mI (18978) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (18978) NETWORK: retry to connect to the AP[0m
-[0;33mW (19948) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (19948) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (21378) NETWORK: retry to connect to the AP[0m
-[0;33mW (21948) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (21948) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (23788) NETWORK: retry to connect to the AP[0m
-[0;33mW (23948) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (23948) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (25948) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (25948) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (26188) NETWORK: retry to connect to the AP[0m
-[0;32mI (26198) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (26198) wifi:state: init -> auth (0xb0)[0m
-[0;32mI (26208) wifi:state: auth -> assoc (0x0)[0m
-[0;32mI (26258) wifi:state: assoc -> run (0x10)[0m
-[0;32mI (26328) wifi:connected with dp, aid = 1, channel 1, BW20, bssid = 02:00:46:fa:da:ed[0m
-[0;32mI (26338) wifi:security: WPA2-PSK, phy: bgn, rssi: -40[0m
-[0;32mI (26338) wifi:pm start, type: 0[0m
-
-[0;32mI (26348) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
-[0;32mI (26348) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
-[0;32mI (26358) wifi:dp: 2, bi: 102400, li: 4, scale listen interval from 307200 us to 409600 us[0m
-[0;32mI (26368) wifi:AP's beacon interval = 102400 us, DTIM period = 2[0m
-[0;33mW (27948) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (27948) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (29948) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (29948) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (30408) esp_netif_handlers: sta ip: 10.42.0.79, mask: 255.255.255.0, gw: 10.42.0.1[0m
-[0;32mI (30408) NETWORK: got ip:10.42.0.79[0m
-[0;32mI (30408) LCD_GUI: Received LCD command: 2[0m
-[0;32mI (30418) LCD_GUI: lcd_gui_task: STATUS[0m
-[0;32mI (30428) LCD_GUI: lcd_gui_task: STATUS done[0m
-[0;32mI (30428) LCD_GUI: LCD STATUS: WiFi Connected: 10.42.0.79[0m
-[0;32mI (30428) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (30438) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (32438) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (32438) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (34438) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (34438) LCD_GUI: lcd_gui_task heartbeat[0m
-[0;32mI (34438) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (36448) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (36448) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (38448) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (38448) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (40448) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (40448) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (42448) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (42448) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (44448) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (44448) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (46448) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (46448) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (48448) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (48448) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (50448) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (50448) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (52448) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (52448) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (54448) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (54448) LCD_GUI: lcd_gui_task heartbeat[0m
-[0;32mI (54448) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (56458) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (56458) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (58458) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (58458) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (60458) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (60458) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (62458) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (62458) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (64458) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (64458) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (66458) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (66458) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (68458) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (68458) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (70458) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (70458) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (72458) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (72458) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-ESP-ROM:esp32s3-20210327
-Build:Mar 27 2021
-rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
-SPIWP:0xee
-mode:DIO, clock div:1
-load:0x3fce2820,len:0x15d0
-load:0x403c8700,len:0xd24
-load:0x403cb700,len:0x2f60
-entry 0x403c8924
-[0;32mI (24) boot: ESP-IDF v5.5-dev-2488-gee77c489e7-dirty 2nd stage bootloader[0m
-[0;32mI (25) boot: compile time Apr 23 2025 19:39:09[0m
-[0;32mI (25) boot: Multicore bootloader[0m
-[0;32mI (27) boot: chip revision: v0.2[0m
-[0;32mI (30) boot: efuse block revision: v1.3[0m
-[0;32mI (33) boot.esp32s3: Boot SPI Speed : 80MHz[0m
-[0;32mI (37) boot.esp32s3: SPI Mode       : DIO[0m
-[0;32mI (41) boot.esp32s3: SPI Flash Size : 4MB[0m
-[0;32mI (45) boot: Enabling RNG early entropy source...[0m
-[0;32mI (49) boot: Partition Table:[0m
-[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
-[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
-[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
-[0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00300000[0m
-[0;32mI (78) boot: End of partition table[0m
-[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c1b0020 size=84c1ch (543772) map[0m
-[0;32mI (184) esp_image: segment 1: paddr=00094c44 vaddr=3fca5f00 size=06710h ( 26384) load[0m
-[0;32mI (190) esp_image: segment 2: paddr=0009b35c vaddr=40378000 size=04cbch ( 19644) load[0m
-[0;32mI (195) esp_image: segment 3: paddr=000a0020 vaddr=42000020 size=1a639ch (1729436) map[0m
-[0;32mI (501) esp_image: segment 4: paddr=002463c4 vaddr=4037ccbc size=191e8h (102888) load[0m
-[0;32mI (523) esp_image: segment 5: paddr=0025f5b4 vaddr=600fe000 size=0001ch (    28) load[0m
-[0;32mI (535) boot: Loaded app from partition at offset 0x10000[0m
-[0;32mI (535) boot: Disabling RNG early entropy source...[0m
-[0;33mW (545) flash HPM: HPM mode is optional feature that depends on flash model. Read Docs First![0m
-[0;33mW (546) flash HPM: HPM mode with DC adjustment is disabled. Some flash models may not be supported. Read Docs First![0m
-[0;33mW (553) flash HPM: High performance mode of this flash model hasn't been supported.[0m
-[0;32mI (560) MSPI Timing: Flash timing tuning index: 2[0m
-[0;32mI (565) octal_psram: vendor id    : 0x0d (AP)[0m
-[0;32mI (569) octal_psram: dev id       : 0x02 (generation 3)[0m
-[0;32mI (573) octal_psram: density      : 0x03 (64 Mbit)[0m
-[0;32mI (578) octal_psram: good-die     : 0x01 (Pass)[0m
-[0;32mI (582) octal_psram: Latency      : 0x01 (Fixed)[0m
-[0;32mI (587) octal_psram: VCC          : 0x01 (3V)[0m
-[0;32mI (591) octal_psram: SRF          : 0x01 (Fast Refresh)[0m
-[0;32mI (596) octal_psram: BurstType    : 0x01 (Hybrid Wrap)[0m
-[0;32mI (600) octal_psram: BurstLen     : 0x01 (32 Byte)[0m
-[0;32mI (605) octal_psram: Readlatency  : 0x02 (10 cycles@Fixed)[0m
-[0;32mI (610) octal_psram: DriveStrength: 0x00 (1/1)[0m
-[0;32mI (622) MSPI Timing: PSRAM timing tuning index: 2[0m
-[0;32mI (622) esp_psram: Found 8MB PSRAM device[0m
-[0;32mI (623) esp_psram: Speed: 120MHz[0m
-[0;32mI (626) cpu_start: Multicore app[0m
-[0;32mI (863) esp_psram: SPI SRAM memory test OK[0m
-[0;32mI (872) cpu_start: Pro cpu start user code[0m
-[0;32mI (872) cpu_start: cpu freq: 240000000 Hz[0m
-[0;32mI (872) app_init: Application information:[0m
-[0;32mI (872) app_init: Project name:     openai_demo[0m
-[0;32mI (876) app_init: App version:      57cb8f6-dirty[0m
-[0;32mI (881) app_init: Compile time:     Apr 23 2025 22:49:06[0m
-[0;32mI (886) app_init: ELF file SHA256:  16ad1f4e5...[0m
-[0;32mI (890) app_init: ESP-IDF:          v5.5-dev-2488-gee77c489e7-dirty[0m
-[0;32mI (896) efuse_init: Min chip rev:     v0.0[0m
-[0;32mI (900) efuse_init: Max chip rev:     v0.99 [0m
-[0;32mI (904) efuse_init: Chip rev:         v0.2[0m
-[0;32mI (908) heap_init: Initializing. RAM available for dynamic allocation:[0m
-[0;32mI (914) heap_init: At 3FCB1D98 len 00037978 (222 KiB): RAM[0m
-[0;32mI (919) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
-[0;32mI (924) heap_init: At 600FE01C len 00001FCC (7 KiB): RTCRAM[0m
-[0;32mI (930) esp_psram: Adding pool of 8192K of PSRAM memory to heap allocator[0m
-[0;32mI (937) spi_flash: detected chip: generic[0m
-[0;32mI (940) spi_flash: flash io: dio[0m
-[0;33mW (943) spi_flash: Detected size(16384k) larger than the size in the binary image header(4096k). Using the size in the binary image header.[0m
-[0;32mI (955) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
-[0;32mI (961) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
-[0;32mI (968) main_task: Started on CPU0[0m
-[0;32mI (988) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
-[0;32mI (988) main_task: Calling app_main()[0m
-[0;32mI (988) Board: Init board.[0m
-i2s: {mclk: -1, bclk: 6, ws: 5, din: 4, dout: 7}
-in_out: {codec: DUMMY, i2c_port: -1, pa: -1, i2s_port: 0}
-Codec 0 dir 3 type:5
-lcd: {bus: spi, controller: st7789, spi_bus: 3, mirror_x: 0, mirror_y: 0, swap_xy: 0, color_inv: 0, width: 240, height: 240, ctrl: 3, cs: 46, dc: 9, rst: 10, mosi: 11, clk: 12, cmd_bits: 8, param_bits: 8}
-[0;32mI (1018) CODEC_INIT: Set mater handle 0 0x3c240998[0m
-[0;32mI (1028) CODEC_INIT: in:1 out:1 port: 1[0m
-[0;32mI (1028) CODEC_INIT: Success to int i2c: -1[0m
-[0;32mI (1028) CODEC_INIT: Init i2s 0 type: 3 mclk:-1 bclk:6 ws:5 din:4 dout:7[0m
-[0;32mI (1038) CODEC_INIT: tx:0x3c240e18 rx:0x3c240fec[0m
-[0;33mW (1038) i2s_tdm: the current mclk multiple is too small, adjust the mclk multiple to 384[0m
-[0;32mI (1048) CODEC_INIT: output init tdm ret 0[0m
-[0;33mW (1058) i2s_tdm: the current mclk multiple is too small, adjust the mclk multiple to 384[0m
-[0;32mI (1058) CODEC_INIT: Input init tdm ret 0[0m
-[0;32mI (1068) CODEC_INIT: Init i2s 0 ok[0m
-[0;32mI (1068) CODEC_INIT: Success to init i2s: 0[0m
-[0;32mI (1068) CODEC_INIT: Success to int i2c: -1[0m
-[0;32mI (1078) CODEC_INIT: Success to init i2s: 0[0m
-[0;32mI (1078) CODEC_INIT: Get out handle 0x3c240e18 port 0[0m
-[0;32mI (1088) Board: Attempting to initialize LCD[0m
-[0;32mI (1088) Board: LCD configuration found, attempting to initialize[0m
-[0;32mI (1098) LCD_INIT: Initializing LCD with configuration: bus_type=1, controller=1, width=240, height=240[0m
-[0;32mI (1108) LCD_INIT: _init_lcd: io_type=0, reset_pin=10, ctrl_pin=3, bus_type=1[0m
-[0;32mI (1108) LCD_INIT: Setting direction for reset_pin 10[0m
-[0;32mI (1118) LCD_INIT: set_pin_dir: pin=10, output=1, io_type=0[0m
-[0;32mI (1118) LCD_INIT: Configuring GPIO pin 10 as OUTPUT[0m
-[0;32mI (1128) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1138) LCD_INIT: Setting direction for ctrl_pin 3[0m
-[0;32mI (1138) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
-[0;32mI (1148) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
-[0;32mI (1148) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1158) LCD_INIT: Setting direction for SPI CS pin 46[0m
-[0;32mI (1158) LCD_INIT: set_pin_dir: pin=46, output=1, io_type=0[0m
-[0;32mI (1168) LCD_INIT: Configuring GPIO pin 46 as OUTPUT[0m
-[0;32mI (1168) gpio: GPIO[46]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1178) LCD_INIT: About to call _lcd_rest[0m
-[0;32mI (1188) LCD_INIT: _lcd_rest: reset_pin=10[0m
-[0;32mI (1188) LCD_INIT: set_pin_state: pin=10, high=0, io_type=0[0m
-[0;32mI (1198) LCD_INIT: Setting GPIO level for pin 10 to 0[0m
-[0;32mI (1298) LCD_INIT: set_pin_state: pin=10, high=1, io_type=0[0m
-[0;32mI (1298) LCD_INIT: Setting GPIO level for pin 10 to 1[0m
-[0;32mI (1298) LCD_INIT: After _lcd_rest[0m
-[0;32mI (1298) LCD_INIT: Setting direction for ctrl_pin 3 again[0m
-[0;32mI (1298) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
-[0;32mI (1308) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
-[0;32mI (1308) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1318) LCD_INIT: About to init SPI LCD[0m
-[0;32mI (1318) LCD_INIT: Initializing SPI LCD with bus=3, cs=46, dc=9, clk=12, mosi=11[0m
-[0;32mI (1328) LCD_INIT: SPI bus initialized: CLK=12, MOSI=11, CS=46, DC=9, Bus=2[0m
-[0;32mI (1338) gpio: GPIO[10]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1348) LCD_INIT: ST7789 driver initialized successfully[0m
-[0;32mI (1348) LCD_INIT: About to call esp_lcd_panel_init[0m
-[0;32mI (1458) LCD_INIT: About to call esp_lcd_panel_disp_on_off (keep display off until splash)[0m
-[0;32mI (1458) LCD_INIT: LCD initialization complete, ret=0[0m
-[0;32mI (1458) LCD_INIT: Setting LCD backlight (ctrl_pin 3) to HIGH[0m
-[0;32mI (1458) LCD_INIT: set_pin_dir: pin=3, output=1, io_type=0[0m
-[0;32mI (1468) LCD_INIT: Configuring GPIO pin 3 as OUTPUT[0m
-[0;32mI (1468) gpio: GPIO[3]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
-[0;32mI (1478) LCD_INIT: set_pin_state: pin=3, high=1, io_type=0[0m
-[0;32mI (1488) LCD_INIT: Setting GPIO level for pin 3 to 1[0m
-[0;32mI (1488) LCD_INIT: LCD initialization successful: 0[0m
-[0;32mI (1488) Board: LCD initialized successfully[0m
-[0;32mI (1498) LCD_GUI: lcd_gui_task started[0m
-[0;32mI (1498) LCD_GUI: Received LCD command: 1[0m
-[0;32mI (1508) LCD_GUI: lcd_gui_task: SPLASH type=1[0m
-[0;32mI (1518) LCD_GUI: Drawing splash_bitmap1 (POWERON)[0m
-[5n[0;32mI (1518) LCD_GUI: Splash displayed, delaying for visibility[0m
-
-Type 'help' to get the list of commands.
-Use UP/DOWN arrows to navigate through command history.
-Press TAB when typing command name to auto-complete.
-[6n I (1588) pp: pp rom version: e7ae62f
-[0;32mI (1588) net80211: net80211 rom version: e7ae62f[0m
-[0;32mI (1608) wifi:wifi driver task: 3fcd1f60, prio:23, stack:6656, core=0[0m
-[999C [6n I (1608) wifi:wifi firmware version: 7086521f2a
-[0;32mI (1608) wifi:wifi certification version: v7.0[0m
-[0;32mI (1608) wifi:config NVS flash: enabled[0m
-[0;32mI (1608) wifi:config nano formatting: disabled[0m
-[0;32mI (1628) wifi:Init data frame dynamic rx buffer num: 32[0m
-[0;32mI (1628) wifi:Init static rx mgmt buffer num: 5[0m
-[172DI (1638) wifi:Init management short buffer num: 32
-esp> I (1638) wifi:Init dynamic tx buffer num: 32
-[0;32mI (1638) wifi:Init static tx FG buffer num: 2[0m
-[0;32mI (1648) wifi:Init static rx buffer size: 1600[0m
-[0;32mI (1648) wifi:Init static rx buffer num: 10[0m
-[0;32mI (1658) wifi:Init dynamic rx buffer num: 32[0m
-[0;32mI (1658) wifi_init: rx ba win: 6[0m
-[0;32mI (1658) wifi_init: accept mbox: 6[0m
-[0;32mI (1668) wifi_init: tcpip mbox: 32[0m
-[0;32mI (1668) wifi_init: udp mbox: 6[0m
-[0;32mI (1668) wifi_init: tcp mbox: 6[0m
-[0;32mI (1668) wifi_init: tcp tx win: 5760[0m
-[0;32mI (1678) wifi_init: tcp rx win: 5760[0m
-[0;32mI (1678) wifi_init: tcp mss: 1440[0m
-[0;32mI (1678) wifi_init: WiFi IRAM OP enabled[0m
-[0;32mI (1678) wifi_init: WiFi RX IRAM OP enabled[0m
-[0;32mI (1688) NETWORK: Force to use wifi config from nvs[0m
-[0;32mI (1708) wifi:Set ps type: 0, coexist: 0[0m
-
-[0;32mI (1708) phy_init: phy_version 701,f4f1da3a,Mar  3 2025,15:50:10[0m
-[0;32mI (1738) wifi:mode : sta (94:a9:90:1b:ac:04)[0m
-[0;32mI (1738) wifi:enable tsf[0m
-[0;32mI (1738) NETWORK: wifi_init_sta finished.[0m
-[0;32mI (1748) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (1748) wifi:state: init -> auth (0xb0)[0m
-[0;32mI (1868) wifi:state: auth -> assoc (0x0)[0m
-[0;32mI (2168) wifi:state: assoc -> run (0x10)[0m
-[0;32mI (2728) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (2728) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
-[0;33mW (4728) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (4728) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
-[0;33mW (6728) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (6728) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
-[0;33mW (8728) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (8728) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
-[0;33mW (10728) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (10728) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
-[0;32mI (12168) wifi:state: run -> init (0xcc00)[0m
-[0;32mI (12178) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (12178) NETWORK: retry to connect to the AP[0m
-[0;33mW (12728) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (12728) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
-[0;32mI (14578) NETWORK: retry to connect to the AP[0m
-[0;32mI (14678) wifi:new:<1,0>, old:<1,0>, ap:<255,255>, sta:<1,0>, prof:1, snd_ch_cfg:0x0[0m
-[0;32mI (14678) wifi:state: init -> auth (0xb0)[0m
-[0;32mI (14698) wifi:state: auth -> assoc (0x0)[0m
-[0;32mI (14718) wifi:state: assoc -> run (0x10)[0m
-[0;33mW (14728) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (14728) LCD_GUI: lcd_gui_task stack high water mark: 9964[0m
-[0;32mI (14738) wifi:connected with dp, aid = 1, channel 1, BW20, bssid = 02:00:46:fa:da:ed[0m
-[0;32mI (14738) wifi:security: WPA2-PSK, phy: bgn, rssi: -40[0m
-[0;32mI (14748) wifi:pm start, type: 0[0m
-
-[0;32mI (14748) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
-[0;32mI (14758) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
-[0;32mI (14798) wifi:dp: 2, bi: 102400, li: 4, scale listen interval from 307200 us to 409600 us[0m
-[0;32mI (14798) wifi:AP's beacon interval = 102400 us, DTIM period = 2[0m
-[0;32mI (15838) esp_netif_handlers: sta ip: 10.42.0.79, mask: 255.255.255.0, gw: 10.42.0.1[0m
-[0;32mI (15838) NETWORK: got ip:10.42.0.79[0m
-[0;32mI (15838) LCD_GUI: Received LCD command: 2[0m
-[0;32mI (15848) LCD_GUI: lcd_gui_task: STATUS[0m
-[0;32mI (15858) LCD_GUI: lcd_gui_task: STATUS done[0m
-[0;32mI (15858) LCD_GUI: LCD STATUS: WiFi Connected: 10.42.0.79[0m
-[0;32mI (15858) LCD_GUI: lcd_gui_queue spaces available: 7[0m
-[0;32mI (15868) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;32mI (15868) LCD_GUI: Received LCD command: 1[0m
-[0;32mI (15868) LCD_GUI: lcd_gui_task: SPLASH type=2[0m
-[0;32mI (15898) LCD_GUI: Drawing splash_bitmap2 (CONNECTED)[0m
-[0;32mI (15898) LCD_GUI: Splash displayed, delaying for visibility[0m
-[0;32mI (17098) LCD_GUI: lcd_gui_queue spaces available: 8[0m
-[0;32mI (17098) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (19098) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (19098) LCD_GUI: lcd_gui_task heartbeat[0m
-[0;32mI (19098) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (21108) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (21108) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (23108) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (23108) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (25108) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (25108) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (27108) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (27108) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (29108) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (29108) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (31108) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (31108) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (33108) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (33108) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (35108) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (35108) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (37108) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (37108) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (39108) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (39108) LCD_GUI: lcd_gui_task heartbeat[0m
-[0;32mI (39108) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (41118) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (41118) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (43118) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (43118) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (45118) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (45118) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (47118) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (47118) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (49118) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (49118) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (51118) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (51118) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (53118) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (53118) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (55118) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (55118) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (57118) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (57118) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (59118) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (59118) LCD_GUI: lcd_gui_task heartbeat[0m
-[0;32mI (59118) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (61128) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (61128) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (63128) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (63128) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (65128) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (65128) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (67128) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (67128) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (69128) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (69128) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (71128) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (71128) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (73128) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (73128) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (75128) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (75128) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (77128) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (77128) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (79128) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (79128) LCD_GUI: lcd_gui_task heartbeat[0m
-[0;32mI (79128) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (81138) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (81138) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (83138) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (83138) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (85138) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (85138) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (87138) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (87138) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (89138) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (89138) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (91138) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (91138) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (93138) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (93138) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (95138) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (95138) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (97138) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (97138) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (99138) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (99138) LCD_GUI: lcd_gui_task heartbeat[0m
-[0;32mI (99138) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
-[0;33mW (101148) LCD_GUI: xQueueReceive timeout (no LCD command in 2s)[0m
-[0;32mI (101148) LCD_GUI: lcd_gui_task stack high water mark: 9916[0m
+[0;32mI (1918) wifi:dp: 1, bi: 102400, li: 3, scale listen interval from 307200 us to 307200 us[0m
+[0;32mI (1928) wifi:set rx beacon pti, rx_bcn_pti: 0, bcn_timeout: 25000, mt_pti: 0, mt_time: 10000[0m
+[0;32mI (2008) wifi:dp: 2, bi: 102400, li: 4, scale listen interval from 307200 us to 409600 us[0m
+[0;32mI (2008) wifi:AP's beacon interval = 102400 us, DTIM period = 2[0m
+[0;32mI (3448) esp_netif_handlers: sta ip: 10.42.0.43, mask: 255.255.255.0, gw: 10.42.0.1[0m
+[0;32mI (3448) NETWORK: got ip:10.42.0.43[0m
+[0Kesp> 
+[6n [999C [6n [119Desp> [0Kesp> r[6C[0Kesp> re[7C[0Kesp> rec[8C[0Kesp> rec2[9C[0Kesp> rec2p[10C[0Kesp> rec2pl[11C[0Kesp> rec2pla[12C[0Kesp> rec2play[13C[0Kesp> rec2play_[14C[0Kesp> rec2play_a[15C[0Kesp> rec2play_ae[16C[0Kesp> rec2play_aec[17C[0Kesp> rec2play_aec[17C
+Start to open channel 2 mask 3
+[0;32mI (26418) I2S_IF: channel mode 2 bits:16/16 channel:2 mask:3[0m
+[0;32mI (26418) I2S_IF: TDM Mode 1 bits:16/16 channel:2 sample_rate:16000 mask:3[0m
+[0;32mI (26428) I2S_IF: channel mode 2 bits:16/16 channel:2 mask:3[0m
+[0;32mI (26428) I2S_IF: TDM Mode 0 bits:16/16 channel:2 sample_rate:16000 mask:3[0m
+[0;32mI (26438) Adev_Codec: Open codec device OK[0m
+[0;32mI (26438) AFE_VC: afe interface for voice communication
+[0m
+[0;32mI (26438) AFE_VC: AFE version: VC_V220727
+[0m
+[0;32mI (26448) AFE_VC: Initial auido front-end, total channel: 2, mic num: 1, ref num: 1
+[0m
+[0;32mI (26468) AFE_VC: aec_init: 1, se_init: 1, vad_init: 1
+[0m
+[0;32mI (26468) AFE_VC: wakenet_init: 0, voice_communication_agc_init: 1
+[0m
+[0;32mI (26478) AFE_VC: ns_mode: 0
+[0m
+[0;32mI (26598) AFE_VC: mode: 0, (Nov  5 2024 16:02:49)
+[0m
+Audio chunksize 256
+[0;32mI (26598) AV_RENDER: Save pcm frame information[0m
+[0;32mI (26608) AV_RENDER: Get need resample 1 in:16000 out:16000[0m
+[0;32mI (26608) I2S_RENDER: open channel:1 sample_rate:16000 bits:16[0m
+[0;32mI (26608) Adev_Codec: Input already open[0m
+[0;32mI (26618) AV_RENDER: ARender Auto pause audio first frame at 0[0m
+audio_aec_src_stop
+Quit done
+[0;32mI (46628) AFE_VC: afe_se_task quit
+[0m
+[0;32mI (46628) AFE_VC: afe task destroy finished
+[0m
+[0;32mI (46638) AFE_VC: exit function: afe_destory
+[0m
+[0;32mI (46638) AV_RENDER: ARender got msg:Close[0m
+[0;32mI (46648) AV_RENDER: Thread ARender exited[0m
+[0;32mI (46648) AV_RENDER: Close done[0m
+[6n [999C [6n [119Desp> [0Kesp> rec2play_aec[17C[0Kesp> rec2play_aec[17C
+Start to open channel 2 mask 3
+[1;31mE (58908) i2s_common: i2s_channel_disable(1209): the channel has not been enabled yet[0m
+[1;31mE (58908) i2s_common: i2s_channel_disable(1209): the channel has not been enabled yet[0m
+[0;32mI (58918) I2S_IF: channel mode 2 bits:16/16 channel:2 mask:3[0m
+[0;32mI (58918) I2S_IF: TDM Mode 1 bits:16/16 channel:2 sample_rate:16000 mask:3[0m
+[0;32mI (58928) I2S_IF: channel mode 2 bits:16/16 channel:2 mask:3[0m
+[0;32mI (58938) I2S_IF: TDM Mode 0 bits:16/16 channel:2 sample_rate:16000 mask:3[0m
+[0;32mI (58948) Adev_Codec: Open codec device OK[0m
+[0;32mI (58948) AFE_VC: afe interface for voice communication
+[0m
+[0;32mI (58958) AFE_VC: AFE version: VC_V220727
+[0m
+[0;32mI (58958) AFE_VC: Initial auido front-end, total channel: 2, mic num: 1, ref num: 1
+[0m
+[0;32mI (58968) AFE_VC: aec_init: 1, se_init: 1, vad_init: 1
+[0m
+[0;32mI (58968) AFE_VC: wakenet_init: 0, voice_communication_agc_init: 1
+[0m
+[0;32mI (58978) AFE_VC: ns_mode: 0
+[0m
+[0;32mI (59098) AFE_VC: mode: 0, (Nov  5 2024 16:02:49)
+[0m
+Audio chunksize 256
+[0;32mI (59098) AV_RENDER: Save pcm frame information[0m
+[0;32mI (59108) AV_RENDER: Get need resample 1 in:16000 out:16000[0m
+[0;32mI (59108) I2S_RENDER: open channel:1 sample_rate:16000 bits:16[0m
+[0;32mI (59108) Adev_Codec: Input already open[0m
+[0;32mI (59118) AV_RENDER: ARender Auto pause audio first frame at 0[0m
+Done

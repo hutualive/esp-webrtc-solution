@@ -165,13 +165,61 @@ static int rec2play_raw_cli(int argc, char **argv)
         if (ret != ESP_CAPTURE_ERR_OK) { ESP_LOGE(TAG, "fail to read audio frame %d", ret); break; }
         int16_t *pcm = (int16_t *)frame.data;
         int sample_cnt = frame.size / sizeof(int16_t);
-        for (int i = 0; i < sample_cnt; i++) pcm[i] *= 4;
+        for (int i = 0; i < sample_cnt; i++) pcm[i] *= 2;  // reduce amplification to lower noise
         av_render_audio_data_t d = { .data = frame.data, .size = frame.size, .pts = frame.pts };
         av_render_add_audio_data(player, &d);
         media_lib_thread_sleep(10);
     }
     raw_src->stop(raw_src);
     raw_src->close(raw_src);
+    av_render_reset(player);
+    return 0;
+}
+
+static int rec2play_aec_cli(int argc, char **argv)
+{
+    // Direct AEC loopback: capture from mic with single-mic AEC, amplify, and play
+    esp_capture_audio_aec_src_cfg_t aec_cfg = {
+        .record_handle = get_record_handle(),
+        .channel = 2,               // 2 channels: mic + reference
+        .channel_mask = (1<<0)|(1<<1), // ch0=mic, ch1=far-end reference
+    };
+    esp_capture_audio_src_if_t *aec_src = esp_capture_new_audio_aec_src(&aec_cfg);
+    if (!aec_src) { ESP_LOGE(TAG, "aec audio src init failed"); return 1; }
+    esp_capture_enable_aec_src_dump(true);  // enable AEC data dump for analysis
+    // negotiate PCM capture capabilities
+    esp_capture_audio_info_t in_cfg = { .codec = ESP_CAPTURE_CODEC_TYPE_PCM,
+                                       .sample_rate = 16000, .channel = 2, .bits_per_sample = 16 };
+    esp_capture_audio_info_t out_cfg;
+    int ret = aec_src->negotiate_caps(aec_src, &in_cfg, &out_cfg);
+    if (ret != ESP_CAPTURE_ERR_OK) { ESP_LOGE(TAG, "negotiate_caps failed %d", ret); return 1; }
+    ret = aec_src->open(aec_src);
+    if (ret != ESP_CAPTURE_ERR_OK) { ESP_LOGE(TAG, "aec open failed %d", ret); return 1; }
+    ret = aec_src->start(aec_src);
+    if (ret != ESP_CAPTURE_ERR_OK) { ESP_LOGE(TAG, "aec start failed %d", ret); aec_src->close(aec_src); return 1; }
+    esp_webrtc_media_provider_t provider;
+    media_sys_get_provider(&provider);
+    av_render_handle_t player = provider.player;
+    av_render_audio_info_t aec_info = { .codec = AV_RENDER_AUDIO_CODEC_PCM,
+                                        .sample_rate = out_cfg.sample_rate,
+                                        .channel = out_cfg.channel,
+                                        .bits_per_sample = out_cfg.bits_per_sample };
+    av_render_add_audio_stream(player, &aec_info);
+    static int16_t pcm_buf[160];
+    esp_capture_stream_frame_t frame = { .stream_type = ESP_CAPTURE_STREAM_TYPE_AUDIO,
+                                        .data = (uint8_t*)pcm_buf,
+                                        .size = sizeof(pcm_buf) };
+    uint32_t start_ms = esp_timer_get_time() / 1000;
+    while (esp_timer_get_time() / 1000 < start_ms + 20000) {
+        ret = aec_src->read_frame(aec_src, &frame);
+        if (ret != ESP_CAPTURE_ERR_OK) { ESP_LOGE(TAG, "fail to read AEC frame %d", ret); break; }
+        for (int i = 0; i < frame.size / sizeof(int16_t); i++) pcm_buf[i] *= 2;  // reduce AEC amplification to lower noise
+        av_render_audio_data_t d = { .data = frame.data, .size = frame.size, .pts = frame.pts };
+        av_render_add_audio_data(player, &d);
+        media_lib_thread_sleep(10);
+    }
+    aec_src->stop(aec_src);
+    aec_src->close(aec_src);
     av_render_reset(player);
     return 0;
 }
@@ -250,6 +298,11 @@ static int init_console()
             .command = "rec2play_raw",
             .help = "Play recorded voice (raw mic, no AEC)\n",
             .func = rec2play_raw_cli,
+        },
+        {
+            .command = "rec2play_aec",
+            .help = "Play recorded voice with AEC\n",
+            .func = rec2play_aec_cli,
         },
     };
     for (int i = 0; i < sizeof(cmds) / sizeof(cmds[0]); i++) {

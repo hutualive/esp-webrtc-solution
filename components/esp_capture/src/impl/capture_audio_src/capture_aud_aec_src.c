@@ -35,6 +35,7 @@
 #include "media_lib_os.h"
 #include "esp_afe_sr_iface.h"
 #include "esp_afe_sr_models.h"
+#include "webrtc_apm.h"
 
 #define TAG "AUD_AEC_SRC"
 
@@ -59,6 +60,7 @@ typedef struct {
     bool                      stopping;
     const esp_afe_sr_iface_t *aec_if;
     esp_afe_sr_data_t        *aec_data;
+    apm_handle_t             apm_handle;
 } audio_aec_src_t;
 
 static int cal_frame_length(esp_capture_audio_info_t *info)
@@ -70,24 +72,27 @@ static int cal_frame_length(esp_capture_audio_info_t *info)
 static int open_afe(audio_aec_src_t *src)
 {
     afe_config_t afe_config = AFE_CONFIG_DEFAULT();
-    afe_config.vad_init = false;
+    afe_config.vad_init = false;             // disable voice activity detection
     afe_config.wakenet_init = false;
     afe_config.afe_perferred_core = 1;
     afe_config.afe_perferred_priority = 20;
     // afe_config.memory_alloc_mode = AFE_MEMORY_ALLOC_MORE_INTERNAL;
-    afe_config.pcm_config.mic_num = 1;
-    afe_config.pcm_config.ref_num = 1;
-    afe_config.pcm_config.total_ch_num = 1 + 1;
-    afe_config.aec_init = true;
-    afe_config.se_init = false;
-#if 0
-    afe_config.voice_communication_agc_init = true;
-    afe_config.voice_communication_agc_gain = algo->agc_gain;
-#endif
+    afe_config.pcm_config.mic_num = 1;                     // 1 mic channel
+    afe_config.pcm_config.ref_num = 1;                     // 1 reference channel
+    afe_config.pcm_config.total_ch_num = 1 + 1;           // total 2 channels
+    afe_config.aec_init = true;                           // enable AEC processing
+    afe_config.se_init = true;               // enable speech enhancement / noise suppression
+    afe_config.voice_communication_agc_init = true;   // enable built-in AGC
+    afe_config.voice_communication_agc_gain = 2;      // moderate AGC gain (1-4)
     afe_config.pcm_config.sample_rate = src->info.sample_rate;
     afe_config.voice_communication_init = true;
     src->aec_if = &ESP_AFE_VC_HANDLE;
     src->aec_data = src->aec_if->create_from_config(&afe_config);
+    src->apm_handle = apm_create(src->info.sample_rate, afe_config.pcm_config.mic_num, afe_config.pcm_config.ref_num);
+    if (!src->apm_handle) {
+        ESP_LOGE(TAG, "APM create failed");
+        return -1;
+    }
     return 0;
 }
 
@@ -113,8 +118,8 @@ static int audio_aec_src_get_support_codecs(esp_capture_audio_src_if_t *src, con
 static int audio_aec_src_negotiate_caps(esp_capture_audio_src_if_t *h, esp_capture_audio_info_t *in_cap, esp_capture_audio_info_t *out_caps)
 {
     audio_aec_src_t *src = (audio_aec_src_t *)h;
-    // Only support 1 channel 16bits PCM
-    if (in_cap->channel != 1 || in_cap->bits_per_sample != 16 || in_cap->codec != ESP_CAPTURE_CODEC_TYPE_PCM) {
+    // Only support configured channels (mic+ref) and 16bits PCM
+    if (in_cap->channel != src->channel || in_cap->bits_per_sample != 16 || in_cap->codec != ESP_CAPTURE_CODEC_TYPE_PCM) {
         return ESP_CAPTURE_ERR_NOT_SUPPORTED;
     }
     *out_caps = *in_cap;
@@ -134,12 +139,13 @@ static media_lib_mutex_handle_t dump_mutex;
 static void enable_aec_dump(bool enable)
 {
     if (origin_data == NULL) {
-        origin_data = (uint8_t *)malloc(4096);
+        // allocate larger buffer for origin dump (800KB)
+        origin_data = (uint8_t *)malloc(800 * 1024);
         if (origin_data == NULL) {
             ESP_LOGE(TAG, "Failed to malloc origin_data");
             return;
         }
-        origin_size = 4096;
+        origin_size = 800 * 1024;
     }
     if (dump_mutex == NULL) {
         media_lib_mutex_create(&dump_mutex);
@@ -193,16 +199,30 @@ static void add_output_data(uint8_t *data, int size)
 
 static void add_origin_data(uint8_t *data, int size)
 {
-    if (aec_dump_enabled == false) {
-        return;
+    if (!aec_dump_enabled) return;
+    // ring buffer: drop oldest to make room
+    media_lib_mutex_lock(dump_mutex, 1000);
+    if (origin_fill + size > origin_size) {
+        if (origin_fill > size) {
+            memmove(origin_data, origin_data + size, origin_fill - size);
+            origin_fill -= size;
+        } else {
+            origin_fill = 0;
+        }
     }
-    if (origin_fill + size < origin_size) {
-        media_lib_mutex_lock(dump_mutex, 1000);
-        memcpy(origin_data + origin_fill, data, size);
-        origin_fill += size;
-        media_lib_mutex_unlock(dump_mutex);
-    } else {
-        ESP_LOGE(TAG, "Read too slow");
+    memcpy(origin_data + origin_fill, data, size);
+    origin_fill += size;
+    media_lib_mutex_unlock(dump_mutex);
+}
+
+static void beamform(int16_t *data, int bytes) {
+    int total = bytes / sizeof(int16_t);
+    int frames = total / 2; // 2 channels: [mic, ref]
+    for (int i = 0; i < frames; i++) {
+        int idx = i * 2;
+        int32_t mic = data[idx];
+        int32_t ref = data[idx + 1];
+        data[idx] = (int16_t)(mic - (ref >> 1));
     }
 }
 
@@ -250,6 +270,9 @@ static void audio_aec_src_buffer_in_thread(void *arg)
             data_queue_query(src->in_q, &q_num, &q_size);
             printf("Cached %d\n", q_size);
         }
+        beamform((int16_t *)feed_data, read_size);
+        size_t apm_samples = src->cache_size / sizeof(int16_t);
+        apm_process_reverse(src->apm_handle, ((int16_t *)feed_data) + 1, apm_samples);
         ret = src->aec_if->feed(src->aec_data, (int16_t *)feed_data);
         if (ret < 0) {
             ESP_LOGE(TAG, "Fail to feed data %d", ret);
@@ -283,6 +306,9 @@ static void audio_aec_src_buffer_in_thread(void *arg)
                 ESP_LOGE(TAG, "Fail to read data %d", ret);
                 break;
             }
+            beamform((int16_t *)feed_data, read_size);
+            size_t apm_samples = src->cache_size / sizeof(int16_t);
+            apm_process_reverse(src->apm_handle, ((int16_t *)feed_data) + 1, apm_samples);
             ret = src->aec_if->feed(src->aec_data, (int16_t *)feed_data);
             if (ret < 0) {
                 ESP_LOGE(TAG, "Fail to feed data %d", ret);
@@ -381,6 +407,8 @@ static int audio_aec_src_read_frame(esp_capture_audio_src_if_t *h, esp_capture_s
         }
         if (res->data_size <= src->cache_size * 2) {
             memcpy(src->cached_frame, res->data, res->data_size);
+            size_t apm_samples = src->cache_fill / sizeof(int16_t);
+            apm_process_stream(src->apm_handle, (int16_t *)src->cached_frame, apm_samples);
             add_output_data(src->cached_frame, res->data_size);
             src->cache_fill = res->data_size;
         } else {
@@ -420,6 +448,10 @@ static int audio_aec_src_stop(esp_capture_audio_src_if_t *h)
         free(src->cached_frame);
         src->cached_frame = NULL;
     }
+    if (src->apm_handle) {
+        apm_destroy(src->apm_handle);
+        src->apm_handle = NULL;
+    }
 #endif
     if (src->handle) {
         esp_codec_dev_close(src->handle);
@@ -432,6 +464,10 @@ static int audio_aec_src_close(esp_capture_audio_src_if_t *h)
 {
     audio_aec_src_t *src = (audio_aec_src_t *)h;
     src->handle = NULL;
+    if (src->apm_handle) {
+        apm_destroy(src->apm_handle);
+        src->apm_handle = NULL;
+    }
     return ESP_CAPTURE_ERR_OK;
 }
 
